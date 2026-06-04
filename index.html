@@ -551,6 +551,59 @@ footer {
   margin-bottom: 20px;
 }
 
+
+/* Gangar carousel */
+.gangar-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 16px;
+}
+.gangar-track {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+.gangar-slide {
+  min-width: 100%;
+  transition: transform 0.4s cubic-bezier(0.35,0,0.15,1);
+}
+.gangar-slide video {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+.car-btn {
+  background: rgba(244,239,230,0.08);
+  border: 1px solid rgba(244,239,230,0.15);
+  color: var(--cream);
+  font-size: 20px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.car-btn:hover { background: var(--orange); border-color: var(--orange); }
+.gangar-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.gangar-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(244,239,230,0.25);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.gangar-dot.active { background: var(--orange); }
+
 </style>
 </head>
 <body>
@@ -663,11 +716,19 @@ footer {
       </div>
 
       <div class="card" onclick="openOverlay('ov-sketchbook')">
-        <div class="thumb placeholder" data-label="Interactive sketchbook →"></div>
+        <div class="thumb placeholder" data-label="Paper sketchbook →"></div>
         <div class="body">
-          <h3>Sketchbook</h3>
+          <h3>Paper Sketchbook</h3>
           <span class="tag">Interactive</span>
-          <p>A hand-drawn interactive sketchbook.</p>
+          <p>Hand-drawn pages from the sketchbook — flip through them.</p>
+        </div>
+      </div>
+      <div class="card" onclick="openOverlay('ov-pixelsketch')">
+        <div class="thumb placeholder" data-label="Pixel sketchbook — coming soon"></div>
+        <div class="body">
+          <h3>Pixel Sketchbook</h3>
+          <span class="tag">Digital illustration</span>
+          <p>Digital drawings and illustrations — coming soon.</p>
         </div>
       </div>
     </div>
@@ -785,7 +846,7 @@ footer {
     <div class="overlay-section">
       <h3 class="section-header">Play the game</h3>
       <p class="desc">A hand-animated point-and-click adventure game set in a mysterious Norwegian interior. Brita Svahni has vanished — explore her home, piece together the clues, and uncover what happened. Built with frame-by-frame animation and an original atmospheric soundtrack.</p>
-      <a href="https://revestrek.github.io/brita-svani/" target="_blank" class="game-link">
+      <a href="https://revestreker.github.io/brita-svani/" target="_blank" class="game-link">
         <img src="assets/images/brita_interior.jpg" alt="Play The Disappearance of Brita Svahni" class="game-thumb">
         <span class="game-cta">▶ Play the game</span>
       </a>
@@ -806,9 +867,25 @@ footer {
   <button class="close" onclick="closeOverlay('ov-gangar')">✕</button>
   <div class="overlay-inner">
     <h2>Gangar</h2>
-    <span class="tag">Music visuals</span>
-    <p class="desc">Animated Spotify Canvas reels and music visuals for the Norwegian artist Gangar. Looping, hypnotic hand-drawn animation — designed to breathe alongside the music.</p>
-    <p class="video-note">GIFs / video files incoming — send me the Drive folder or drop the files and I'll get them in here.</p>
+    <span class="tag">Music visuals / Spotify Canvas</span>
+    <p class="desc">Animated Spotify Canvas loops and music visuals for Norwegian folk-jazz act Gangar. Looping, hypnotic hand-drawn character cycles — designed to breathe and move alongside the music.</p>
+    <div class="gangar-carousel">
+      <button class="car-btn car-prev" onclick="gangarPrev()">&#8592;</button>
+      <div class="gangar-track" id="gangar-track">
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
+      </div>
+      <button class="car-btn car-next" onclick="gangarNext()">&#8594;</button>
+    </div>
+    <div class="gangar-dots" id="gangar-dots"></div>
   </div>
 </div>
 
@@ -850,7 +927,9 @@ footer {
 
     <div class="overlay-section">
       <h3 class="section-header">Backgrounds</h3>
-      <p class="video-note">Background animation tests — upload to YouTube/Vimeo as unlisted and send me the links to embed them here.</p>
+      <div class="vimeo-wrap">
+        <iframe src="https://www.youtube.com/embed/R4KISSrF27g?autoplay=0&rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
     </div>
 
     <div class="overlay-section">
@@ -918,10 +997,19 @@ footer {
   <button class="close" onclick="closeOverlay('ov-sketchbook')">✕</button>
   <div style="position:fixed;inset:0;padding-top:0;">
     <iframe
-      src="https://revestrek.github.io/sketchbook/"
+      src="https://revestreker.github.io/sketchbook/"
       style="width:100%;height:100%;border:none;display:block;"
       title="Sketchbook">
     </iframe>
+  </div>
+</div>
+
+<div class="overlay" id="ov-pixelsketch">
+  <button class="close" onclick="closeOverlay('ov-pixelsketch')">✕</button>
+  <div class="overlay-inner">
+    <h2>Pixel Sketchbook</h2>
+    <span class="tag">Digital illustration</span>
+    <p class="desc">A collection of digital drawings and illustrations. Coming soon — send me the folder when it's ready and I'll get it in here.</p>
   </div>
 </div>
 
@@ -965,5 +1053,36 @@ document.addEventListener('keydown', e => {
   }
 });
 </script>
+
+<script>
+// Gangar carousel
+let gangarIdx = 0;
+const gangarSlides = document.querySelectorAll('.gangar-slide');
+const gangarTrack  = document.getElementById('gangar-track');
+const dotsContainer = document.getElementById('gangar-dots');
+
+function gangarBuildDots() {
+  if (!dotsContainer) return;
+  gangarSlides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'gangar-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => gangarGo(i);
+    dotsContainer.appendChild(d);
+  });
+}
+function gangarGo(n) {
+  gangarSlides[gangarIdx].querySelector('video')?.pause();
+  gangarIdx = (n + gangarSlides.length) % gangarSlides.length;
+  gangarSlides.forEach((s, i) => s.style.transform = `translateX(${(i - gangarIdx) * 100}%)`);
+  document.querySelectorAll('.gangar-dot').forEach((d, i) => d.classList.toggle('active', i === gangarIdx));
+  gangarSlides[gangarIdx].querySelector('video')?.play();
+}
+function gangarNext() { gangarGo(gangarIdx + 1); }
+function gangarPrev() { gangarGo(gangarIdx - 1); }
+gangarBuildDots();
+// Init positions
+gangarSlides.forEach((s, i) => s.style.transform = `translateX(${i * 100}%)`);
+</script>
+
 </body>
 </html>
