@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Revestreker — Elmer Lødemel</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -78,12 +81,22 @@ nav .links a:hover { transform: translateY(-3px) rotate(-2deg); }
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   text-align: center;
-  padding: 0 24px;
+  padding: 0 24px 72px;
   z-index: 2;
   overflow: hidden;
 }
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.85) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
 .hero-video {
   position: absolute;
   inset: 0;
@@ -93,26 +106,12 @@ nav .links a:hover { transform: translateY(-3px) rotate(-2deg); }
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.35;
+  opacity: 1.0;
 }
-.hero-video::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.7) 100%);
-}
-.hero .grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(244,239,230,0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(244,239,230,0.04) 1px, transparent 1px);
-  background-size: 48px 48px;
-  z-index: -1;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, #000 30%, transparent 75%);
-}
+
+
 .hero-logo {
-  width: clamp(280px, 70vw, 900px);
+  width: clamp(220px, 55vw, 700px);
   height: auto;
   animation: wobble 3s steps(4) infinite;
   filter: drop-shadow(0.04em 0.04em 0 var(--blue)) drop-shadow(-0.03em 0.03em 0 var(--orange));
@@ -245,12 +244,14 @@ section {
   100% { transform: translateY(0) scale(1); }
 }
 .explore-list {
-  margin-top: 20px;
   display: none;
-  gap: 14px;
-  flex-wrap: wrap;
 }
-.explore-list.open { display: flex; }
+.explore-list.open {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 26px;
+  margin-top: 20px;
+}
 .explore-list .pill {
   background: var(--card);
   border: 2px solid rgba(244,239,230,0.08);
@@ -367,6 +368,10 @@ footer {
   display: none;
   padding: 80px 24px 80px;
 }
+#ov-sketchbook {
+  padding: 0;
+  overflow: hidden;
+}
 .overlay.open {
   display: block;
   animation: slide-up 0.35s steps(4) forwards;
@@ -477,6 +482,75 @@ footer {
   .contact-photo { width: 120px; height: 120px; }
   .project-grid { grid-template-columns: 1fr; }
 }
+
+/* Overlay section headers */
+.overlay-section { margin-top: 48px; }
+.overlay-section:first-of-type { margin-top: 32px; }
+.section-header {
+  font-family: 'Revestreker', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,106,31,0.25);
+}
+
+/* Vimeo embed */
+.vimeo-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #111;
+  margin-bottom: 28px;
+}
+.vimeo-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+/* Game link */
+.game-link {
+  display: block;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  margin-bottom: 28px;
+  max-width: 700px;
+}
+.game-link:hover .game-cta { background: var(--orange); }
+.game-thumb { width: 100%; display: block; }
+.game-cta {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(10,10,10,0.75);
+  color: var(--cream);
+  font-family: 'Revestreker', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  padding: 14px 20px;
+  transition: background 0.2s;
+}
+
+/* Teddies video note */
+.video-note {
+  background: rgba(255,106,31,0.08);
+  border: 1px solid rgba(255,106,31,0.2);
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--cream);
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
 </style>
 </head>
 <body>
@@ -500,7 +574,6 @@ footer {
       <source src="studio_reel_v002_2026.mp4" type="video/mp4">
     </video>
   </div>
-  <div class="grid-bg"></div>
   <img class="hero-logo" src="assets/images/revestreker_title.svg" alt="REVESTREKER">
   <p class="sub">Comedic, charming &amp; funky animated film made in Norway and Denmark.</p>
   <div class="scroll-hint">scroll ↓</div>
@@ -537,11 +610,20 @@ footer {
     </div>
 
     <div class="card" onclick="openOverlay('ov-brita')">
-      <div class="thumb placeholder" data-label="Brita Svani — art coming soon"></div>
+      <div class="thumb" style="background-image:url('assets/images/brita_interior.jpg')"></div>
       <div class="body">
-        <h3>Brita Svani</h3>
-        <span class="tag">Game project</span>
-        <p>Hand-drawn character art meets pixel interaction.</p>
+        <h3>The Disappearance of Brita Svahni</h3>
+        <span class="tag">Interactive game &amp; animation</span>
+        <p>Hand-animated point-and-click adventure. Play it online.</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="openOverlay('ov-minimic')">
+      <div class="thumb" style="background-image:url('assets/images/ted_turnaround.jpg')"></div>
+      <div class="body">
+        <h3>Teddies / Mini Mic</h3>
+        <span class="tag">Animated short series</span>
+        <p>A cosy murder mystery in miniature. Teddy bears, jazz, and mayhem.</p>
       </div>
     </div>
 
@@ -563,36 +645,33 @@ footer {
       </div>
     </div>
 
-    <div class="card" onclick="openOverlay('ov-among')">
-      <div class="thumb" style="background-image:url('assets/images/among_still.jpg')"></div>
-      <div class="body">
-        <h3>Among Giants</h3>
-        <span class="tag">Animated film</span>
-        <p>Atmospheric frame-by-frame work, scale and wonder.</p>
-      </div>
-    </div>
 
-    <div class="card" onclick="openOverlay('ov-minimic')">
-      <div class="thumb placeholder" data-label="Mini Mic — coming soon"></div>
-      <div class="body">
-        <h3>Mini Mic</h3>
-        <span class="tag">Animated short</span>
-        <p>More soon.</p>
-      </div>
-    </div>
-
-    <div class="card" onclick="window.open('https://github.com/revestrek/sketchbook','_blank')">
-      <div class="thumb placeholder" data-label="Interactive sketchbook →"></div>
-      <div class="body">
-        <h3>Sketchbook</h3>
-        <span class="tag">Interactive</span>
-        <p>A hand-drawn interactive sketchbook. Opens in a new tab.</p>
-      </div>
-    </div>
 
   </div>
 
-  <!-- EXPLORE MORE removed — all projects now in main grid -->
+  <!-- EXPLORE MORE -->
+  <div class="explore-wrap">
+    <button class="explore-btn" onclick="toggleExplore(this)">explore more +</button>
+    <div class="explore-list">
+      <div class="card" onclick="openOverlay('ov-among')">
+        <div class="thumb" style="background-image:url('assets/images/among_still.jpg')"></div>
+        <div class="body">
+          <h3>Among Giants</h3>
+          <span class="tag">Animated film</span>
+          <p>Atmospheric frame-by-frame work, scale and wonder.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openOverlay('ov-sketchbook')">
+        <div class="thumb placeholder" data-label="Interactive sketchbook →"></div>
+        <div class="body">
+          <h3>Sketchbook</h3>
+          <span class="tag">Interactive</span>
+          <p>A hand-drawn interactive sketchbook.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- PORTFOLIO -->
   <h2 class="portfolio-title">portfolio</h2>
@@ -634,13 +713,47 @@ footer {
   <button class="close" onclick="closeOverlay('ov-servicebus')">✕</button>
   <div class="overlay-inner">
     <h2>Service Bus</h2>
-    <span class="tag">Animated short · Best Animation, Ekko Shortlist 2025</span>
-    <p class="desc">A comedic animated short screening internationally, with a stop at La Guarimba in August 2026. Built frame by frame with the funky, human absurdity at the core of Revestreker.</p>
-    <div class="img-grid">
-      <img src="assets/images/sb_poster.jpg" class="tall" alt="Service Bus poster" onclick="openLightbox(this.src)">
-      <img src="assets/images/sb_still1.jpg" alt="Service Bus still 1" onclick="openLightbox(this.src)">
-      <img src="assets/images/sb_still2.jpg" alt="Service Bus still 2" onclick="openLightbox(this.src)">
-      <img src="assets/images/sb_still3.jpg" alt="Service Bus still 3" onclick="openLightbox(this.src)">
+    <span class="tag">Animated short film</span>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Film</h3>
+      <p class="desc">A comedic animated short following a grumpy tour bus driver and his chaotic passengers through the Norwegian countryside. <em>Service Bus</em> premiered at Kortfilmfestivalen Grimstad 2025 and toured the international festival circuit — winning the Norwegian Short Film Award for Best Animation.</p>
+      <div class="vimeo-wrap">
+        <iframe src="https://player.vimeo.com/video/1051852019?h=b982cfd35d&autoplay=0&title=0&byline=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="img-grid">
+        <img src="assets/images/sb_still1.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+        <img src="assets/images/sb_still2.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+        <img src="assets/images/sb_still3.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Designs</h3>
+      <div class="img-grid">
+        <img src="assets/images/sb_des_1.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_2.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_3.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_4.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_5.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/char_sb_001.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/char_sb_002.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_8.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/char_passengers.jpg" alt="Character design" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <div class="img-grid">
+        <img src="assets/images/sb_bg_1.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_2.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_3.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_4.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_5.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_6.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_7.jpg" alt="Background" onclick="openLightbox(this)">
+      </div>
     </div>
   </div>
 </div>
@@ -648,14 +761,17 @@ footer {
 <div class="overlay" id="ov-faf">
   <button class="close" onclick="closeOverlay('ov-faf')">✕</button>
   <div class="overlay-inner">
-    <h2>FAF 2026 Trailer</h2>
-    <span class="tag">Festival trailer commission · Fredrikstad Animation Festival</span>
-    <p class="desc">A high-energy festival trailer driven by a rocket-powered character. Character lineup, props and style frames for the 2026 edition.</p>
+    <h2>FAF 2026 — Trailer</h2>
+    <span class="tag">Animation production</span>
+    <p class="desc">Animation production for the Fredrikstad Animation Festival 2026 trailer. Lush, hand-painted backgrounds and a full character lineup bring a fantastical world to life — cliffs, mushrooms, and a crew ready to adventure.</p>
     <div class="img-grid">
-      <img src="assets/images/faf_lineup.jpg" alt="FAF character lineup" onclick="openLightbox(this.src)">
-      <img src="assets/images/faf_style.jpg" alt="FAF style frame" onclick="openLightbox(this.src)">
-      <img src="assets/images/faf_bee.jpg" alt="FAF bee prop" onclick="openLightbox(this.src)">
-      <img src="assets/images/faf_storyboard.jpg" alt="FAF storyboard" onclick="openLightbox(this.src)">
+      <img src="assets/images/faf_bg_1.jpg" alt="FAF background" onclick="openLightbox(this)">
+      <img src="assets/images/faf_bg_2.jpg" alt="FAF background" onclick="openLightbox(this)">
+      <img src="assets/images/faf_bg_3.jpg" alt="FAF background" onclick="openLightbox(this)">
+      <img src="assets/images/faf_mushroom.jpg" alt="FAF mushroom props" onclick="openLightbox(this)">
+      <img src="assets/images/faf_lineup.jpg" alt="FAF character lineup" onclick="openLightbox(this)">
+      <img src="assets/images/faf_sketches.jpg" alt="FAF sketches" onclick="openLightbox(this)">
+      <img src="assets/images/faf_thumbs.jpg" alt="FAF thumbnails" onclick="openLightbox(this)">
     </div>
   </div>
 </div>
@@ -663,9 +779,26 @@ footer {
 <div class="overlay" id="ov-brita">
   <button class="close" onclick="closeOverlay('ov-brita')">✕</button>
   <div class="overlay-inner">
-    <h2>Brita Svani</h2>
-    <span class="tag">Game project</span>
-    <p class="desc">Hand-drawn character art meeting pixel interaction. Artwork coming soon.</p>
+    <h2>The Disappearance of Brita Svahni</h2>
+    <span class="tag">Interactive game &amp; animation</span>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Play the game</h3>
+      <p class="desc">A hand-animated point-and-click adventure game set in a mysterious Norwegian interior. Brita Svahni has vanished — explore her home, piece together the clues, and uncover what happened. Built with frame-by-frame animation and an original atmospheric soundtrack.</p>
+      <a href="https://revestrek.github.io/brita-svani/" target="_blank" class="game-link">
+        <img src="assets/images/brita_interior.jpg" alt="Play The Disappearance of Brita Svahni" class="game-thumb">
+        <span class="game-cta">▶ Play the game</span>
+      </a>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Assets</h3>
+      <div class="img-grid">
+        <img src="assets/images/brita_interior.jpg" alt="Brita interior" onclick="openLightbox(this)">
+        <img src="assets/images/brita_exterior.jpg" alt="Brita exterior" onclick="openLightbox(this)">
+        <img src="assets/images/brita_char.jpg" alt="Brita character design" onclick="openLightbox(this)">
+      </div>
+    </div>
   </div>
 </div>
 
@@ -673,8 +806,9 @@ footer {
   <button class="close" onclick="closeOverlay('ov-gangar')">✕</button>
   <div class="overlay-inner">
     <h2>Gangar</h2>
-    <span class="tag">Spotify Canvas reels</span>
-    <p class="desc">Looping animated music visuals. Reels coming soon.</p>
+    <span class="tag">Music visuals</span>
+    <p class="desc">Animated Spotify Canvas reels and music visuals for the Norwegian artist Gangar. Looping, hypnotic hand-drawn animation — designed to breathe alongside the music.</p>
+    <p class="video-note">GIFs / video files incoming — send me the Drive folder or drop the files and I'll get them in here.</p>
   </div>
 </div>
 
@@ -682,8 +816,9 @@ footer {
   <button class="close" onclick="closeOverlay('ov-ecokrim')">✕</button>
   <div class="overlay-inner">
     <h2>Ecokrim Concert Visuals</h2>
-    <span class="tag">Live VJ work · Resolume Arena</span>
-    <p class="desc">Real-time concert visuals performed live. Stills coming soon.</p>
+    <span class="tag">Live VJ work</span>
+    <p class="desc">Animated character cycles and loops performed live through Resolume Arena for Norwegian comedy-crime act Ecokrim. Mike walks through seasons — spring greens, winter greys, and everything in between — synced to the show in real time.</p>
+    <p class="video-note">Video files are .mov / large — upload to YouTube or Vimeo as unlisted and send me the links to embed them here.</p>
   </div>
 </div>
 
@@ -691,10 +826,17 @@ footer {
   <button class="close" onclick="closeOverlay('ov-among')">✕</button>
   <div class="overlay-inner">
     <h2>Among Giants</h2>
-    <span class="tag">Animated film</span>
-    <p class="desc">Atmospheric frame-by-frame animation exploring scale and wonder.</p>
+    <span class="tag">Animated short film</span>
+    <p class="desc">A hand-drawn animated short about small things in a very large world. Atmospheric, wordless, frame-by-frame — exploring scale, wonder, and the strange tenderness of being tiny.</p>
     <div class="img-grid">
-      <img src="assets/images/among_still.jpg" alt="Among Giants still" onclick="openLightbox(this.src)">
+      <img src="assets/images/ag_girls.jpg" alt="Among Giants" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_0.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_1.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_2.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_3.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_4.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_5.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+      <img src="assets/images/ag_still_6.jpg" alt="Among Giants still" onclick="openLightbox(this)">
     </div>
   </div>
 </div>
@@ -702,9 +844,25 @@ footer {
 <div class="overlay" id="ov-minimic">
   <button class="close" onclick="closeOverlay('ov-minimic')">✕</button>
   <div class="overlay-inner">
-    <h2>Mini Mic</h2>
-    <span class="tag">Animated short</span>
-    <p class="desc">Coming soon.</p>
+    <h2>Teddies / Mini Mic</h2>
+    <span class="tag">Animated short series</span>
+    <p class="desc">A cosy murder mystery in miniature. Teddy bears, a tiny jazz club, and a detective who should probably be in a children's show but really isn't. <em>Teddies</em> is the original animation series behind the <em>Mini Mic</em> concept — hand-drawn, character-driven, and gleefully absurd.</p>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <p class="video-note">Background animation tests — upload to YouTube/Vimeo as unlisted and send me the links to embed them here.</p>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Character designs</h3>
+      <div class="img-grid">
+        <img src="assets/images/ted_turnaround.jpg" alt="Ted turnaround" onclick="openLightbox(this)">
+        <img src="assets/images/ted_ladies.jpg" alt="Ladies concept" onclick="openLightbox(this)">
+        <img src="assets/images/ted_mike.jpg" alt="Mike" onclick="openLightbox(this)">
+        <img src="assets/images/ted_guys_turn.jpg" alt="Guys turnaround" onclick="openLightbox(this)">
+        <img src="assets/images/ted_guys_con.jpg" alt="Guys concept" onclick="openLightbox(this)">
+      </div>
+    </div>
   </div>
 </div>
 
@@ -753,6 +911,17 @@ footer {
       <img src="assets/images/sb_still2.jpg" alt="Service Bus still" onclick="openLightbox(this.src)">
       <img src="assets/images/sb_still3.jpg" alt="Service Bus still" onclick="openLightbox(this.src)">
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-sketchbook">
+  <button class="close" onclick="closeOverlay('ov-sketchbook')">✕</button>
+  <div style="position:fixed;inset:0;padding-top:0;">
+    <iframe
+      src="https://revestrek.github.io/sketchbook/"
+      style="width:100%;height:100%;border:none;display:block;"
+      title="Sketchbook">
+    </iframe>
   </div>
 </div>
 
