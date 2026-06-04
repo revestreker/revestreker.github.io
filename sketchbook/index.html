@@ -6,7 +6,6 @@
 <title>Sketchbook</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-
 html, body {
   width:100vw; height:100vh;
   background:#080808;
@@ -15,25 +14,18 @@ html, body {
   align-items:center;
   justify-content:center;
 }
-
 .stage {
-  width:100%;
-  height:100%;
+  width:100%; height:100%;
   display:flex;
   align-items:center;
   justify-content:center;
   perspective:2400px;
   perspective-origin:50% 50%;
 }
-
 #book {
   position:relative;
-  box-shadow:
-    0 50px 140px rgba(0,0,0,0.9),
-    0 10px 36px  rgba(0,0,0,0.6);
+  box-shadow: 0 50px 140px rgba(0,0,0,0.9), 0 10px 36px rgba(0,0,0,0.6);
 }
-
-/* ── Layers (stacking order) ── */
 .pg-under, .pg-top, #flipper {
   position:absolute;
   inset:0;
@@ -45,11 +37,8 @@ html, body {
   transform-style:preserve-3d;
   will-change:transform;
   pointer-events:none;
-  /* HIDDEN AT REST — revealed only during a flip */
   visibility:hidden;
 }
-
-/* Images */
 .pg-under img, .pg-top img {
   width:100%; height:100%;
   object-fit:cover;
@@ -58,8 +47,6 @@ html, body {
   -webkit-user-drag:none;
   pointer-events:none;
 }
-
-/* ── Flipper faces ── */
 .face {
   position:absolute;
   inset:0;
@@ -67,7 +54,6 @@ html, body {
   -webkit-backface-visibility:hidden;
   overflow:hidden;
 }
-
 .face-front img {
   width:100%; height:100%;
   object-fit:cover;
@@ -75,21 +61,15 @@ html, body {
   user-select:none;
   pointer-events:none;
 }
-
-/* Fold shadow — sweeps across the front face during the turn */
 #fold-shadow {
   position:absolute;
   inset:0;
   pointer-events:none;
 }
-
 .face-back {
   transform:rotateY(180deg);
-  /* Slight off-black so back-of-page looks like paper, not void */
   background:#131313;
 }
-
-/* Shadow cast onto the incoming page (sits between pg-under and flipper) */
 #reveal-shadow {
   position:absolute;
   inset:0;
@@ -97,38 +77,30 @@ html, body {
   pointer-events:none;
   opacity:0;
 }
-
-/* ── Fold shadow keyframes ── */
-/* Forward: page turns from right edge, shadow sweeps R→L→R */
 @keyframes fold-fwd {
   0%   { background: linear-gradient(to left,  rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 100%); }
   20%  { background: linear-gradient(to left,  rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
-  50%  { background:                            rgba(0,0,0,0.52); }
+  50%  { background: rgba(0,0,0,0.52); }
   80%  { background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
-  100% { background:                            rgba(0,0,0,0.00); }
+  100% { background: rgba(0,0,0,0.00); }
 }
-/* Backward: page turns from left edge, shadow sweeps L→R→L */
 @keyframes fold-bwd {
   0%   { background: linear-gradient(to right, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 100%); }
   20%  { background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
-  50%  { background:                            rgba(0,0,0,0.52); }
+  50%  { background: rgba(0,0,0,0.52); }
   80%  { background: linear-gradient(to left,  rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
-  100% { background:                            rgba(0,0,0,0.00); }
+  100% { background: rgba(0,0,0,0.00); }
 }
-
-/* Shadow on revealed page — fades in then out */
 @keyframes reveal-fwd {
   0%   { opacity:0; background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
   30%  { opacity:1; }
   100% { opacity:0; }
 }
 @keyframes reveal-bwd {
-  0%   { opacity:0; background: linear-gradient(to left,  rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
+  0%   { opacity:0; background: linear-gradient(to left, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
   30%  { opacity:1; }
   100% { opacity:0; }
 }
-
-/* ── Click zones ── */
 .zone {
   position:absolute;
   top:0; height:100%;
@@ -138,8 +110,6 @@ html, body {
 }
 #zone-l { left:0; }
 #zone-r { right:0; }
-
-/* ── Hover glows ── */
 .glow {
   position:absolute;
   top:0; height:100%;
@@ -151,17 +121,11 @@ html, body {
 }
 #glow-l {
   left:0;
-  background:radial-gradient(ellipse 85% 65% at 0% 50%,
-    rgba(255,255,255,0.22) 0%,
-    rgba(255,255,255,0.07) 38%,
-    transparent 68%);
+  background:radial-gradient(ellipse 85% 65% at 0% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
 }
 #glow-r {
   right:0;
-  background:radial-gradient(ellipse 85% 65% at 100% 50%,
-    rgba(255,255,255,0.22) 0%,
-    rgba(255,255,255,0.07) 38%,
-    transparent 68%);
+  background:radial-gradient(ellipse 85% 65% at 100% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
 }
 </style>
 </head>
@@ -170,7 +134,6 @@ html, body {
   <div id="book">
     <div class="pg-under"><img id="img-under" src="" alt=""></div>
     <div class="pg-top" id="pg-top"><img id="img-top" src="" alt=""></div>
-
     <div id="flipper">
       <div class="face face-front">
         <img id="flip-f" src="" alt="">
@@ -178,41 +141,51 @@ html, body {
       </div>
       <div class="face face-back"></div>
     </div>
-
     <div id="reveal-shadow"></div>
-
     <div class="zone" id="zone-l"></div>
     <div class="zone" id="zone-r"></div>
     <div class="glow"  id="glow-l"></div>
     <div class="glow"  id="glow-r"></div>
   </div>
 </div>
-
 <script>
 const IMGS = [
-  'IMG_2317.jpeg','IMG_2318.jpeg','IMG_2323.jpeg','IMG_2327.jpeg',
-  'IMG_2329.jpeg','IMG_2331.jpeg','IMG_2408.jpeg','IMG_2409.jpeg',
-  'IMG_2579.jpeg','IMG_3561.jpeg','IMG_3564.jpeg','IMG_4524.jpeg',
-  'IMG_4525.jpeg','IMG_4526.jpeg','IMG_4528.jpeg','IMG_4529.jpeg',
-  'IMG_4530.jpeg','IMG_5217.jpeg','IMG_5219.jpeg','IMG_5830.jpeg',
-  'IMG_5831.jpeg','IMG_5832.jpeg'
+  'images/C6BEE7C8-F42D-4B14-8D75-CC4DA3715503.JPG',
+  'images/IMG_0005.jpeg',
+  'images/IMG_0007.jpeg',
+  'images/IMG_0031.jpeg',
+  'images/IMG_0171.jpeg',
+  'images/IMG_0174.jpeg',
+  'images/IMG_0175.jpeg',
+  'images/IMG_1675.jpg',
+  'images/IMG_1986.JPG',
+  'images/IMG_2409.jpeg',
+  'images/IMG_2612.jpeg',
+  'images/IMG_2613.jpeg',
+  'images/IMG_4524.jpeg',
+  'images/IMG_4529.jpeg',
+  'images/IMG_6572.jpeg',
+  'images/IMG_8476.jpeg',
+  'images/IMG_8557.jpeg',
+  'images/IMG_8558.jpeg',
+  'images/IMG_8562.jpeg',
+  'images/IMG_9980.jpeg'
 ];
 
-const DUR = 660; // ms — animation duration
+const DUR = 660;
 let cur = 0, busy = false;
 
-const book          = document.getElementById('book');
-const imgTop        = document.getElementById('img-top');
-const imgUnder      = document.getElementById('img-under');
-const flipper       = document.getElementById('flipper');
-const flipF         = document.getElementById('flip-f');
-const pgTop         = document.getElementById('pg-top');
-const glowL         = document.getElementById('glow-l');
-const glowR         = document.getElementById('glow-r');
-const foldShadow    = document.getElementById('fold-shadow');
-const revealShadow  = document.getElementById('reveal-shadow');
+const book         = document.getElementById('book');
+const imgTop       = document.getElementById('img-top');
+const imgUnder     = document.getElementById('img-under');
+const flipper      = document.getElementById('flipper');
+const flipF        = document.getElementById('flip-f');
+const pgTop        = document.getElementById('pg-top');
+const glowL        = document.getElementById('glow-l');
+const glowR        = document.getElementById('glow-r');
+const foldShadow   = document.getElementById('fold-shadow');
+const revealShadow = document.getElementById('reveal-shadow');
 
-/* ── Size the book to fit viewport, preserving image AR ── */
 function sizeBook(src, cb) {
   const p = new Image();
   p.onload = () => {
@@ -229,119 +202,73 @@ function sizeBook(src, cb) {
 }
 
 function preload(i) {
-  if (i >= 0 && i < IMGS.length) {
-    const p = new Image();
-    p.src = IMGS[i];
-  }
+  if (i >= 0 && i < IMGS.length) { const p = new Image(); p.src = IMGS[i]; }
 }
 
 function init() {
   sizeBook(IMGS[0], () => {
     imgTop.src   = IMGS[0];
     imgUnder.src = IMGS[1] || '';
-    preload(2);
-    preload(3);
+    preload(2); preload(3);
   });
 }
 
 function stopAnimations() {
-  foldShadow.style.animation  = 'none';
+  foldShadow.style.animation   = 'none';
   revealShadow.style.animation = 'none';
-  revealShadow.style.opacity  = '0';
+  revealShadow.style.opacity   = '0';
 }
 
-/* ── The flip ── */
 function flip(dir) {
   if (busy) return;
   const nxt = cur + dir;
   if (nxt < 0 || nxt >= IMGS.length) return;
   busy = true;
-
   glowL.style.opacity = '0';
   glowR.style.opacity = '0';
-
-  /* 1. Put the destination image underneath */
   imgUnder.src = IMGS[nxt];
-
-  /* 2. Set up the flipper with the CURRENT image */
   flipF.src = IMGS[cur];
   flipper.style.transformOrigin = dir === 1 ? '0% 50%' : '100% 50%';
-  flipper.style.transition      = 'none';
-  flipper.style.transform       = 'rotateY(0deg)';
-
-  /* 3. Hide pg-top (flipper takes its visual role) then SHOW flipper */
-  pgTop.style.visibility  = 'hidden';
+  flipper.style.transition = 'none';
+  flipper.style.transform  = 'rotateY(0deg)';
+  pgTop.style.visibility   = 'hidden';
   flipper.style.visibility = 'visible';
-
-  /* 4. Restart shadow animations */
   stopAnimations();
-  flipper.offsetHeight; // force reflow so animations restart cleanly
-
+  flipper.offsetHeight;
   const foldKf   = dir === 1 ? 'fold-fwd'   : 'fold-bwd';
   const revealKf = dir === 1 ? 'reveal-fwd' : 'reveal-bwd';
   foldShadow.style.animation   = `${foldKf}   ${DUR}ms ease-in-out forwards`;
   revealShadow.style.animation = `${revealKf} ${DUR}ms ease-in-out forwards`;
-
-  /* 5. Kick off the 3D rotation */
   flipper.style.transition = `transform ${DUR}ms cubic-bezier(0.35, 0, 0.15, 1)`;
   flipper.style.transform  = `rotateY(${dir === 1 ? -180 : 180}deg)`;
-
-  /* 6. Clean up after animation */
   setTimeout(() => {
     cur = nxt;
-
-    /* ── ORDER MATTERS: hide flipper FIRST, then reveal pg-top ── */
-    flipper.style.visibility = 'hidden';   // ← kills the ghost image
+    flipper.style.visibility = 'hidden';
     flipper.style.transition = 'none';
     flipper.style.transform  = 'rotateY(0deg)';
     stopAnimations();
-
-    imgTop.src             = IMGS[cur];    // update static layer
-    pgTop.style.visibility = '';           // show it
-
-    /* Pre-load neighbours */
-    preload(cur + 1);
-    preload(cur + 2);
-    preload(cur - 1);
-
-    /* Prep under-layer for next flip */
+    imgTop.src             = IMGS[cur];
+    pgTop.style.visibility = '';
+    preload(cur + 1); preload(cur + 2); preload(cur - 1);
     if (IMGS[cur + 1]) imgUnder.src = IMGS[cur + 1];
-
     busy = false;
   }, DUR + 30);
 }
 
-/* ── Interactions ── */
 document.getElementById('zone-r').addEventListener('click', () => flip(1));
 document.getElementById('zone-l').addEventListener('click', () => flip(-1));
-
-document.getElementById('zone-r').addEventListener('mouseenter', () => {
-  if (!busy && cur < IMGS.length - 1) glowR.style.opacity = '1';
-});
-document.getElementById('zone-r').addEventListener('mouseleave', () => {
-  glowR.style.opacity = '0';
-});
-document.getElementById('zone-l').addEventListener('mouseenter', () => {
-  if (!busy && cur > 0) glowL.style.opacity = '1';
-});
-document.getElementById('zone-l').addEventListener('mouseleave', () => {
-  glowL.style.opacity = '0';
-});
-
+document.getElementById('zone-r').addEventListener('mouseenter', () => { if (!busy && cur < IMGS.length - 1) glowR.style.opacity = '1'; });
+document.getElementById('zone-r').addEventListener('mouseleave', () => { glowR.style.opacity = '0'; });
+document.getElementById('zone-l').addEventListener('mouseenter', () => { if (!busy && cur > 0) glowL.style.opacity = '1'; });
+document.getElementById('zone-l').addEventListener('mouseleave', () => { glowL.style.opacity = '0'; });
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight' || e.key === 'ArrowDown') flip(1);
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   flip(-1);
 });
-
 let tx = 0;
 document.addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, { passive: true });
-document.addEventListener('touchend',   e => {
-  const dx = e.changedTouches[0].clientX - tx;
-  if (Math.abs(dx) > 50) flip(dx < 0 ? 1 : -1);
-});
-
+document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) flip(dx < 0 ? 1 : -1); });
 window.addEventListener('resize', () => sizeBook(IMGS[cur]));
-
 init();
 </script>
 </body>
