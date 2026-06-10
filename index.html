@@ -300,6 +300,31 @@ section {
   color: var(--cream);
 }
 
+
+/* ---------- SKETCHBOOK SECTION ---------- */
+#sketchbook-section {
+  padding: 80px 0 0;
+}
+#sketchbook-section .section-title {
+  text-align: center;
+  margin-bottom: 8px;
+}
+#sketchbook-section .section-sub {
+  text-align: center;
+  font-size: 14px;
+  color: var(--cream);
+  opacity: 0.5;
+  margin-bottom: 32px;
+  font-family: 'DM Sans', sans-serif;
+}
+.sketchbook-embed {
+  width: 100%;
+  height: 80vh;
+  min-height: 500px;
+  border: none;
+  display: block;
+}
+
 /* ---------- CONTACT ---------- */
 .contact-intro {
   display: flex;
@@ -715,12 +740,12 @@ footer {
         </div>
       </div>
 
-      <div class="card" onclick="openOverlay('ov-sketchbook')">
-        <div class="thumb placeholder" data-label="Paper sketchbook →"></div>
+      <div class="card" onclick="document.getElementById('sketchbook-section').scrollIntoView({behavior:'smooth'});closeExplore();">
+        <div class="thumb placeholder" data-label="Paper sketchbook ↓"></div>
         <div class="body">
           <h3>Paper Sketchbook</h3>
           <span class="tag">Interactive</span>
-          <p>Hand-drawn pages from the sketchbook — flip through them.</p>
+          <p>Hand-drawn pages — scroll down to flip through them.</p>
         </div>
       </div>
       <div class="card" onclick="openOverlay('ov-pixelsketch')">
@@ -748,6 +773,18 @@ footer {
     </div>
   </div>
 
+</section>
+
+<!-- SKETCHBOOK -->
+<section id="sketchbook-section">
+  <h2 class="section-title">sketchbook</h2>
+  <p class="section-sub">click the edges to flip — or use arrow keys</p>
+  <iframe
+    class="sketchbook-embed"
+    src="/sketchbook/"
+    title="Sketchbook"
+    loading="lazy">
+  </iframe>
 </section>
 
 <!-- CONTACT -->
