@@ -314,15 +314,106 @@ section {
   font-size: 14px;
   color: var(--cream);
   opacity: 0.5;
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   font-family: 'DM Sans', sans-serif;
 }
-.sketchbook-embed {
+.sb-stage {
   width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2400px;
+  perspective-origin: 50% 50%;
   height: 80vh;
-  min-height: 500px;
-  border: none;
+  min-height: 480px;
+}
+#sb-book {
+  position: relative;
+  box-shadow: 0 50px 140px rgba(0,0,0,0.9), 0 10px 36px rgba(0,0,0,0.6);
+}
+.sb-pg-under, .sb-pg-top, #sb-flipper {
+  position: absolute;
+  inset: 0;
+}
+.sb-pg-under { z-index: 1; }
+.sb-pg-top   { z-index: 2; }
+#sb-flipper  {
+  z-index: 3;
+  transform-style: preserve-3d;
+  will-change: transform;
+  pointer-events: none;
+  visibility: hidden;
+}
+.sb-pg-under img, .sb-pg-top img {
+  width: 100%; height: 100%;
+  object-fit: cover;
   display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.sb-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+.sb-face-front img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+#sb-fold-shadow { position: absolute; inset: 0; pointer-events: none; }
+.sb-face-back { transform: rotateY(180deg); background: #131313; }
+#sb-reveal-shadow {
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; opacity: 0;
+}
+@keyframes sb-fold-fwd {
+  0%   { background: linear-gradient(to left,  rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 100%); }
+  20%  { background: linear-gradient(to left,  rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  50%  { background: rgba(0,0,0,0.52); }
+  80%  { background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  100% { background: rgba(0,0,0,0.00); }
+}
+@keyframes sb-fold-bwd {
+  0%   { background: linear-gradient(to right, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 100%); }
+  20%  { background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  50%  { background: rgba(0,0,0,0.52); }
+  80%  { background: linear-gradient(to left,  rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  100% { background: rgba(0,0,0,0.00); }
+}
+@keyframes sb-reveal-fwd {
+  0%   { opacity:0; background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
+  30%  { opacity:1; }
+  100% { opacity:0; }
+}
+@keyframes sb-reveal-bwd {
+  0%   { opacity:0; background: linear-gradient(to left, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
+  30%  { opacity:1; }
+  100% { opacity:0; }
+}
+.sb-zone {
+  position: absolute; top: 0; height: 100%; width: 22%;
+  z-index: 10; cursor: pointer;
+}
+#sb-zone-l { left: 0; }
+#sb-zone-r { right: 0; }
+.sb-glow {
+  position: absolute; top: 0; height: 100%; width: 40%;
+  z-index: 9; pointer-events: none; opacity: 0;
+  transition: opacity 0.4s ease;
+}
+#sb-glow-l {
+  left: 0;
+  background: radial-gradient(ellipse 85% 65% at 0% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
+}
+#sb-glow-r {
+  right: 0;
+  background: radial-gradient(ellipse 85% 65% at 100% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
 }
 
 /* ---------- CONTACT ---------- */
@@ -779,12 +870,24 @@ footer {
 <section id="sketchbook-section">
   <h2 class="section-title">sketchbook</h2>
   <p class="section-sub">click the edges to flip — or use arrow keys</p>
-  <iframe
-    class="sketchbook-embed"
-    src="/sketchbook/"
-    title="Sketchbook"
-    loading="lazy">
-  </iframe>
+  <div class="sb-stage">
+    <div id="sb-book">
+      <div class="sb-pg-under"><img id="sb-img-under" src="" alt=""></div>
+      <div class="sb-pg-top" id="sb-pg-top"><img id="sb-img-top" src="" alt=""></div>
+      <div id="sb-flipper">
+        <div class="sb-face sb-face-front">
+          <img id="sb-flip-f" src="" alt="">
+          <div id="sb-fold-shadow"></div>
+        </div>
+        <div class="sb-face sb-face-back"></div>
+      </div>
+      <div id="sb-reveal-shadow"></div>
+      <div class="sb-zone" id="sb-zone-l"></div>
+      <div class="sb-zone" id="sb-zone-r"></div>
+      <div class="sb-glow" id="sb-glow-l"></div>
+      <div class="sb-glow" id="sb-glow-r"></div>
+    </div>
+  </div>
 </section>
 
 <!-- CONTACT -->
@@ -1119,6 +1222,130 @@ function gangarPrev() { gangarGo(gangarIdx - 1); }
 gangarBuildDots();
 // Init positions
 gangarSlides.forEach((s, i) => s.style.transform = `translateX(${i * 100}%)`);
+</script>
+
+
+<script>
+// ── Inline Sketchbook ──
+const SB_IMGS = [
+  'sketchbook/images/C6BEE7C8-F42D-4B14-8D75-CC4DA3715503.JPG',
+  'sketchbook/images/IMG_0005.jpeg',
+  'sketchbook/images/IMG_0007.jpeg',
+  'sketchbook/images/IMG_0031.jpeg',
+  'sketchbook/images/IMG_0171.jpeg',
+  'sketchbook/images/IMG_0174.jpeg',
+  'sketchbook/images/IMG_0175.jpeg',
+  'sketchbook/images/IMG_1675.jpg',
+  'sketchbook/images/IMG_1986.JPG',
+  'sketchbook/images/IMG_2409.jpeg',
+  'sketchbook/images/IMG_2612.jpeg',
+  'sketchbook/images/IMG_2613.jpeg',
+  'sketchbook/images/IMG_4524.jpeg',
+  'sketchbook/images/IMG_4529.jpeg',
+  'sketchbook/images/IMG_6572.jpeg',
+  'sketchbook/images/IMG_8476.jpeg',
+  'sketchbook/images/IMG_8557.jpeg',
+  'sketchbook/images/IMG_8558.jpeg',
+  'sketchbook/images/IMG_8562.jpeg',
+  'sketchbook/images/IMG_9980.jpeg'
+];
+const SB_DUR = 660;
+let sbCur = 0, sbBusy = false;
+
+const sbBook       = document.getElementById('sb-book');
+const sbImgTop     = document.getElementById('sb-img-top');
+const sbImgUnder   = document.getElementById('sb-img-under');
+const sbFlipper    = document.getElementById('sb-flipper');
+const sbFlipF      = document.getElementById('sb-flip-f');
+const sbPgTop      = document.getElementById('sb-pg-top');
+const sbGlowL      = document.getElementById('sb-glow-l');
+const sbGlowR      = document.getElementById('sb-glow-r');
+const sbFoldShadow = document.getElementById('sb-fold-shadow');
+const sbReveal     = document.getElementById('sb-reveal-shadow');
+
+function sbSize(src, cb) {
+  const p = new Image();
+  p.onload = () => {
+    const ar = p.naturalWidth / p.naturalHeight;
+    const stage = sbBook.parentElement;
+    const maxH = stage.clientHeight * 0.92;
+    const maxW = stage.clientWidth  * 0.90;
+    let h = maxH, w = h * ar;
+    if (w > maxW) { w = maxW; h = w / ar; }
+    sbBook.style.width  = Math.round(w) + 'px';
+    sbBook.style.height = Math.round(h) + 'px';
+    if (cb) cb();
+  };
+  p.src = src;
+}
+
+function sbPreload(i) {
+  if (i >= 0 && i < SB_IMGS.length) { const p = new Image(); p.src = SB_IMGS[i]; }
+}
+
+function sbInit() {
+  sbSize(SB_IMGS[0], () => {
+    sbImgTop.src   = SB_IMGS[0];
+    sbImgUnder.src = SB_IMGS[1] || '';
+    sbPreload(2); sbPreload(3);
+  });
+}
+
+function sbStopAnim() {
+  sbFoldShadow.style.animation = 'none';
+  sbReveal.style.animation     = 'none';
+  sbReveal.style.opacity       = '0';
+}
+
+function sbFlip(dir) {
+  if (sbBusy) return;
+  const nxt = sbCur + dir;
+  if (nxt < 0 || nxt >= SB_IMGS.length) return;
+  sbBusy = true;
+  sbGlowL.style.opacity = '0';
+  sbGlowR.style.opacity = '0';
+  sbImgUnder.src = SB_IMGS[nxt];
+  sbFlipF.src    = SB_IMGS[sbCur];
+  sbFlipper.style.transformOrigin = dir === 1 ? '0% 50%' : '100% 50%';
+  sbFlipper.style.transition = 'none';
+  sbFlipper.style.transform  = 'rotateY(0deg)';
+  sbPgTop.style.visibility   = 'hidden';
+  sbFlipper.style.visibility = 'visible';
+  sbStopAnim();
+  sbFlipper.offsetHeight;
+  sbFoldShadow.style.animation = `${dir===1?'sb-fold-fwd':'sb-fold-bwd'} ${SB_DUR}ms ease-in-out forwards`;
+  sbReveal.style.animation     = `${dir===1?'sb-reveal-fwd':'sb-reveal-bwd'} ${SB_DUR}ms ease-in-out forwards`;
+  sbFlipper.style.transition = `transform ${SB_DUR}ms cubic-bezier(0.35,0,0.15,1)`;
+  sbFlipper.style.transform  = `rotateY(${dir===1?-180:180}deg)`;
+  setTimeout(() => {
+    sbCur = nxt;
+    sbFlipper.style.visibility = 'hidden';
+    sbFlipper.style.transition = 'none';
+    sbFlipper.style.transform  = 'rotateY(0deg)';
+    sbStopAnim();
+    sbImgTop.src = SB_IMGS[sbCur];
+    sbPgTop.style.visibility = '';
+    sbPreload(sbCur+1); sbPreload(sbCur+2); sbPreload(sbCur-1);
+    if (SB_IMGS[sbCur+1]) sbImgUnder.src = SB_IMGS[sbCur+1];
+    sbBusy = false;
+  }, SB_DUR + 30);
+}
+
+document.getElementById('sb-zone-r').addEventListener('click', () => sbFlip(1));
+document.getElementById('sb-zone-l').addEventListener('click', () => sbFlip(-1));
+document.getElementById('sb-zone-r').addEventListener('mouseenter', () => { if (!sbBusy && sbCur < SB_IMGS.length-1) sbGlowR.style.opacity='1'; });
+document.getElementById('sb-zone-r').addEventListener('mouseleave', () => { sbGlowR.style.opacity='0'; });
+document.getElementById('sb-zone-l').addEventListener('mouseenter', () => { if (!sbBusy && sbCur > 0) sbGlowL.style.opacity='1'; });
+document.getElementById('sb-zone-l').addEventListener('mouseleave', () => { sbGlowL.style.opacity='0'; });
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') sbFlip(1);
+  if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   sbFlip(-1);
+});
+let sbTx = 0;
+document.addEventListener('touchstart', e => { sbTx = e.changedTouches[0].clientX; }, {passive:true});
+document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - sbTx; if (Math.abs(dx)>50) sbFlip(dx<0?1:-1); });
+window.addEventListener('resize', () => sbSize(SB_IMGS[sbCur]));
+sbInit();
 </script>
 
 </body>
