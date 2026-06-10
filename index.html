@@ -745,7 +745,7 @@ footer {
 <!-- HERO -->
 <header class="hero" id="top">
   <div class="hero-video">
-    <video muted loop playsinline>
+    <video muted loop playsinline preload="auto">
       <source src="studio_reel_v002_2026.mp4" type="video/mp4">
     </video>
   </div>
@@ -1018,16 +1018,16 @@ footer {
     <div class="gangar-carousel">
       <button class="car-btn car-prev" onclick="gangarPrev()">&#8592;</button>
       <div class="gangar-track" id="gangar-track">
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline preload="auto"><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
       </div>
       <button class="car-btn car-next" onclick="gangarNext()">&#8594;</button>
     </div>
@@ -1217,18 +1217,27 @@ function gangarBuildDots() {
 }
 
 function gangarGo(n) {
-  // Hide + pause current
-  gangarSlides[gangarIdx].classList.remove('active');
-  const curVid = gangarSlides[gangarIdx].querySelector('video');
-  if (curVid) { curVid.pause(); curVid.currentTime = 0; }
+  const cur = gangarSlides[gangarIdx];
+  const curVid = cur.querySelector('video');
+  if (curVid) curVid.pause();
+  cur.classList.remove('active');
 
-  // Show + play next
   gangarIdx = (n + gangarSlides.length) % gangarSlides.length;
-  gangarSlides[gangarIdx].classList.add('active');
-  const newVid = gangarSlides[gangarIdx].querySelector('video');
-  if (newVid) newVid.play().catch(() => {});
 
-  // Dots
+  const nextSlide = gangarSlides[gangarIdx];
+  nextSlide.classList.add('active');
+  const newVid = nextSlide.querySelector('video');
+  if (newVid) {
+    // Force decode: load, then play once ready
+    const tryPlay = () => newVid.play().catch(() => {});
+    if (newVid.readyState >= 2) {
+      tryPlay();
+    } else {
+      newVid.load();
+      newVid.addEventListener('loadeddata', tryPlay, { once: true });
+    }
+  }
+
   document.querySelectorAll('.gangar-dot').forEach((d, i) =>
     d.classList.toggle('active', i === gangarIdx));
 }
@@ -1236,7 +1245,23 @@ function gangarGo(n) {
 function gangarNext() { gangarGo(gangarIdx + 1); }
 function gangarPrev() { gangarGo(gangarIdx - 1); }
 
-// Init: show first slide, play its video
+// PRIME ALL VIDEOS: force each to decode its first frame on page load.
+// Playing then pausing forces the browser to render frame 1 (kills black frames).
+gangarSlides.forEach((s, i) => {
+  const v = s.querySelector('video');
+  if (!v) return;
+  v.load();
+  v.play().then(() => {
+    if (i !== 0) { v.pause(); v.currentTime = 0; }
+  }).catch(() => {
+    // Autoplay blocked — at least load metadata + first frame
+    v.addEventListener('loadeddata', () => {
+      if (i !== 0) { try { v.currentTime = 0; } catch(e){} }
+    }, { once: true });
+  });
+});
+
+// Show first slide
 gangarSlides[0].classList.add('active');
 gangarSlides[0].querySelector('video')?.play().catch(() => {});
 gangarBuildDots();
