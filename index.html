@@ -739,7 +739,7 @@ footer {
 <!-- HERO -->
 <header class="hero" id="top">
   <div class="hero-video">
-    <video autoplay muted loop playsinline>
+    <video muted loop playsinline>
       <source src="studio_reel_v002_2026.mp4" type="video/mp4">
     </video>
   </div>
@@ -1012,16 +1012,16 @@ footer {
     <div class="gangar-carousel">
       <button class="car-btn car-prev" onclick="gangarPrev()">&#8592;</button>
       <div class="gangar-track" id="gangar-track">
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
-      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video muted loop playsinline><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
       </div>
       <button class="car-btn car-next" onclick="gangarNext()">&#8594;</button>
     </div>
@@ -1221,7 +1221,7 @@ function gangarNext() { gangarGo(gangarIdx + 1); }
 function gangarPrev() { gangarGo(gangarIdx - 1); }
 gangarBuildDots();
 // Init positions
-gangarSlides.forEach((s, i) => s.style.transform = `translateX(${i * 100}%)`);
+gangarSlides.forEach((s, i) => { s.style.display = i === 0 ? 'block' : 'none'; }); const firstVid = gangarSlides[0]?.querySelector('video'); if (firstVid) firstVid.play();
 </script>
 
 
