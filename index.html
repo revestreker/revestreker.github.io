@@ -675,24 +675,29 @@ footer {
   align-items: center;
   gap: 16px;
   margin: 24px 0 16px;
+  justify-content: center;
 }
 .gangar-track {
   position: relative;
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
+  width: 400px;
+  height: 711px;
   border-radius: 8px;
+  background: #000;
+  overflow: hidden;
 }
 .gangar-slide {
-  display: none;
+  position: absolute;
+  inset: 0;
+  visibility: hidden;
 }
 .gangar-slide.active {
-  display: block;
+  visibility: visible;
 }
 .gangar-slide video {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
-  border-radius: 8px;
 }
 .car-btn {
   background: rgba(244,239,230,0.08);
@@ -1199,7 +1204,6 @@ document.addEventListener('keydown', e => {
 // Gangar carousel
 let gangarIdx = 0;
 const gangarSlides = document.querySelectorAll('.gangar-slide');
-const gangarTrack  = document.getElementById('gangar-track');
 const dotsContainer = document.getElementById('gangar-dots');
 
 function gangarBuildDots() {
@@ -1211,15 +1215,30 @@ function gangarBuildDots() {
     dotsContainer.appendChild(d);
   });
 }
+
 function gangarGo(n) {
-  gangarSlides[gangarIdx].querySelector('video')?.pause();
+  // Hide + pause current
+  gangarSlides[gangarIdx].classList.remove('active');
+  const curVid = gangarSlides[gangarIdx].querySelector('video');
+  if (curVid) { curVid.pause(); curVid.currentTime = 0; }
+
+  // Show + play next
   gangarIdx = (n + gangarSlides.length) % gangarSlides.length;
-  gangarSlides.forEach((s, i) => s.style.transform = `translateX(${(i - gangarIdx) * 100}%)`);
-  document.querySelectorAll('.gangar-dot').forEach((d, i) => d.classList.toggle('active', i === gangarIdx));
-  gangarSlides[gangarIdx].querySelector('video')?.play();
+  gangarSlides[gangarIdx].classList.add('active');
+  const newVid = gangarSlides[gangarIdx].querySelector('video');
+  if (newVid) newVid.play().catch(() => {});
+
+  // Dots
+  document.querySelectorAll('.gangar-dot').forEach((d, i) =>
+    d.classList.toggle('active', i === gangarIdx));
 }
+
 function gangarNext() { gangarGo(gangarIdx + 1); }
 function gangarPrev() { gangarGo(gangarIdx - 1); }
+
+// Init: show first slide, play its video
+gangarSlides[0].classList.add('active');
+gangarSlides[0].querySelector('video')?.play().catch(() => {});
 gangarBuildDots();
 // Init positions
 gangarSlides.forEach((s, i) => { s.style.display = i === 0 ? 'block' : 'none'; }); const firstVid = gangarSlides[0]?.querySelector('video'); if (firstVid) firstVid.play();
