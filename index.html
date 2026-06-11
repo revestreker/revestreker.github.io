@@ -286,7 +286,7 @@ section {
   background-position: center;
   border-radius: var(--radius);
   padding: 36px 28px;
-  border: 2px solid rgba(244,239,230,0.06);
+  border: none;
   cursor: pointer;
   transition: transform 0.4s steps(3), border-color 0.4s steps(2);
   min-height: 180px;
@@ -344,6 +344,46 @@ section {
 #sb-book {
   position: relative;
   box-shadow: 0 50px 140px rgba(0,0,0,0.9), 0 10px 36px rgba(0,0,0,0.6);
+  /* Grungy torn edges via filter */
+  filter: url(#sb-grunge-filter);
+}
+/* SVG filter lives in the HTML — see below #sb-book HTML */
+/* Torn edge overlay — pseudo-element burns the border */
+#sb-book::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: 20;
+  pointer-events: none;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 3px rgba(10,10,10,0.6),
+    inset 3px 0 8px rgba(0,0,0,0.7),
+    inset -3px 0 6px rgba(0,0,0,0.5),
+    inset 0 3px 6px rgba(0,0,0,0.5),
+    inset 0 -3px 6px rgba(0,0,0,0.5);
+  background:
+    /* top torn edge */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='12'%3E%3Cpath d='M0,8 C20,2 35,11 55,5 C75,-1 90,9 115,4 C140,-1 155,10 180,6 C205,2 220,11 245,4 C270,-3 285,9 310,5 C335,1 350,10 375,6 C400,2 415,11 440,4 C465,-3 480,9 505,5 C530,1 545,10 570,6 C595,2 615,11 640,3 C665,-5 680,9 705,5 C730,1 750,10 775,6 L800,8 L800,0 L0,0 Z' fill='%230a0a0a'/%3E%3C/svg%3E") top/100% 12px no-repeat,
+    /* bottom torn edge */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='12'%3E%3Cpath d='M0,4 C20,10 35,1 55,7 C75,13 90,3 115,8 C140,13 155,2 180,6 C205,10 220,1 245,8 C270,15 285,3 310,7 C335,11 350,2 375,6 C400,10 415,1 440,8 C465,15 480,3 505,7 C530,11 545,2 570,6 C595,10 615,1 640,9 C665,17 680,3 705,7 C730,11 750,2 775,6 L800,4 L800,12 L0,12 Z' fill='%230a0a0a'/%3E%3C/svg%3E") bottom/100% 12px no-repeat;
+}
+/* Ring holes on left edge */
+#sb-book::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 22px;
+  height: 100%;
+  z-index: 21;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 9px 9px at 11px 50%, #0a0a0a 55%, transparent 56%),
+    radial-gradient(ellipse 11px 11px at 11px 50%, rgba(0,0,0,0.8) 55%, transparent 56%);
+  background-size: 22px 52px;
+  background-repeat: repeat-y;
+  background-position: 0 24px;
 }
 .sb-pg-under, .sb-pg-top, #sb-flipper {
   position: absolute;
@@ -428,6 +468,152 @@ section {
 #sb-glow-r {
   right: 0;
   background: radial-gradient(ellipse 85% 65% at 100% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
+}
+.sb-counter {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  z-index: 20;
+  font-family: 'Revestreker', cursive;
+  font-size: 15px;
+  color: rgba(244,239,230,0.35);
+  pointer-events: none;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- DIGITAL SKETCHBOOK SECTION ---------- */
+#digital-sketchbook-section {
+  padding: 80px 0 120px;
+}
+#digital-sketchbook-section .section-title {
+  text-align: center;
+  margin-bottom: 8px;
+  color: var(--blue-bright);
+}
+#digital-sketchbook-section .section-sub {
+  text-align: center;
+  font-size: 14px;
+  color: var(--cream);
+  opacity: 0.5;
+  margin-bottom: 40px;
+  font-family: 'DM Sans', sans-serif;
+}
+.dsk-stage {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  height: 80vh;
+}
+.dsk-frame {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 100%;
+  overflow: hidden;
+  background: #0d0d0d;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.95), 0 8px 32px rgba(0,0,0,0.7);
+}
+.dsk-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  background: #0d0d0d;
+}
+.dsk-img-next {
+  opacity: 0;
+  z-index: 1;
+}
+/* scan-line texture — removed, images display clean */
+.dsk-scanlines { display: none; }
+/* wipe curtain — bold with glitch */
+.dsk-wipe {
+  position: absolute;
+  top: 0; left: -100%; bottom: 0;
+  width: 100%;
+  z-index: 5;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 3px,
+      rgba(255,255,255,0.12) 3px, rgba(255,255,255,0.12) 4px,
+      transparent 4px, transparent 7px,
+      rgba(0,0,0,0.18) 7px, rgba(0,0,0,0.18) 8px
+    ),
+    linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(91,60,240,0.25) 25%,
+      rgba(91,60,240,0.75) 44%,
+      rgba(255,255,255,0.55) 49%,
+      rgba(232,84,26,0.75) 54%,
+      rgba(232,84,26,0.25) 70%,
+      transparent 100%
+    );
+}
+@keyframes dsk-wipe-fwd {
+  0%   { left: -100%; filter: none; }
+  18%  { left: -30%;  filter: none; }
+  20%  { left: -28%;  filter: brightness(1.4) saturate(2); transform: translateX(-4px) skewX(-1deg); }
+  22%  { left: -26%;  filter: none; transform: none; }
+  48%  { left: 44%;   filter: none; }
+  50%  { left: 46%;   filter: brightness(1.6) saturate(2.5); transform: translateX(6px) skewX(1.5deg); }
+  52%  { left: 48%;   filter: none; transform: none; }
+  100% { left: 160%;  filter: none; }
+}
+@keyframes dsk-wipe-bwd {
+  0%   { left: 160%;  transform: scaleX(-1); filter: none; }
+  18%  { left: 30%;   transform: scaleX(-1); filter: none; }
+  20%  { left: 28%;   transform: scaleX(-1) translateX(-4px) skewX(-1deg); filter: brightness(1.4) saturate(2); }
+  22%  { left: 26%;   transform: scaleX(-1); filter: none; }
+  48%  { left: -44%;  transform: scaleX(-1); filter: none; }
+  50%  { left: -46%;  transform: scaleX(-1) translateX(6px) skewX(1.5deg); filter: brightness(1.6) saturate(2.5); }
+  52%  { left: -48%;  transform: scaleX(-1); filter: none; }
+  100% { left: -160%; transform: scaleX(-1); filter: none; }
+}
+/* click zones */
+.dsk-zone {
+  position: absolute;
+  top: 0; height: 100%; width: 22%;
+  z-index: 15;
+  cursor: pointer;
+}
+.dsk-zone-l { left: 0; }
+.dsk-zone-r { right: 0; }
+/* hover glow on zones */
+.dsk-zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.dsk-zone-l::after {
+  background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(91,60,240,0.18) 0%, transparent 70%);
+}
+.dsk-zone-r::after {
+  background: radial-gradient(ellipse 80% 60% at 100% 50%, rgba(91,60,240,0.18) 0%, transparent 70%);
+}
+.dsk-zone:hover::after { opacity: 1; }
+/* page counter */
+.dsk-counter {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  z-index: 20;
+  font-family: 'Revestreker', cursive;
+  font-size: 15px;
+  color: rgba(244,239,230,0.35);
+  pointer-events: none;
+  letter-spacing: 0.05em;
 }
 
 /* ---------- CONTACT ---------- */
@@ -735,6 +921,11 @@ footer {
 }
 .gangar-dot.active { background: var(--orange); }
 
+.folio-grid--sketch {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 22px;
+}
+
 /* Locked coming-soon items inside portfolio overlays */
 .folio-locked {
   display: flex;
@@ -854,24 +1045,6 @@ footer {
         </div>
       </div>
 
-      <div class="card" onclick="document.getElementById('sketchbook-section').scrollIntoView({behavior:'smooth'});closeExplore();">
-        <div class="thumb placeholder" data-label="Paper sketchbook ↓"></div>
-        <div class="body">
-          <h3>Paper Sketchbook</h3>
-          <span class="tag">Interactive</span>
-          <p>Hand-drawn pages — scroll down to flip through them.</p>
-        </div>
-      </div>
-
-      <div class="card" onclick="openOverlay('ov-pixelsketch')">
-        <div class="thumb placeholder" data-label="Pixel sketchbook — coming soon"></div>
-        <div class="body">
-          <h3>Pixel Sketchbook</h3>
-          <span class="tag">Digital illustration</span>
-          <p>Digital drawings and illustrations — coming soon.</p>
-        </div>
-      </div>
-
     </div>
   </div>
 
@@ -891,10 +1064,21 @@ footer {
 
 </section>
 
+<!-- SVG filter for sketchbook grungy edges -->
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <filter id="sb-grunge-filter" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="linearRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.06" numOctaves="4" seed="8" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feComposite in="displaced" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+</svg>
+
 <!-- SKETCHBOOK -->
 <section id="sketchbook-section">
   <h2 class="section-title">sketchbook</h2>
-  <p class="section-sub">click the edges to flip — or use arrow keys</p>
+  <p class="section-sub">paper — click the edges to flip, or use arrow keys</p>
   <div class="sb-stage">
     <div id="sb-book">
       <div class="sb-pg-under"><img id="sb-img-under" src="" alt=""></div>
@@ -911,6 +1095,29 @@ footer {
       <div class="sb-zone" id="sb-zone-r"></div>
       <div class="sb-glow" id="sb-glow-l"></div>
       <div class="sb-glow" id="sb-glow-r"></div>
+      <div class="sb-counter" id="sb-counter">1 / 20</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIGITAL SKETCHBOOK -->
+<section id="digital-sketchbook-section">
+  <h2 class="section-title" id="dsk-title">digital sketchbook</h2>
+  <p class="section-sub" id="dsk-sub">click the edges to advance — or use arrow keys</p>
+  <div class="dsk-stage">
+    <div class="dsk-frame" id="dsk-frame">
+      <!-- scan-line overlay -->
+      <div class="dsk-scanlines" id="dsk-scanlines"></div>
+      <!-- wipe curtain -->
+      <div class="dsk-wipe" id="dsk-wipe"></div>
+      <!-- images -->
+      <img class="dsk-img" id="dsk-img-cur" src="" alt="">
+      <img class="dsk-img dsk-img-next" id="dsk-img-next" src="" alt="">
+      <!-- click zones -->
+      <div class="dsk-zone dsk-zone-l" id="dsk-zone-l"></div>
+      <div class="dsk-zone dsk-zone-r" id="dsk-zone-r"></div>
+      <!-- page counter -->
+      <div class="dsk-counter" id="dsk-counter">1 / 24</div>
     </div>
   </div>
 </section>
@@ -1444,6 +1651,11 @@ const sbGlowL      = document.getElementById('sb-glow-l');
 const sbGlowR      = document.getElementById('sb-glow-r');
 const sbFoldShadow = document.getElementById('sb-fold-shadow');
 const sbReveal     = document.getElementById('sb-reveal-shadow');
+const sbCounter    = document.getElementById('sb-counter');
+
+function sbUpdateCounter() {
+  if (sbCounter) sbCounter.textContent = (sbCur + 1) + ' / ' + SB_IMGS.length;
+}
 
 function sbSize(src, cb) {
   const p = new Image();
@@ -1470,6 +1682,7 @@ function sbInit() {
     sbImgTop.src   = SB_IMGS[0];
     sbImgUnder.src = SB_IMGS[1] || '';
     sbPreload(2); sbPreload(3);
+    sbUpdateCounter();
   });
 }
 
@@ -1509,6 +1722,7 @@ function sbFlip(dir) {
     sbPgTop.style.visibility = '';
     sbPreload(sbCur+1); sbPreload(sbCur+2); sbPreload(sbCur-1);
     if (SB_IMGS[sbCur+1]) sbImgUnder.src = SB_IMGS[sbCur+1];
+    sbUpdateCounter();
     sbBusy = false;
   }, SB_DUR + 30);
 }
@@ -1528,6 +1742,117 @@ document.addEventListener('touchstart', e => { sbTx = e.changedTouches[0].client
 document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - sbTx; if (Math.abs(dx)>50) sbFlip(dx<0?1:-1); });
 window.addEventListener('resize', () => sbSize(SB_IMGS[sbCur]));
 sbInit();
+</script>
+
+<script>
+// ── Digital Sketchbook ──
+const DSK_IMGS = [
+  'https://lh3.googleusercontent.com/d/1gvXG9i1PSDmU9iDARVnFKpS28y453wfM', // 1
+  'https://lh3.googleusercontent.com/d/1GHUTcg1WmEj6JvK1rfAoImbsXUnsfpvB', // 2
+  'https://lh3.googleusercontent.com/d/14MGtMQASA675Z_npMvx_ZkndLFA6aa9m', // 3
+  // 4 is .tiff — skipped
+  'https://lh3.googleusercontent.com/d/17TvflTFBBLfPkYAQukvZ0Mmadfcbg2iX', // 5
+  'https://lh3.googleusercontent.com/d/1ptvQqL1L5fodKxV8uHWkXYvJ4f8fBXNA', // 6
+  'https://lh3.googleusercontent.com/d/1Tb5LR6A8TxNIrAexM6vAVRlLshyZJ491', // 7
+  'https://lh3.googleusercontent.com/d/1dq_2wffP4_iolo_mz8lKrlD1mlgRGg1X', // 8
+  'https://lh3.googleusercontent.com/d/1XpcBvLcR8NiBYPtRNkaAIv0SNMFpV9B3', // 9
+  'https://lh3.googleusercontent.com/d/1LBdu1s82Y2rALlxEx6ZFGMRIMpujdYaN', // 10
+  'https://lh3.googleusercontent.com/d/1Y8WcEU0kBp5LqJpBbN-qy_-EhiQasxfd', // 11
+  'https://lh3.googleusercontent.com/d/1nkxaG6vuoxmcWEIYUNY3ClFxhpALxKhG', // 12
+  'https://lh3.googleusercontent.com/d/191B5ePVIFOIvZfKo0_fQzWFWFgGrUFxS', // 13
+  'https://lh3.googleusercontent.com/d/18J19A6mSVFfD3VyWHtqs6KIEFgdf65km', // 14
+  'https://lh3.googleusercontent.com/d/1xworvARbJ8ipnm_mV9l6Mv085gzOhbs4', // 15
+  'https://lh3.googleusercontent.com/d/1shRKe45YLaDF3Js3l5Ui3ekl-jPV3ZsN', // 16
+  'https://lh3.googleusercontent.com/d/1Z_-NkGl6jKkVAiPzYtmIoHTDwowe2xsw', // 17
+  'https://lh3.googleusercontent.com/d/1g7wBZVxqN2oTW5yVWaWWcjbWE-QfuIHu', // 18
+  'https://lh3.googleusercontent.com/d/1O35U6OUD-dBcl33xzd3uD7EsUXWZcWi3', // 19
+  'https://lh3.googleusercontent.com/d/1yu8rPoSK7ALJgS6saqmeCF42TVIbjggP', // 20
+  'https://lh3.googleusercontent.com/d/1DilEeh3lsWyIziz30dU8PugTbGm18zDy', // 21
+  'https://lh3.googleusercontent.com/d/1o7PyHNL5DwJ2O_B-Xtp1PKkxYQ-eOk7o', // 22
+  'https://lh3.googleusercontent.com/d/1cnMZ-dgFq9zoNdZgmyyCx_5IXbTuOwef', // 23
+  'https://lh3.googleusercontent.com/d/1mfRvHmayZC3xG-vKPHWiYhLS91y18AXo', // 24
+  'https://lh3.googleusercontent.com/d/1AhwmHy_6hg81f6dq00MdWS6VUiNSybLF', // 25
+];
+const DSK_DUR = 680;
+let dskCur = 0, dskBusy = false;
+
+const dskImgCur  = document.getElementById('dsk-img-cur');
+const dskImgNext = document.getElementById('dsk-img-next');
+const dskWipe    = document.getElementById('dsk-wipe');
+const dskCounter = document.getElementById('dsk-counter');
+
+function dskUpdateCounter() {
+  dskCounter.textContent = (dskCur + 1) + ' / ' + DSK_IMGS.length;
+}
+
+function dskPreload(i) {
+  if (i >= 0 && i < DSK_IMGS.length) { const p = new Image(); p.src = DSK_IMGS[i]; }
+}
+
+function dskInit() {
+  dskImgCur.src = DSK_IMGS[0];
+  dskPreload(1); dskPreload(2);
+  dskUpdateCounter();
+}
+
+function dskFlip(dir) {
+  if (dskBusy) return;
+  const nxt = dskCur + dir;
+  if (nxt < 0 || nxt >= DSK_IMGS.length) return;
+  dskBusy = true;
+
+  // preload next image
+  dskImgNext.src = DSK_IMGS[nxt];
+  dskImgNext.style.opacity = '0';
+
+  // reset wipe
+  dskWipe.style.animation = 'none';
+  dskWipe.style.left = dir === 1 ? '-100%' : '100%';
+  dskWipe.offsetHeight; // reflow
+
+  // mid-point: swap images halfway through wipe
+  const half = DSK_DUR / 2;
+  setTimeout(() => {
+    dskImgCur.src = DSK_IMGS[nxt];
+    dskImgNext.style.opacity = '0';
+    dskCur = nxt;
+    dskUpdateCounter();
+    dskPreload(dskCur + 1);
+    dskPreload(dskCur - 1);
+  }, half);
+
+  // run wipe animation
+  dskWipe.style.animation = `${dir === 1 ? 'dsk-wipe-fwd' : 'dsk-wipe-bwd'} ${DSK_DUR}ms cubic-bezier(0.4,0,0.2,1) forwards`;
+
+  setTimeout(() => {
+    dskWipe.style.animation = 'none';
+    dskWipe.style.left = '-100%';
+    dskBusy = false;
+  }, DSK_DUR + 20);
+}
+
+document.getElementById('dsk-zone-r').addEventListener('click', () => dskFlip(1));
+document.getElementById('dsk-zone-l').addEventListener('click', () => dskFlip(-1));
+
+// touch swipe
+let dskTx = 0;
+document.getElementById('dsk-frame').addEventListener('touchstart', e => { dskTx = e.changedTouches[0].clientX; }, {passive:true});
+document.getElementById('dsk-frame').addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - dskTx;
+  if (Math.abs(dx) > 50) dskFlip(dx < 0 ? 1 : -1);
+});
+
+// keyboard — only when paper sketchbook isn't active (dsk section in view)
+document.addEventListener('keydown', e => {
+  const dskSection = document.getElementById('digital-sketchbook-section');
+  const rect = dskSection.getBoundingClientRect();
+  const inView = rect.top < window.innerHeight && rect.bottom > 0;
+  if (!inView) return;
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') dskFlip(1);
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   dskFlip(-1);
+});
+
+dskInit();
 </script>
 
 </body>
