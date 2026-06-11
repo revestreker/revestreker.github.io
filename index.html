@@ -40,6 +40,7 @@ body {
   font-size: 18px;
   line-height: 1.6;
   overflow-x: hidden;
+  cursor: url('assets/images/cursor.png') 16 16, auto;
 }
 
 body::before {
@@ -50,6 +51,17 @@ body::before {
   pointer-events: none;
   opacity: 0.05;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- SCROLL TINT OVERLAY ---------- */
+#scroll-tint {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(74,43,232,0.0) 0%, transparent 70%);
+  transition: opacity 0.6s ease;
+  mix-blend-mode: screen;
 }
 
 /* ---------- NAV ---------- */
@@ -315,22 +327,56 @@ section {
 }
 
 
-/* ---------- SKETCHBOOK SECTION ---------- */
-#sketchbook-section {
-  padding: 80px 0 0;
+/* ---------- SKETCHBOOK TABS ---------- */
+.sb-tabs-wrap {
+  margin-top: 48px;
 }
-#sketchbook-section .section-title {
-  text-align: center;
-  margin-bottom: 8px;
+.sb-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 0;
 }
-#sketchbook-section .section-sub {
-  text-align: center;
-  font-size: 14px;
+.sb-tab {
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  background: var(--card);
   color: var(--cream);
-  opacity: 0.5;
-  margin-bottom: 40px;
-  font-family: 'DM Sans', sans-serif;
+  border: 2px solid rgba(244,239,230,0.08);
+  border-bottom: none;
+  border-radius: 18px 18px 0 0;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: border-color 0.3s steps(2), color 0.3s steps(2), background 0.3s steps(2);
+  position: relative;
+  z-index: 1;
 }
+.sb-tab:hover {
+  border-color: rgba(244,239,230,0.2);
+}
+.sb-tab.active {
+  background: #111;
+  border-color: var(--orange);
+  color: var(--orange-bright);
+}
+.sb-panel {
+  display: none;
+  background: #111;
+  border: 2px solid rgba(244,239,230,0.08);
+  border-radius: 0 18px 18px 18px;
+  padding: 40px 0 0;
+  overflow: hidden;
+}
+.sb-panel.active {
+  display: block;
+}
+/* when paper tab is active, round the right corner of its border join */
+#sb-tab-paper.active {
+  border-bottom-color: #111;
+}
+#sb-tab-digital.active {
+  border-radius: 18px 18px 0 0;
+}
+
 .sb-stage {
   width: 100%;
   display: flex;
@@ -340,6 +386,7 @@ section {
   perspective-origin: 50% 50%;
   height: 80vh;
   min-height: 480px;
+  padding-bottom: 40px;
 }
 #sb-book {
   position: relative;
@@ -481,23 +528,6 @@ section {
   letter-spacing: 0.05em;
 }
 
-/* ---------- DIGITAL SKETCHBOOK SECTION ---------- */
-#digital-sketchbook-section {
-  padding: 80px 0 120px;
-}
-#digital-sketchbook-section .section-title {
-  text-align: center;
-  margin-bottom: 8px;
-  color: var(--blue-bright);
-}
-#digital-sketchbook-section .section-sub {
-  text-align: center;
-  font-size: 14px;
-  color: var(--cream);
-  opacity: 0.5;
-  margin-bottom: 40px;
-  font-family: 'DM Sans', sans-serif;
-}
 .dsk-stage {
   width: 100%;
   display: flex;
@@ -974,6 +1004,9 @@ footer {
 </head>
 <body>
 
+<!-- SCROLL TINT -->
+<div id="scroll-tint"></div>
+
 <!-- NAV -->
 <nav>
   <a href="#top" class="logo">
@@ -1015,16 +1048,16 @@ footer {
       <div class="body">
         <h3>Service Bus</h3>
         <span class="tag">Animated short</span>
-        <p>Best Animation, Ekko Shortlist 2025. Screening at La Guarimba, August 2026.</p>
+        <p>Best Animation Short EKKO 2025, New Danish Talent VAF 2025, Visuelt Prisen 2026.</p>
       </div>
     </div>
 
     <div class="card" onclick="openOverlay('ov-faf')">
       <div class="thumb" style="background-image:url('assets/images/faf_lineup.jpg')"></div>
       <div class="body">
-        <h3>FAF 2026 Trailer</h3>
+        <h3>FAF Trailer</h3>
         <span class="tag">Festival trailer commission</span>
-        <p>High-energy rocket-driven character romp for Fredrikstad Animation Festival.</p>
+        <p>Fredrikstad Animation Festival trailer for 2026.</p>
       </div>
     </div>
 
@@ -1033,7 +1066,7 @@ footer {
       <div class="body">
         <h3>Teddies</h3>
         <span class="tag">Animated short series</span>
-        <p>A cosy murder mystery in miniature. Teddy bears, jazz, and mayhem.</p>
+        <p>An animated stand-up TV-show in the world of Revestreker.</p>
       </div>
     </div>
 
@@ -1066,8 +1099,8 @@ footer {
         <div class="thumb" style="background-image:url('assets/images/among_still.jpg')"></div>
         <div class="body">
           <h3>Among Giants</h3>
-          <span class="tag">Animated film</span>
-          <p>Atmospheric frame-by-frame work, scale and wonder.</p>
+          <span class="tag">Feature film in development</span>
+          <p>A action-drama film in development.</p>
         </div>
       </div>
 
@@ -1086,66 +1119,64 @@ footer {
     <div class="folio" onclick="openOverlay('ov-folio-story')" style="background-image:url('https://lh3.googleusercontent.com/d/1FEQu83tKU3vva3HL4S66z7c2Esddh5uc')">
       <h4>Storyboard &amp; Direction</h4>
     </div>
-  </div>
+  <!-- SKETCHBOOK TABS -->
+  <div class="sb-tabs-wrap">
+    <div class="sb-tabs">
+      <button class="sb-tab" id="sb-tab-paper" onclick="toggleSbTab('paper')">Paper Sketchbook</button>
+      <button class="sb-tab" id="sb-tab-digital" onclick="toggleSbTab('digital')">Digital Sketchbook</button>
+    </div>
 
-</section>
-
-<!-- SVG filter for sketchbook grungy edges -->
-<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
-  <defs>
-    <filter id="sb-grunge-filter" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="linearRGB">
-      <feTurbulence type="fractalNoise" baseFrequency="0.04 0.06" numOctaves="4" seed="8" result="noise"/>
-      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
-      <feComposite in="displaced" in2="SourceGraphic" operator="in"/>
-    </filter>
-  </defs>
-</svg>
-
-<!-- SKETCHBOOK -->
-<section id="sketchbook-section">
-  <h2 class="section-title">sketchbook</h2>
-  <p class="section-sub">paper — click the edges to flip, or use arrow keys</p>
-  <div class="sb-stage">
-    <div id="sb-book">
-      <div class="sb-pg-under"><img id="sb-img-under" src="" alt=""></div>
-      <div class="sb-pg-top" id="sb-pg-top"><img id="sb-img-top" src="" alt=""></div>
-      <div id="sb-flipper">
-        <div class="sb-face sb-face-front">
-          <img id="sb-flip-f" src="" alt="">
-          <div id="sb-fold-shadow"></div>
+    <!-- PAPER SKETCHBOOK PANEL -->
+    <div class="sb-panel" id="sb-panel-paper">
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip — or use arrow keys</p>
+      <!-- SVG filter for grungy edges -->
+      <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+        <defs>
+          <filter id="sb-grunge-filter" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="linearRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.06" numOctaves="4" seed="8" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+            <feComposite in="displaced" in2="SourceGraphic" operator="in"/>
+          </filter>
+        </defs>
+      </svg>
+      <div class="sb-stage">
+        <div id="sb-book">
+          <div class="sb-pg-under"><img id="sb-img-under" src="" alt=""></div>
+          <div class="sb-pg-top" id="sb-pg-top"><img id="sb-img-top" src="" alt=""></div>
+          <div id="sb-flipper">
+            <div class="sb-face sb-face-front">
+              <img id="sb-flip-f" src="" alt="">
+              <div id="sb-fold-shadow"></div>
+            </div>
+            <div class="sb-face sb-face-back"></div>
+          </div>
+          <div id="sb-reveal-shadow"></div>
+          <div class="sb-zone" id="sb-zone-l"></div>
+          <div class="sb-zone" id="sb-zone-r"></div>
+          <div class="sb-glow" id="sb-glow-l"></div>
+          <div class="sb-glow" id="sb-glow-r"></div>
+          <div class="sb-counter" id="sb-counter">1 / 20</div>
         </div>
-        <div class="sb-face sb-face-back"></div>
       </div>
-      <div id="sb-reveal-shadow"></div>
-      <div class="sb-zone" id="sb-zone-l"></div>
-      <div class="sb-zone" id="sb-zone-r"></div>
-      <div class="sb-glow" id="sb-glow-l"></div>
-      <div class="sb-glow" id="sb-glow-r"></div>
-      <div class="sb-counter" id="sb-counter">1 / 20</div>
     </div>
-  </div>
-</section>
 
-<!-- DIGITAL SKETCHBOOK -->
-<section id="digital-sketchbook-section">
-  <h2 class="section-title" id="dsk-title">digital sketchbook</h2>
-  <p class="section-sub" id="dsk-sub">click the edges to advance — or use arrow keys</p>
-  <div class="dsk-stage">
-    <div class="dsk-frame" id="dsk-frame">
-      <!-- scan-line overlay -->
-      <div class="dsk-scanlines" id="dsk-scanlines"></div>
-      <!-- wipe curtain -->
-      <div class="dsk-wipe" id="dsk-wipe"></div>
-      <!-- images -->
-      <img class="dsk-img" id="dsk-img-cur" src="" alt="">
-      <img class="dsk-img dsk-img-next" id="dsk-img-next" src="" alt="">
-      <!-- click zones -->
-      <div class="dsk-zone dsk-zone-l" id="dsk-zone-l"></div>
-      <div class="dsk-zone dsk-zone-r" id="dsk-zone-r"></div>
-      <!-- page counter -->
-      <div class="dsk-counter" id="dsk-counter">1 / 24</div>
+    <!-- DIGITAL SKETCHBOOK PANEL -->
+    <div class="sb-panel" id="sb-panel-digital">
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to advance — or use arrow keys</p>
+      <div class="dsk-stage">
+        <div class="dsk-frame" id="dsk-frame">
+          <div class="dsk-scanlines" id="dsk-scanlines"></div>
+          <div class="dsk-wipe" id="dsk-wipe"></div>
+          <img class="dsk-img" id="dsk-img-cur" src="" alt="">
+          <img class="dsk-img dsk-img-next" id="dsk-img-next" src="" alt="">
+          <div class="dsk-zone dsk-zone-l" id="dsk-zone-l"></div>
+          <div class="dsk-zone dsk-zone-r" id="dsk-zone-r"></div>
+          <div class="dsk-counter" id="dsk-counter">1 / 24</div>
+        </div>
+      </div>
     </div>
   </div>
+
 </section>
 
 <!-- CONTACT -->
@@ -1226,7 +1257,7 @@ footer {
     </div>
 
     <div class="overlay-coffee">
-      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1234,7 +1265,7 @@ footer {
 <div class="overlay" id="ov-faf">
   <button class="close" onclick="closeOverlay('ov-faf')">✕</button>
   <div class="overlay-inner">
-    <h2>FAF 2026 — Trailer</h2>
+    <h2>FAF Trailer</h2>
     <span class="tag">Festival trailer commission</span>
     <p class="desc">Animation trailer for Fredrikstad Animation Festival 2026.</p>
     <div class="img-grid">
@@ -1247,7 +1278,7 @@ footer {
       <img src="assets/images/faf_thumbs.jpg" alt="FAF thumbnails" onclick="openLightbox(this)">
     </div>
     <div class="overlay-coffee">
-      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1277,7 +1308,7 @@ footer {
     </div>
 
     <div class="overlay-coffee">
-      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1306,7 +1337,7 @@ footer {
     </div>
     <div class="gangar-dots" id="gangar-dots"></div>
     <div class="overlay-coffee">
-      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1347,14 +1378,11 @@ footer {
 
     <div class="overlay-section">
       <h3 class="section-header">WIP Storyboards</h3>
-      <div class="vimeo-wrap">
-        <iframe src="https://speakerdeck.com/player/revestreken" style="border:0;" allowfullscreen="true" allow="autoplay; fullscreen"></iframe>
-      </div>
-      <p style="margin-top:12px;font-size:14px;opacity:0.5;"><a href="https://speakerdeck.com/revestreken/among-giants-wip-storyboards" target="_blank" rel="noopener" style="color:var(--orange-bright);text-decoration:none;">View full storyboard deck ↗</a></p>
+      <p><a href="https://speakerdeck.com/revestreken/among-giants-wip-storyboards" target="_blank" rel="noopener" style="color:var(--orange-bright);text-decoration:none;font-family:'Revestreker',cursive;font-size:20px;">View WIP storyboard deck ↗</a></p>
     </div>
 
     <div class="overlay-coffee">
-      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1385,7 +1413,7 @@ footer {
     </div>
 
     <div class="overlay-coffee">
-      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1814,7 +1842,7 @@ let sbTx = 0;
 document.addEventListener('touchstart', e => { sbTx = e.changedTouches[0].clientX; }, {passive:true});
 document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - sbTx; if (Math.abs(dx)>50) sbFlip(dx<0?1:-1); });
 window.addEventListener('resize', () => sbSize(SB_IMGS[sbCur]));
-sbInit();
+// sbInit called by tab toggle
 </script>
 
 <script>
@@ -1925,7 +1953,89 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   dskFlip(-1);
 });
 
-dskInit();
+// dskInit called by tab toggle
+</script>
+
+<script>
+// ── Sketchbook tab toggle ──
+let sbInited = false, dskInited = false;
+
+function toggleSbTab(which) {
+  const paperTab  = document.getElementById('sb-tab-paper');
+  const digitalTab = document.getElementById('sb-tab-digital');
+  const paperPanel  = document.getElementById('sb-panel-paper');
+  const digitalPanel = document.getElementById('sb-panel-digital');
+
+  const isAlreadyActive = (which === 'paper' && paperPanel.classList.contains('active'))
+                       || (which === 'digital' && digitalPanel.classList.contains('active'));
+
+  // clicking the active tab closes it
+  if (isAlreadyActive) {
+    paperTab.classList.remove('active');
+    digitalTab.classList.remove('active');
+    paperPanel.classList.remove('active');
+    digitalPanel.classList.remove('active');
+    return;
+  }
+
+  // switch to clicked tab
+  if (which === 'paper') {
+    paperTab.classList.add('active');
+    digitalTab.classList.remove('active');
+    paperPanel.classList.add('active');
+    digitalPanel.classList.remove('active');
+    if (!sbInited) { sbInited = true; sbInit(); }
+    else { window.dispatchEvent(new Event('resize')); }
+  } else {
+    digitalTab.classList.add('active');
+    paperTab.classList.remove('active');
+    digitalPanel.classList.add('active');
+    paperPanel.classList.remove('active');
+    if (!dskInited) { dskInited = true; dskInit(); }
+  }
+}
+
+// ── Scroll tint overlay ──
+const scrollTint = document.getElementById('scroll-tint');
+const tintColors = [
+  [74, 43, 232],   // blue (top)
+  [74, 43, 232],   // blue
+  [232, 84, 26],   // orange (mid)
+  [74, 43, 232],   // blue
+  [91, 60, 240],   // blue-bright (bottom)
+];
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function updateScrollTint() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.body.scrollHeight - window.innerHeight;
+  const t = Math.min(scrollY / maxScroll, 1);
+
+  const seg = t * (tintColors.length - 1);
+  const idx = Math.floor(seg);
+  const frac = seg - idx;
+  const c1 = tintColors[Math.min(idx, tintColors.length - 1)];
+  const c2 = tintColors[Math.min(idx + 1, tintColors.length - 1)];
+
+  const r = Math.round(lerp(c1[0], c2[0], frac));
+  const g = Math.round(lerp(c1[1], c2[1], frac));
+  const b = Math.round(lerp(c1[2], c2[2], frac));
+  const alpha = 0.07 + t * 0.08;
+
+  scrollTint.style.background = `radial-gradient(ellipse 120% 80% at 50% ${20 + t * 60}%, rgba(${r},${g},${b},${alpha.toFixed(2)}) 0%, transparent 70%)`;
+}
+window.addEventListener('scroll', updateScrollTint, { passive: true });
+updateScrollTint();
+
+// ── Hero parallax ──
+const heroVideo = document.querySelector('.hero-video');
+const heroLogo  = document.querySelector('.hero-logo');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (heroVideo) heroVideo.style.transform = `translateY(${y * 0.35}px)`;
+  if (heroLogo)  heroLogo.style.transform  = `translateY(${y * 0.12}px) rotate(${heroLogo.style.transform.match(/rotate\(([^)]+)\)/)?.[1] || '-1deg'})`;
+}, { passive: true });
 </script>
 
 </body>
