@@ -551,24 +551,25 @@ footer {
   line-height: 1.65;
 }
 
-/* image grid inside overlays */
+/* image grid inside overlays — masonry columns, natural aspect ratios */
 .img-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 14px;
+  columns: 3;
+  column-gap: 14px;
 }
 .img-grid img {
   width: 100%;
-  aspect-ratio: 4/3;
-  object-fit: cover;
+  height: auto;
+  display: block;
   border-radius: 18px;
   background: #1c1c1c;
   cursor: pointer;
   transition: transform 0.3s steps(3);
-  display: block;
+  margin-bottom: 14px;
+  break-inside: avoid;
 }
 .img-grid img:hover { transform: scale(1.02); }
-.img-grid img.tall { aspect-ratio: 2/3; grid-row: span 2; }
+@media (max-width: 900px) { .img-grid { columns: 2; } }
+@media (max-width: 500px) { .img-grid { columns: 1; } }
 
 /* fullscreen image lightbox */
 .lightbox {
@@ -810,15 +811,6 @@ footer {
       </div>
     </div>
 
-    <div class="card" onclick="openOverlay('ov-brita')">
-      <div class="thumb" style="background-image:url('assets/images/brita_interior.jpg')"></div>
-      <div class="body">
-        <h3>The Disappearance of Brita Svahni</h3>
-        <span class="tag">Interactive game &amp; animation</span>
-        <p>Hand-animated point-and-click adventure. Play it online.</p>
-      </div>
-    </div>
-
     <div class="card" onclick="openOverlay('ov-minimic')">
       <div class="thumb" style="background-image:url('assets/images/ted_turnaround.jpg')"></div>
       <div class="body">
@@ -828,32 +820,31 @@ footer {
       </div>
     </div>
 
-    <div class="card" onclick="openOverlay('ov-gangar')">
-      <div class="thumb placeholder" data-label="Gangar — visuals coming soon"></div>
-      <div class="body">
-        <h3>Gangar</h3>
-        <span class="tag">Spotify Canvas reels</span>
-        <p>Animated music visuals, looping and hypnotic.</p>
-      </div>
-    </div>
-
-    <div class="card" onclick="openOverlay('ov-ecokrim')">
-      <div class="thumb placeholder" data-label="Ecokrim — VJ stills coming soon"></div>
-      <div class="body">
-        <h3>Ecokrim Concert Visuals</h3>
-        <span class="tag">Live VJ work</span>
-        <p>Real-time visuals performed through Resolume Arena.</p>
-      </div>
-    </div>
-
-
-
   </div>
 
   <!-- EXPLORE MORE -->
   <div class="explore-wrap">
     <button class="explore-btn" onclick="toggleExplore(this)">explore more +</button>
-    <div class="explore-list">
+    <div class="explore-list" id="explore-list">
+
+      <div class="card" onclick="openOverlay('ov-brita')">
+        <div class="thumb" style="background-image:url('assets/images/brita_interior.jpg')"></div>
+        <div class="body">
+          <h3>The Disappearance of Brita Svahni</h3>
+          <span class="tag">Interactive game &amp; animation</span>
+          <p>Hand-animated point-and-click adventure. Play it online.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openOverlay('ov-gangar')">
+        <div class="thumb placeholder" data-label="Gangar — visuals coming soon"></div>
+        <div class="body">
+          <h3>Gangar</h3>
+          <span class="tag">Spotify Canvas reels</span>
+          <p>Animated music visuals, looping and hypnotic.</p>
+        </div>
+      </div>
+
       <div class="card" onclick="openOverlay('ov-among')">
         <div class="thumb" style="background-image:url('assets/images/among_still.jpg')"></div>
         <div class="body">
@@ -871,6 +862,7 @@ footer {
           <p>Hand-drawn pages — scroll down to flip through them.</p>
         </div>
       </div>
+
       <div class="card" onclick="openOverlay('ov-pixelsketch')">
         <div class="thumb placeholder" data-label="Pixel sketchbook — coming soon"></div>
         <div class="body">
@@ -879,6 +871,7 @@ footer {
           <p>Digital drawings and illustrations — coming soon.</p>
         </div>
       </div>
+
     </div>
   </div>
 
@@ -1337,6 +1330,18 @@ footer {
 </div>
 
 <script>
+function toggleExplore(btn) {
+  const list = document.getElementById('explore-list');
+  const isOpen = list.classList.contains('open');
+  list.classList.toggle('open');
+  btn.textContent = isOpen ? 'explore more +' : 'explore less −';
+}
+function closeExplore() {
+  const list = document.getElementById('explore-list');
+  list.classList.remove('open');
+  const btn = document.querySelector('.explore-btn');
+  if (btn) btn.textContent = 'explore more +';
+}
 function openOverlay(id) {
   const el = document.getElementById(id);
   el.style.display = 'block';
