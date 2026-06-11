@@ -646,18 +646,19 @@ section {
   gap: 16px;
   margin-top: 16px;
 }
-.contact-links a {
-  font-family: 'Revestreker', cursive;
+.icon-link {
   color: var(--cream);
   text-decoration: none;
   background: var(--card);
   border: 2px solid rgba(244,239,230,0.08);
   border-radius: 22px;
-  padding: 14px 26px;
-  font-size: 19px;
+  width: 58px; height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.4s steps(3), border-color 0.4s steps(2), color 0.4s steps(2);
 }
-.contact-links a:hover {
+.icon-link:hover {
   transform: translateY(-6px) rotate(-1deg);
   border-color: var(--orange);
   color: var(--orange-bright);
@@ -926,6 +927,31 @@ footer {
   margin-top: 22px;
 }
 
+/* Coffee link at bottom of overlays */
+.overlay-coffee {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(244,239,230,0.07);
+  text-align: center;
+}
+.coffee-link {
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  color: var(--cream);
+  text-decoration: none;
+  background: var(--card);
+  border: 2px solid rgba(244,239,230,0.08);
+  border-radius: var(--radius);
+  padding: 14px 28px;
+  display: inline-block;
+  transition: transform 0.3s steps(2), border-color 0.3s steps(2), color 0.3s steps(2);
+}
+.coffee-link:hover {
+  transform: translateY(-4px) rotate(-1deg);
+  border-color: var(--orange);
+  color: var(--orange-bright);
+}
+
 /* Locked coming-soon items inside portfolio overlays */
 .folio-locked {
   display: flex;
@@ -975,7 +1001,7 @@ footer {
 <!-- ABOUT -->
 <section id="about" class="about">
   <h2 class="section-title">about</h2>
-  <p>Revestreker is the studio of Elmer Lødemel, a Norwegian-Danish animator and illustrator making funky films with humor and care, built frame by frame. He also designs characters, sets and pipeline and storyboards for popular TV-productions and films.</p>
+  <p>Revestreker is the studio of Elmer Lødemel, an animator and illustrator building comedy and entertainment, frame by frame.<br>He also designs characters, sets, pipeline and storyboards for TV-productions and films.</p>
 </section>
 
 <!-- PROJECTS -->
@@ -1005,7 +1031,7 @@ footer {
     <div class="card" onclick="openOverlay('ov-minimic')">
       <div class="thumb" style="background-image:url('assets/images/ted_turnaround.jpg')"></div>
       <div class="body">
-        <h3>Teddies / Mini Mic</h3>
+        <h3>Teddies</h3>
         <span class="tag">Animated short series</span>
         <p>A cosy murder mystery in miniature. Teddy bears, jazz, and mayhem.</p>
       </div>
@@ -1127,14 +1153,24 @@ footer {
   <h2 class="section-title">contact</h2>
   <div class="contact-intro">
     <img class="contact-photo" src="assets/images/photo_elmer.jpg" alt="Elmer Lødemel">
-    <p class="contact-bio">I'm Elmer, a Norwegian-Danish animator and filmmaker based in Oslo. I make funny films about people, run a small studio called Revestreker, and occasionally show up somewhere with a sketchbook. If you want to work together or just say hi, reach out.</p>
+    <p class="contact-bio">Hope you like what you saw!<br>Please don't hesitate to reach out for questions and requests.<br>I'd love to collaborate with you!</p>
   </div>
   <div class="contact-links">
-    <a href="mailto:elmerlodemel@gmail.com">Email</a>
-    <a href="https://www.instagram.com/revestreken/" target="_blank" rel="noopener">Instagram</a>
-    <a href="https://www.youtube.com/@revestreken" target="_blank" rel="noopener">YouTube</a>
-    <a href="https://soundcloud.com/revestrek" target="_blank" rel="noopener">SoundCloud</a>
-    <a href="https://www.linkedin.com/in/elmerlodemel/" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:elmerlodemel@gmail.com" title="Email" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    </a>
+    <a href="https://www.instagram.com/revestreken/" target="_blank" rel="noopener" title="Instagram" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@revestreken" target="_blank" rel="noopener" title="YouTube" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://soundcloud.com/revestrek" target="_blank" rel="noopener" title="SoundCloud" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M1.175 12.225c-.042 0-.08.03-.083.072l-.41 3.653.41 3.606c.004.042.04.072.083.072.041 0 .077-.03.082-.072l.465-3.606-.465-3.653c-.005-.042-.04-.072-.082-.072zm1.558-.297c-.05 0-.09.037-.094.087l-.35 3.943.35 3.862c.004.05.044.087.094.087.05 0 .09-.037.094-.087l.398-3.862-.398-3.943c-.004-.05-.044-.087-.094-.087zm1.574-.155c-.058 0-.105.047-.108.105l-.29 4.098.29 4.02c.003.058.05.105.108.105.06 0 .106-.047.109-.105l.33-4.02-.33-4.098c-.003-.058-.05-.105-.109-.105zm1.59.444c-.066 0-.12.054-.122.12l-.23 3.654.23 3.955c.003.066.056.12.122.12.067 0 .12-.054.123-.12l.262-3.955-.262-3.654c-.003-.066-.056-.12-.123-.12zm1.604-.732c-.075 0-.135.06-.137.135l-.17 4.386.17 3.896c.002.075.062.135.137.135.076 0 .136-.06.138-.135l.193-3.896-.193-4.386c-.002-.075-.062-.135-.138-.135zm1.618-.33c-.083 0-.15.067-.152.15l-.11 4.716.11 3.836c.002.083.069.15.152.15.084 0 .15-.067.153-.15l.124-3.836-.124-4.716c-.003-.083-.07-.15-.153-.15zm1.63.09c-.09 0-.164.074-.165.165l-.053 4.626.053 3.776c.001.09.075.164.165.164.091 0 .165-.074.166-.164l.06-3.776-.06-4.626c-.001-.09-.075-.165-.166-.165zm1.644-.43c-.1 0-.18.08-.18.18l.003 5.056-.003 3.717c0 .1.08.18.18.18.1 0 .18-.08.18-.18l.003-3.717-.003-5.056c0-.1-.08-.18-.18-.18zm1.657-.194c-.107 0-.194.087-.195.194l.003 5.25-.003 3.657c.001.108.088.195.195.195.108 0 .194-.087.195-.195l.003-3.657-.003-5.25c-.001-.107-.087-.194-.195-.194zm1.67-.116c-.116 0-.21.094-.21.21v8.967c0 .116.094.21.21.21.117 0 .21-.094.21-.21v-8.967c0-.116-.093-.21-.21-.21zm2.625.9c-.42 0-.826.07-1.207.2V19.97c0 .125.1.23.226.23h7.434C22.1 20.2 23 19.295 23 18.188c0-1.108-.9-2.013-2.013-2.013-.22 0-.432.036-.63.102-.133-2.533-2.19-4.555-4.74-4.555z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/elmerlodemel/" target="_blank" rel="noopener" title="LinkedIn" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
   </div>
 </section>
 
@@ -1150,7 +1186,7 @@ footer {
 
     <div class="overlay-section">
       <h3 class="section-header">Film</h3>
-      <p class="desc">A comedic animated short following a grumpy tour bus driver and his chaotic passengers through the Norwegian countryside. <em>Service Bus</em> premiered at Kortfilmfestivalen Grimstad 2025 and toured the international festival circuit — winning the Norwegian Short Film Award for Best Animation.</p>
+      <p class="desc">An award winning short film made at The Animation Workshop as our graduation project.<br><br>We all know the service button on airplanes, but what about the ones on buses? When a bored traveler stumbles upon one, his curiosity gets the better of him. But with only the bus driver on duty, pressing it might lead to unexpected consequences.</p>
       <div class="vimeo-wrap">
         <iframe src="https://player.vimeo.com/video/1051852019?h=b982cfd35d&autoplay=0&title=0&byline=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
       </div>
@@ -1158,6 +1194,19 @@ footer {
         <img src="assets/images/sb_still1.jpg" alt="Service Bus still" onclick="openLightbox(this)">
         <img src="assets/images/sb_still2.jpg" alt="Service Bus still" onclick="openLightbox(this)">
         <img src="assets/images/sb_still3.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <div class="img-grid">
+        <img src="assets/images/sb_bg_1.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_2.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_3.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_4.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_5.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_6.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_7.jpg" alt="Background" onclick="openLightbox(this)">
       </div>
     </div>
 
@@ -1176,17 +1225,8 @@ footer {
       </div>
     </div>
 
-    <div class="overlay-section">
-      <h3 class="section-header">Backgrounds</h3>
-      <div class="img-grid">
-        <img src="assets/images/sb_bg_1.jpg" alt="Background" onclick="openLightbox(this)">
-        <img src="assets/images/sb_bg_2.jpg" alt="Background" onclick="openLightbox(this)">
-        <img src="assets/images/sb_bg_3.jpg" alt="Background" onclick="openLightbox(this)">
-        <img src="assets/images/sb_bg_4.jpg" alt="Background" onclick="openLightbox(this)">
-        <img src="assets/images/sb_bg_5.jpg" alt="Background" onclick="openLightbox(this)">
-        <img src="assets/images/sb_bg_6.jpg" alt="Background" onclick="openLightbox(this)">
-        <img src="assets/images/sb_bg_7.jpg" alt="Background" onclick="openLightbox(this)">
-      </div>
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1195,8 +1235,8 @@ footer {
   <button class="close" onclick="closeOverlay('ov-faf')">✕</button>
   <div class="overlay-inner">
     <h2>FAF 2026 — Trailer</h2>
-    <span class="tag">Animation production</span>
-    <p class="desc">Animation production for the Fredrikstad Animation Festival 2026 trailer. Lush, hand-painted backgrounds and a full character lineup bring a fantastical world to life — cliffs, mushrooms, and a crew ready to adventure.</p>
+    <span class="tag">Festival trailer commission</span>
+    <p class="desc">Animation trailer for Fredrikstad Animation Festival 2026.</p>
     <div class="img-grid">
       <img src="assets/images/faf_bg_1.jpg" alt="FAF background" onclick="openLightbox(this)">
       <img src="assets/images/faf_bg_2.jpg" alt="FAF background" onclick="openLightbox(this)">
@@ -1205,6 +1245,9 @@ footer {
       <img src="assets/images/faf_lineup.jpg" alt="FAF character lineup" onclick="openLightbox(this)">
       <img src="assets/images/faf_sketches.jpg" alt="FAF sketches" onclick="openLightbox(this)">
       <img src="assets/images/faf_thumbs.jpg" alt="FAF thumbnails" onclick="openLightbox(this)">
+    </div>
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1217,7 +1260,7 @@ footer {
 
     <div class="overlay-section">
       <h3 class="section-header">Play the game</h3>
-      <p class="desc">A hand-animated point-and-click adventure game set in a mysterious Norwegian interior. Brita Svahni has vanished — explore her home, piece together the clues, and uncover what happened. Built with frame-by-frame animation and an original atmospheric soundtrack.</p>
+      <p class="desc">Brita Svahni is a well-known theater actress. Nobody has seen her since her last performance. You show up at her apartment to find out what happened. Look around, find clues and piece together the story in this hand-animated point-and-click game with an original atmospheric soundtrack.</p>
       <a href="https://revestreker.github.io/brita-svani/" target="_blank" class="game-link">
         <img src="assets/images/brita_interior.jpg" alt="Play The Disappearance of Brita Svahni" class="game-thumb">
         <span class="game-cta">▶ Play the game</span>
@@ -1232,6 +1275,10 @@ footer {
         <img src="assets/images/brita_char.jpg" alt="Brita character design" onclick="openLightbox(this)">
       </div>
     </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+    </div>
   </div>
 </div>
 
@@ -1240,7 +1287,7 @@ footer {
   <div class="overlay-inner">
     <h2>Gangar</h2>
     <span class="tag">Music visuals / Spotify Canvas</span>
-    <p class="desc">Animated Spotify Canvas loops and music visuals for Norwegian folk-jazz act Gangar. Looping, hypnotic hand-drawn character cycles — designed to breathe and move alongside the music.</p>
+    <p class="desc">13 animated Spotify Canvases made for the folk-rock band Gangar.</p>
     <div class="gangar-carousel">
       <button class="car-btn car-prev" onclick="gangarPrev()">&#8592;</button>
       <div class="gangar-track" id="gangar-track">
@@ -1258,6 +1305,9 @@ footer {
       <button class="car-btn car-next" onclick="gangarNext()">&#8594;</button>
     </div>
     <div class="gangar-dots" id="gangar-dots"></div>
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
+    </div>
   </div>
 </div>
 
@@ -1275,17 +1325,36 @@ footer {
   <button class="close" onclick="closeOverlay('ov-among')">✕</button>
   <div class="overlay-inner">
     <h2>Among Giants</h2>
-    <span class="tag">Animated short film</span>
-    <p class="desc">A hand-drawn animated short about small things in a very large world. Atmospheric, wordless, frame-by-frame — exploring scale, wonder, and the strange tenderness of being tiny.</p>
-    <div class="img-grid">
-      <img src="assets/images/ag_girls.jpg" alt="Among Giants" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_0.jpg" alt="Among Giants still" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_1.jpg" alt="Among Giants still" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_2.jpg" alt="Among Giants still" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_3.jpg" alt="Among Giants still" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_4.jpg" alt="Among Giants still" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_5.jpg" alt="Among Giants still" onclick="openLightbox(this)">
-      <img src="assets/images/ag_still_6.jpg" alt="Among Giants still" onclick="openLightbox(this)">
+    <span class="tag">Feature film</span>
+    <p class="desc">A feature film about the corrupt and mafia-like society we live in today.</p>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Stills &amp; Development</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1UiO7W39E98shjbWyExAwSlcxLZaMce0d" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ys9Yfjvc2_OjQnNos4Xcow7pX4hARGfI" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TWoETdQVQms9kN1t0HZwyIJYzFEgHXwu" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/13_PtpnE3MLFi40cuYMEkYNccuqMVWKI5" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1o-wO5yFwGWmqXTyVqxKzSb0JQa4GHAqa" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TElWgTV9Eiy1VRdOEXXu4vOIicgeNlje" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1ssbckHF1n85x5V2rh05K2A9Y6IRgNCiT" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m4A_HzXbcTgu9LD5gkQ2iSa5a8xFPElE" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1GXE0c-xHPmmfCrQM8NtQx4iBi16ckzqS" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m_Xy8MA02azjzPoIFYSueR8RMKC6Vb4B" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1zQHJ-mrzUVBcRAJXSiQ99XgIMz00LB-2" alt="Among Giants" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">WIP Storyboards</h3>
+      <div class="vimeo-wrap">
+        <iframe src="https://speakerdeck.com/player/revestreken" style="border:0;" allowfullscreen="true" allow="autoplay; fullscreen"></iframe>
+      </div>
+      <p style="margin-top:12px;font-size:14px;opacity:0.5;"><a href="https://speakerdeck.com/revestreken/among-giants-wip-storyboards" target="_blank" rel="noopener" style="color:var(--orange-bright);text-decoration:none;">View full storyboard deck ↗</a></p>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
     </div>
   </div>
 </div>
@@ -1293,9 +1362,9 @@ footer {
 <div class="overlay" id="ov-minimic">
   <button class="close" onclick="closeOverlay('ov-minimic')">✕</button>
   <div class="overlay-inner">
-    <h2>Teddies / Mini Mic</h2>
+    <h2>Teddies</h2>
     <span class="tag">Animated short series</span>
-    <p class="desc">A cosy murder mystery in miniature. Teddy bears, a tiny jazz club, and a detective who should probably be in a children's show but really isn't. <em>Teddies</em> is the original animation series behind the <em>Mini Mic</em> concept — hand-drawn, character-driven, and gleefully absurd.</p>
+    <p class="desc">Walk into the grungy and funky world of Revestreker where the pub Teddies sits. Here you will find stand-up shows, theater events and more. You can walk into apartments to solve mysteries (like <a href="#" onclick="closeOverlay('ov-minimic');openOverlay('ov-brita');return false;" style="color:var(--orange-bright);text-decoration:none;">The Disappearance of Brita Svahni</a>), and play mini games.</p>
 
     <div class="overlay-section">
       <h3 class="section-header">Backgrounds</h3>
@@ -1313,6 +1382,10 @@ footer {
         <img src="assets/images/ted_guys_turn.jpg" alt="Guys turnaround" onclick="openLightbox(this)">
         <img src="assets/images/ted_guys_con.jpg" alt="Guys concept" onclick="openLightbox(this)">
       </div>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">☕ Buy me a coffee</a>
     </div>
   </div>
 </div>
