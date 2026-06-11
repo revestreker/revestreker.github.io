@@ -282,6 +282,8 @@ section {
 }
 .folio {
   background: var(--card);
+  background-size: cover;
+  background-position: center;
   border-radius: var(--radius);
   padding: 36px 28px;
   border: 2px solid rgba(244,239,230,0.06);
@@ -290,6 +292,16 @@ section {
   min-height: 180px;
   display: flex;
   align-items: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+.folio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.18) 60%, transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
 }
 .folio:hover { transform: translateY(-8px) rotate(-1deg); border-color: var(--blue-bright); }
 .folio:nth-child(odd):hover { border-color: var(--orange); }
@@ -298,6 +310,8 @@ section {
   font-size: 22px;
   line-height: 1.15;
   color: var(--cream);
+  position: relative;
+  z-index: 1;
 }
 
 
@@ -720,6 +734,24 @@ footer {
 }
 .gangar-dot.active { background: var(--orange); }
 
+/* Locked coming-soon items inside portfolio overlays */
+.folio-locked {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  border: 2px solid rgba(244,239,230,0.07);
+  background: rgba(255,255,255,0.02);
+  color: rgba(244,239,230,0.32);
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  cursor: default;
+  user-select: none;
+}
+.folio-locked svg { flex-shrink: 0; opacity: 0.5; }
+
 </style>
 </head>
 <body>
@@ -853,13 +885,13 @@ footer {
   <!-- PORTFOLIO -->
   <h2 class="portfolio-title">portfolio</h2>
   <div class="folio-grid">
-    <div class="folio" onclick="openOverlay('ov-folio-char')">
+    <div class="folio" onclick="openOverlay('ov-folio-char')" style="background-image:url('https://lh3.googleusercontent.com/d/1XvDE4wjybB4hFhNCaOwV_JRdOmOn_UjP')">
       <h4>Character Design &amp; Art Direction</h4>
     </div>
-    <div class="folio" onclick="openOverlay('ov-folio-prod')">
+    <div class="folio" onclick="openOverlay('ov-folio-prod')" style="background-image:url('https://lh3.googleusercontent.com/d/1IHRTo3c3K4DQlIMflSOpStacOWb6UCyc')">
       <h4>Production Design &amp; Visual Development</h4>
     </div>
-    <div class="folio" onclick="openOverlay('ov-folio-story')">
+    <div class="folio" onclick="openOverlay('ov-folio-story')" style="background-image:url('https://lh3.googleusercontent.com/d/1FEQu83tKU3vva3HL4S66z7c2Esddh5uc')">
       <h4>Storyboard &amp; Direction</h4>
     </div>
   </div>
@@ -1090,15 +1122,66 @@ footer {
   <div class="overlay-inner">
     <h2>Character Design &amp; Art Direction</h2>
     <span class="tag">Portfolio</span>
-    <p class="desc">Character work across films, commissions and personal projects.</p>
-    <div class="img-grid">
-      <img src="assets/images/faf_lineup.jpg" alt="FAF character lineup" onclick="openLightbox(this.src)">
-      <img src="assets/images/char_sb_001.jpg" alt="Service Bus character design" onclick="openLightbox(this.src)">
-      <img src="assets/images/char_sb_002.jpg" alt="Service Bus character design" onclick="openLightbox(this.src)">
-      <img src="assets/images/char_passengers.jpg" alt="Bus passengers" onclick="openLightbox(this.src)">
-      <img src="assets/images/char_mafia.jpg" alt="Mr Mafia Man" onclick="openLightbox(this.src)">
-      <img src="assets/images/char_gunnar.jpg" alt="Gunnar concept sheet" onclick="openLightbox(this.src)">
+
+    <div class="overlay-section">
+      <h3 class="section-header">Teddies</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1XvDE4wjybB4hFhNCaOwV_JRdOmOn_UjP" alt="Teddies turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1bAYG4U0RzmUKe5xBcwXOILnhyxyRYTcR" alt="Guys turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1tV-cB7QGecfCw-Gl7T3qCkUy-1xjvWpL" alt="Guys concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1wZPhmCpclDsD7ikDttSEIPI9w60elWTs" alt="Ladies concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1szsTnSkYKYXOXQobLBXXlADAbM8AjfA9" alt="Character design lady" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/17pmP-0Ds8MHvEQ08ndgwnNK_xOnvKaaR" alt="Character exploration" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/10LUI2oB0Rsb4XsLe9sPx8y2leHWsi5rD" alt="Silhouettes" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Jpje5CNORB9TV3dtYW3PDeFBoz8ttwW7" alt="Mike" onclick="openLightbox(this)">
+      </div>
     </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Mr. Mafiaman</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1Hkp3-_QILuhayGxtJRZlWm-zb-ufCpMp" alt="Mafiaman character design" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/189RVni2yKoc-EAqIYCuD8jifcumRZr42" alt="Mr Mafiaman" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1gdC9jsQZdEefmqkkB_PF4S7_JDhpg8Pt" alt="Mr Mafiaman v1" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1qvIc-TF0K2s14T23rPnsPrvuWlqn6zXr" alt="Mafiaman concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/10SdxAQll7x33Bp3PsQ18AjX1W9dXsjWM" alt="Mafiaman sketch" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1sCx0oihluaJkfXlkZK24PoZcdF_BN_1z" alt="Mr Mafiaman animation" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/kluwYaDu2bA?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Among Giants</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1UiO7W39E98shjbWyExAwSlcxLZaMce0d" alt="Picky Mic turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ys9Yfjvc2_OjQnNos4Xcow7pX4hARGfI" alt="Loose Bruce turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/13_PtpnE3MLFi40cuYMEkYNccuqMVWKI5" alt="Picky Mic expressions" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1o-wO5yFwGWmqXTyVqxKzSb0JQa4GHAqa" alt="Loose Bruce expressions" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TWoETdQVQms9kN1t0HZwyIJYzFEgHXwu" alt="Girls concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TElWgTV9Eiy1VRdOEXXu4vOIicgeNlje" alt="Among Giants design 1" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1ssbckHF1n85x5V2rh05K2A9Y6IRgNCiT" alt="Among Giants design 2" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m4A_HzXbcTgu9LD5gkQ2iSa5a8xFPElE" alt="Among Giants design 3" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1GXE0c-xHPmmfCrQM8NtQx4iBi16ckzqS" alt="Among Giants design 4" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m_Xy8MA02azjzPoIFYSueR8RMKC6Vb4B" alt="Picky Mic walk" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1zQHJ-mrzUVBcRAJXSiQ99XgIMz00LB-2" alt="Loose Bruce walk" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Other Designs</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1aCWgnQjL9PrRdB4E_NMIcchMHuhoHRM2" alt="Gunnar concept sheet" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1xBbK4kIEXVoZTv4arFFO27xAPvj7n6Fq" alt="Character design" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1D3YKyYF_-cuWM6PqaY9z81Pc8k7UwaSD" alt="Design work" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1_8APz2QmVXJds7BeFNyNTuOkSB7vT0nM" alt="Character concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1tNdpPObo3P2fQxh1mAuwCbj8FDh46X7d" alt="Character design" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1tnpK6mFZC-ptGKjxH-X_qeiTZ_jutGbI" alt="Design sketch" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1YswBzqk2SBVI00fSsz-UJMaT4r3o5xEk" alt="Character design" onclick="openLightbox(this)">
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1107,14 +1190,76 @@ footer {
   <div class="overlay-inner">
     <h2>Production Design &amp; Visual Development</h2>
     <span class="tag">Portfolio</span>
-    <p class="desc">Sets, props, color scripts and visual development across projects.</p>
-    <div class="img-grid">
-      <img src="assets/images/faf_style.jpg" alt="FAF style frame" onclick="openLightbox(this.src)">
-      <img src="assets/images/prod_bus_bg.jpg" alt="Service Bus background" onclick="openLightbox(this.src)">
-      <img src="assets/images/prod_color.jpg" alt="Color script" onclick="openLightbox(this.src)">
-      <img src="assets/images/prod_car.jpg" alt="Vehicle design" onclick="openLightbox(this.src)">
-      <img src="assets/images/faf_bee.jpg" alt="FAF bee prop" onclick="openLightbox(this.src)">
+
+    <div class="overlay-section">
+      <h3 class="section-header">Blender Worlds — Teddies</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1oIKz7ANwMclxoUOirmaKur8M1e7Cm6Lz" alt="Locations" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1IHRTo3c3K4DQlIMflSOpStacOWb6UCyc" alt="Look test v007" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/17Kh7_qwOAS-ReLboHe4_Gqgfpmmr2VxV" alt="Look test v006 frame 01" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1uC_NwqlhauQUSIOHxkXJLoyT0_3C_Bye" alt="Look test v006 frame 02" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1qBdDwVqpUziMhZhNNtBC5eD9zyB9nlE9" alt="Look test v006 frame 03" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/R4KISSrF27g?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
     </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Blender Worlds — Scenes</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1bHVjrJrWxktyGekSrznImWO_dEe8GohA" alt="Snofritt 002" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ia9uW1fH4hXX9ImZyiMHWUbrJCEhdKao" alt="Snofritt 004" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1klAV94l57kpzNTRXzW1J-6b40NMpfRzj" alt="Sunset v003" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Y49Hqgw0tOKhGGzX7J3IC0I0CWzaduAk" alt="Sunset v002" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1jEenlqAoBeBSKtN5Z6oGnXMNStOMWRK7" alt="Sunset v001" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1WDiWF8M3YYIHMTY__pWmPopU8NLBeM69" alt="Night scene" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1MzK110ZNAHoolM0VA9onKtjg4ZBY2J0o" alt="House scene" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1bg64XFlVubQjCrszUlUMHmx8er_9CyfR" alt="Chimney asset" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1eZQ6DZuyofTGHt6f-YBHV45p9YQyS3JU" alt="House looktest" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1i8zEUrXi4Dar4fp96T62IMR83AyEwztZ" alt="Ambient scene" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/_F1CQtSxXOk?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Service Bus</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/14proEp0IsuEmChstYXc4lV0eNy6f_6ie" alt="Service Bus background" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1G8iX2r8nGPhQzn-9Nfu0qCrIPnU0SkN9" alt="Service Bus background 2" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1hVVaERmNjgvrRWjPhoVZoYDY5pIzLfSs" alt="Service Bus background 3" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1fb9DMtfq7Vu52F7XBaAWJugVd9qe0_f7" alt="Service Bus background 4" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TAA2jHNBpxUx-J_4CEUxShvPz-y08zS4" alt="Look test" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1FHuj6nqDooReuUaIbxs587GTeT5aEwAx" alt="Tree concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1dY6hOZOHxGRmLZewZ3s_jr2kFxYhHm21" alt="Cliff concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1FcW9ZnSuajFNFNiOehSQz-Uq2gBsgG-n" alt="Painting guide" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1UK7urZo7ZuIGZq0PGS3FM8b3yssh7VW-" alt="Reference photo" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1dARVfZEKtUjl4FKRXBLFT6NtVxrVygJF" alt="Cliffs reference" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/k_l_9RxO38E?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Other Designs</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1h8m1ScnqatoHx06oC6-bVQUXNiZoPK0Z" alt="Car design four views" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1c9ketombUraxuW8W0mk5lufu-Jkxnz8x" alt="Car design rear" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1gVeWfz9s7VK53_h9U3AZzP_ROkxSMCYk" alt="Color script" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1PlXyqKctM3tfxczxNmP_I2VfHtHQewsH" alt="Walking forest long shot" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1266KBMCjloem7nTjJnMsPY-9G0CpbZ2e" alt="Design work" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1M170oTasyQPzr4dhauVW3sX7RIfrFtfC" alt="Design work 2" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Jjtq5v9DG8pAwts9DzXjgiAGOXk3inrI" alt="Design work 3" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Z-E3jGxrjKfIs50aKD7ow0XJ_sOTBqyW" alt="Design work 4" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/183RnDiiyczkDuOPz-xHnI0_Sw0mNPqzL" alt="Design work 5" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1PKqGocJOm4MXiC_MJGKbMPfOw-3A7aV2" alt="Design work 6" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1gxjx_YLpaKpgyGNAUmzxPjW0fSqJn0Ws" alt="Design work 7" onclick="openLightbox(this)">
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1123,13 +1268,45 @@ footer {
   <div class="overlay-inner">
     <h2>Storyboard &amp; Direction</h2>
     <span class="tag">Portfolio</span>
-    <p class="desc">Storyboards and direction for TV productions and films.</p>
-    <div class="img-grid">
-      <img src="assets/images/faf_storyboard.jpg" alt="FAF storyboard" onclick="openLightbox(this.src)">
-      <img src="assets/images/sb_still1.jpg" alt="Service Bus still" onclick="openLightbox(this.src)">
-      <img src="assets/images/sb_still2.jpg" alt="Service Bus still" onclick="openLightbox(this.src)">
-      <img src="assets/images/sb_still3.jpg" alt="Service Bus still" onclick="openLightbox(this.src)">
+
+    <div class="overlay-section">
+      <div class="folio-locked">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Høj Season 2 — coming soon!</span>
+      </div>
+      <div class="folio-locked">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Hidden Islands — coming soon!</span>
+      </div>
     </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Yardmission</h3>
+      <div class="vimeo-wrap">
+        <iframe src="https://www.youtube.com/embed/kO_Yl2_gHHs?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1zrxSUh40gE0PLTjXTmhkbW6K6gyIo-dH" alt="Yardmission thumbnails" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1AmWlmOoZdcSLc97ziFl-eCGaIa7Xhyj5" alt="Yardmission shot 016" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Service Bus — Storyboards</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1FEQu83tKU3vva3HL4S66z7c2Esddh5uc" alt="Storyboard page 01" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Y4kIs8zdnMcOzh9h-oCXA63CJwM-wh8d" alt="Storyboard page 02" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1HZKTN4uDFPf3rvJJVXUxTWqhvudZInw6" alt="Storyboard page 03" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1or-N7lYU011PTe13YS2darTAI8mb9mUW" alt="Storyboard page 04" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/12AJ8Chms7tNaSWFrbO-SiM9HvcjfYo2Z" alt="Service Bus poster" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1kUOBNzA62QAkcozgxFgZQag5V37qPlgv" alt="Bus driver turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1ScEpX-awUx49p356tTMSGKn0Z0NSGOBp" alt="Rolf turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1LVP8R6nNeiNrvzOjXEdK9lMhlMroQo3R" alt="Rolf expression sheet" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1XeLepsxtXTX0YBOAtwMVX7BsOG7MT-QI" alt="Bus front view" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ul1WX9LqgI7buKmGhKTaeDuVmEoFBDU7" alt="Bus profile" onclick="openLightbox(this)">
+      </div>
+    </div>
+
   </div>
 </div>
 
