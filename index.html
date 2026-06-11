@@ -62,9 +62,19 @@ body::before {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse 120% 80% at 50% 0%, rgba(74,43,232,0.0) 0%, transparent 70%);
-  transition: opacity 0.6s ease;
   mix-blend-mode: screen;
+}
+/* secondary noise texture that intensifies with scroll */
+#scroll-texture {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  transition: opacity 0.4s ease;
 }
 
 /* ---------- NAV ---------- */
@@ -333,6 +343,10 @@ section {
 /* ---------- SKETCHBOOK TABS ---------- */
 .sb-tabs-wrap {
   margin-top: 48px;
+  /* break out of section's max-width constraint */
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  width: 100vw;
 }
 .sb-tabs {
   display: flex;
@@ -576,46 +590,26 @@ section {
 }
 /* scan-line texture — removed */
 .dsk-scanlines { display: none; }
-/* pixel glitch overlay — replaces wipe curtain */
+/* solid colour flash — orange burst on transition */
 .dsk-wipe {
   position: absolute;
   inset: 0;
   z-index: 5;
   pointer-events: none;
   opacity: 0;
-  image-rendering: pixelated;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px, transparent 6px,
-      rgba(91,60,240,0.9) 6px, rgba(91,60,240,0.9) 8px,
-      transparent 8px, transparent 14px,
-      rgba(232,84,26,0.7) 14px, rgba(232,84,26,0.7) 15px,
-      transparent 15px, transparent 22px,
-      rgba(255,255,255,0.5) 22px, rgba(255,255,255,0.5) 23px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px, transparent 4px,
-      rgba(0,0,0,0.6) 4px, rgba(0,0,0,0.6) 5px
-    );
-  background-size: 24px 5px;
-  mix-blend-mode: screen;
+  background: var(--orange);
 }
 @keyframes dsk-glitch {
-  0%   { opacity: 0; transform: translateX(0)   scaleX(1);    }
-  8%   { opacity: 1; transform: translateX(-6px) scaleX(1);    }
-  16%  { opacity: 1; transform: translateX(8px)  scaleX(1.02); }
-  24%  { opacity: 0; transform: translateX(-4px) scaleX(1);    }
-  32%  { opacity: 1; transform: translateX(0)    scaleX(1);    }
-  40%  { opacity: 0; transform: translateX(5px)  scaleX(0.99); }
-  50%  { opacity: 1; transform: translateX(-3px) scaleX(1);    }
-  58%  { opacity: 0; transform: translateX(0)    scaleX(1);    }
-  66%  { opacity: 1; transform: translateX(4px)  scaleX(1.01); }
-  74%  { opacity: 0; transform: translateX(-2px) scaleX(1);    }
-  82%  { opacity: 1; transform: translateX(0)    scaleX(1);    }
-  90%  { opacity: 0; transform: translateX(3px)  scaleX(1);    }
-  100% { opacity: 0; transform: translateX(0)    scaleX(1);    }
+  0%   { opacity: 0; }
+  12%  { opacity: 0.85; }
+  22%  { opacity: 0.2; }
+  30%  { opacity: 0.9; }
+  42%  { opacity: 0.15; }
+  50%  { opacity: 0.75; }
+  62%  { opacity: 0.05; }
+  70%  { opacity: 0.6; }
+  82%  { opacity: 0; }
+  100% { opacity: 0; }
 }
 /* click zones */
 .dsk-zone {
@@ -1014,6 +1008,7 @@ footer {
 
 <!-- SCROLL TINT -->
 <div id="scroll-tint"></div>
+<div id="scroll-texture"></div>
 
 <!-- NAV -->
 <nav>
@@ -1127,7 +1122,9 @@ footer {
     <div class="folio" onclick="openOverlay('ov-folio-story')" style="background-image:url('https://lh3.googleusercontent.com/d/1FEQu83tKU3vva3HL4S66z7c2Esddh5uc')">
       <h4>Storyboard &amp; Direction</h4>
     </div>
-  <!-- SKETCHBOOK TABS -->
+  </div>
+
+  <!-- SKETCHBOOK TABS — full bleed breakout -->
   <div class="sb-tabs-wrap">
     <div class="sb-tabs">
       <button class="sb-tab" id="sb-tab-paper" onclick="toggleSbTab('paper')">Paper Sketchbook</button>
@@ -1997,7 +1994,8 @@ function toggleSbTab(which) {
 }
 
 // ── Scroll tint overlay ──
-const scrollTint = document.getElementById('scroll-tint');
+const scrollTint    = document.getElementById('scroll-tint');
+const scrollTexture = document.getElementById('scroll-texture');
 // warm orange at top → neutral mid → cool blue at bottom
 const tintColors = [
   [232, 100, 26],  // warm orange-red (top of page)
@@ -2023,10 +2021,16 @@ function updateScrollTint() {
   const r = Math.round(lerp(c1[0], c2[0], frac));
   const g = Math.round(lerp(c1[1], c2[1], frac));
   const b = Math.round(lerp(c1[2], c2[2], frac));
-  // stronger alpha — noticeable but not overwhelming
   const alpha = 0.12 + t * 0.18;
 
   scrollTint.style.background = `radial-gradient(ellipse 140% 90% at 50% ${10 + t * 70}%, rgba(${r},${g},${b},${alpha.toFixed(2)}) 0%, transparent 65%)`;
+
+  // texture layer: ramps up from 0 to ~0.12 as you scroll, peaks in mid-scroll
+  const texOpacity = Math.sin(t * Math.PI) * 0.14;
+  scrollTexture.style.opacity = texOpacity.toFixed(3);
+  // slowly drift the texture position for a living feel
+  const drift = scrollY * 0.08;
+  scrollTexture.style.backgroundPosition = `${drift}px ${drift * 0.6}px`;
 }
 window.addEventListener('scroll', updateScrollTint, { passive: true });
 updateScrollTint();
