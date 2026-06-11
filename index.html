@@ -40,7 +40,10 @@ body {
   font-size: 18px;
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: url('assets/images/cursor.png') 16 16, auto;
+  cursor: url('/assets/images/cursor.png') 16 16, url('assets/images/cursor.png') 16 16, auto;
+}
+a, button, [onclick], .card, .folio, .sb-tab, .dsk-zone, .sb-zone, .explore-btn, .close, .icon-link, .coffee-link, .game-link, .car-btn {
+  cursor: url('/assets/images/cursor.png') 16 16, url('assets/images/cursor.png') 16 16, pointer;
 }
 
 body::before {
@@ -333,7 +336,7 @@ section {
 }
 .sb-tabs {
   display: flex;
-  gap: 16px;
+  gap: 0;
   margin-bottom: 0;
 }
 .sb-tab {
@@ -345,10 +348,20 @@ section {
   border-bottom: none;
   border-radius: 18px 18px 0 0;
   padding: 14px 28px;
-  cursor: pointer;
+  cursor: url('/assets/images/cursor.png') 16 16, pointer;
   transition: border-color 0.3s steps(2), color 0.3s steps(2), background 0.3s steps(2);
   position: relative;
   z-index: 1;
+  flex: 1;
+  text-align: center;
+}
+.sb-tab:first-child {
+  border-right-width: 1px;
+  border-radius: 18px 0 0 0;
+}
+.sb-tab:last-child {
+  border-left-width: 1px;
+  border-radius: 0 18px 0 0;
 }
 .sb-tab:hover {
   border-color: rgba(244,239,230,0.2);
@@ -362,7 +375,7 @@ section {
   display: none;
   background: #111;
   border: 2px solid rgba(244,239,230,0.08);
-  border-radius: 0 18px 18px 18px;
+  border-radius: 0 0 18px 18px;
   padding: 40px 0 0;
   overflow: hidden;
 }
@@ -561,53 +574,48 @@ section {
   opacity: 0;
   z-index: 1;
 }
-/* scan-line texture — removed, images display clean */
+/* scan-line texture — removed */
 .dsk-scanlines { display: none; }
-/* wipe curtain — bold with glitch */
+/* pixel glitch overlay — replaces wipe curtain */
 .dsk-wipe {
   position: absolute;
-  top: 0; left: -100%; bottom: 0;
-  width: 100%;
+  inset: 0;
   z-index: 5;
   pointer-events: none;
+  opacity: 0;
+  image-rendering: pixelated;
   background-image:
     repeating-linear-gradient(
-      to bottom,
-      transparent 0px, transparent 3px,
-      rgba(255,255,255,0.12) 3px, rgba(255,255,255,0.12) 4px,
-      transparent 4px, transparent 7px,
-      rgba(0,0,0,0.18) 7px, rgba(0,0,0,0.18) 8px
+      90deg,
+      transparent 0px, transparent 6px,
+      rgba(91,60,240,0.9) 6px, rgba(91,60,240,0.9) 8px,
+      transparent 8px, transparent 14px,
+      rgba(232,84,26,0.7) 14px, rgba(232,84,26,0.7) 15px,
+      transparent 15px, transparent 22px,
+      rgba(255,255,255,0.5) 22px, rgba(255,255,255,0.5) 23px
     ),
-    linear-gradient(
-      to right,
-      transparent 0%,
-      rgba(91,60,240,0.25) 25%,
-      rgba(91,60,240,0.75) 44%,
-      rgba(255,255,255,0.55) 49%,
-      rgba(232,84,26,0.75) 54%,
-      rgba(232,84,26,0.25) 70%,
-      transparent 100%
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px, transparent 4px,
+      rgba(0,0,0,0.6) 4px, rgba(0,0,0,0.6) 5px
     );
+  background-size: 24px 5px;
+  mix-blend-mode: screen;
 }
-@keyframes dsk-wipe-fwd {
-  0%   { left: -100%; filter: none; }
-  18%  { left: -30%;  filter: none; }
-  20%  { left: -28%;  filter: brightness(1.4) saturate(2); transform: translateX(-4px) skewX(-1deg); }
-  22%  { left: -26%;  filter: none; transform: none; }
-  48%  { left: 44%;   filter: none; }
-  50%  { left: 46%;   filter: brightness(1.6) saturate(2.5); transform: translateX(6px) skewX(1.5deg); }
-  52%  { left: 48%;   filter: none; transform: none; }
-  100% { left: 160%;  filter: none; }
-}
-@keyframes dsk-wipe-bwd {
-  0%   { left: 160%;  transform: scaleX(-1); filter: none; }
-  18%  { left: 30%;   transform: scaleX(-1); filter: none; }
-  20%  { left: 28%;   transform: scaleX(-1) translateX(-4px) skewX(-1deg); filter: brightness(1.4) saturate(2); }
-  22%  { left: 26%;   transform: scaleX(-1); filter: none; }
-  48%  { left: -44%;  transform: scaleX(-1); filter: none; }
-  50%  { left: -46%;  transform: scaleX(-1) translateX(6px) skewX(1.5deg); filter: brightness(1.6) saturate(2.5); }
-  52%  { left: -48%;  transform: scaleX(-1); filter: none; }
-  100% { left: -160%; transform: scaleX(-1); filter: none; }
+@keyframes dsk-glitch {
+  0%   { opacity: 0; transform: translateX(0)   scaleX(1);    }
+  8%   { opacity: 1; transform: translateX(-6px) scaleX(1);    }
+  16%  { opacity: 1; transform: translateX(8px)  scaleX(1.02); }
+  24%  { opacity: 0; transform: translateX(-4px) scaleX(1);    }
+  32%  { opacity: 1; transform: translateX(0)    scaleX(1);    }
+  40%  { opacity: 0; transform: translateX(5px)  scaleX(0.99); }
+  50%  { opacity: 1; transform: translateX(-3px) scaleX(1);    }
+  58%  { opacity: 0; transform: translateX(0)    scaleX(1);    }
+  66%  { opacity: 1; transform: translateX(4px)  scaleX(1.01); }
+  74%  { opacity: 0; transform: translateX(-2px) scaleX(1);    }
+  82%  { opacity: 1; transform: translateX(0)    scaleX(1);    }
+  90%  { opacity: 0; transform: translateX(3px)  scaleX(1);    }
+  100% { opacity: 0; transform: translateX(0)    scaleX(1);    }
 }
 /* click zones */
 .dsk-zone {
@@ -1087,7 +1095,7 @@ footer {
       </div>
 
       <div class="card" onclick="openOverlay('ov-gangar')">
-        <div class="thumb placeholder" data-label="Gangar — visuals coming soon"></div>
+        <div class="thumb" style="background-image:url('assets/images/gangar_baansull_render_v003_glitch.jpg')"></div>
         <div class="body">
           <h3>Gangar</h3>
           <span class="tag">Spotify Canvas reels</span>
@@ -1128,7 +1136,7 @@ footer {
 
     <!-- PAPER SKETCHBOOK PANEL -->
     <div class="sb-panel" id="sb-panel-paper">
-      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip — or use arrow keys</p>
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip, or use arrow keys</p>
       <!-- SVG filter for grungy edges -->
       <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
         <defs>
@@ -1162,7 +1170,7 @@ footer {
 
     <!-- DIGITAL SKETCHBOOK PANEL -->
     <div class="sb-panel" id="sb-panel-digital">
-      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to advance — or use arrow keys</p>
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to advance, or use arrow keys</p>
       <div class="dsk-stage">
         <div class="dsk-frame" id="dsk-frame">
           <div class="dsk-scanlines" id="dsk-scanlines"></div>
@@ -1874,7 +1882,7 @@ const DSK_IMGS = [
   'https://lh3.googleusercontent.com/d/1mfRvHmayZC3xG-vKPHWiYhLS91y18AXo', // 24
   'https://lh3.googleusercontent.com/d/1AhwmHy_6hg81f6dq00MdWS6VUiNSybLF', // 25
 ];
-const DSK_DUR = 680;
+const DSK_DUR = 600;
 let dskCur = 0, dskBusy = false;
 
 const dskImgCur  = document.getElementById('dsk-img-cur');
@@ -1902,32 +1910,25 @@ function dskFlip(dir) {
   if (nxt < 0 || nxt >= DSK_IMGS.length) return;
   dskBusy = true;
 
-  // preload next image
-  dskImgNext.src = DSK_IMGS[nxt];
-  dskImgNext.style.opacity = '0';
-
-  // reset wipe
+  // reset glitch overlay
   dskWipe.style.animation = 'none';
-  dskWipe.style.left = dir === 1 ? '-100%' : '100%';
   dskWipe.offsetHeight; // reflow
 
-  // mid-point: swap images halfway through wipe
-  const half = DSK_DUR / 2;
+  // swap image at the midpoint of the glitch
+  const half = DSK_DUR * 0.4;
   setTimeout(() => {
     dskImgCur.src = DSK_IMGS[nxt];
-    dskImgNext.style.opacity = '0';
     dskCur = nxt;
     dskUpdateCounter();
     dskPreload(dskCur + 1);
     dskPreload(dskCur - 1);
   }, half);
 
-  // run wipe animation
-  dskWipe.style.animation = `${dir === 1 ? 'dsk-wipe-fwd' : 'dsk-wipe-bwd'} ${DSK_DUR}ms cubic-bezier(0.4,0,0.2,1) forwards`;
+  // run pixel glitch — linear so speed is even throughout
+  dskWipe.style.animation = `dsk-glitch ${DSK_DUR}ms linear forwards`;
 
   setTimeout(() => {
     dskWipe.style.animation = 'none';
-    dskWipe.style.left = '-100%';
     dskBusy = false;
   }, DSK_DUR + 20);
 }
@@ -1997,12 +1998,13 @@ function toggleSbTab(which) {
 
 // ── Scroll tint overlay ──
 const scrollTint = document.getElementById('scroll-tint');
+// warm orange at top → neutral mid → cool blue at bottom
 const tintColors = [
-  [74, 43, 232],   // blue (top)
-  [74, 43, 232],   // blue
-  [232, 84, 26],   // orange (mid)
-  [74, 43, 232],   // blue
-  [91, 60, 240],   // blue-bright (bottom)
+  [232, 100, 26],  // warm orange-red (top of page)
+  [200, 80,  20],  // deeper orange
+  [140, 60, 120],  // warm purple transition
+  [74,  43, 232],  // blue
+  [50,  30, 210],  // deeper blue (bottom)
 ];
 
 function lerp(a, b, t) { return a + (b - a) * t; }
@@ -2021,9 +2023,10 @@ function updateScrollTint() {
   const r = Math.round(lerp(c1[0], c2[0], frac));
   const g = Math.round(lerp(c1[1], c2[1], frac));
   const b = Math.round(lerp(c1[2], c2[2], frac));
-  const alpha = 0.07 + t * 0.08;
+  // stronger alpha — noticeable but not overwhelming
+  const alpha = 0.12 + t * 0.18;
 
-  scrollTint.style.background = `radial-gradient(ellipse 120% 80% at 50% ${20 + t * 60}%, rgba(${r},${g},${b},${alpha.toFixed(2)}) 0%, transparent 70%)`;
+  scrollTint.style.background = `radial-gradient(ellipse 140% 90% at 50% ${10 + t * 70}%, rgba(${r},${g},${b},${alpha.toFixed(2)}) 0%, transparent 65%)`;
 }
 window.addEventListener('scroll', updateScrollTint, { passive: true });
 updateScrollTint();
