@@ -331,7 +331,7 @@ section {
   border-radius: inherit;
   pointer-events: none;
 }
-.folio:hover { transform: translateY(-8px) rotate(-1deg); border-color: var(--blue-bright); }
+.folio:hover { transform: translateY(-8px) rotate(-1deg); border: 2px solid var(--orange); }
 .folio:nth-child(odd):hover { border-color: var(--orange); }
 .folio h4 {
   font-family: 'Revestreker', cursive;
@@ -401,15 +401,12 @@ section {
   min-height: 480px;
   padding-bottom: 40px;
 }
-#sb-book {
+#sb-book, .sb-book {
   position: relative;
   box-shadow: 0 50px 140px rgba(0,0,0,0.9), 0 10px 36px rgba(0,0,0,0.6);
-  /* Grungy torn edges via filter */
   filter: url(#sb-grunge-filter);
 }
-/* SVG filter lives in the HTML — see below #sb-book HTML */
-/* Torn edge overlay — pseudo-element burns the border */
-#sb-book::before {
+#sb-book::before, .sb-book::before {
   content: '';
   position: absolute;
   inset: -2px;
@@ -423,13 +420,10 @@ section {
     inset 0 3px 6px rgba(0,0,0,0.5),
     inset 0 -3px 6px rgba(0,0,0,0.5);
   background:
-    /* top torn edge */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='12'%3E%3Cpath d='M0,8 C20,2 35,11 55,5 C75,-1 90,9 115,4 C140,-1 155,10 180,6 C205,2 220,11 245,4 C270,-3 285,9 310,5 C335,1 350,10 375,6 C400,2 415,11 440,4 C465,-3 480,9 505,5 C530,1 545,10 570,6 C595,2 615,11 640,3 C665,-5 680,9 705,5 C730,1 750,10 775,6 L800,8 L800,0 L0,0 Z' fill='%230a0a0a'/%3E%3C/svg%3E") top/100% 12px no-repeat,
-    /* bottom torn edge */
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='12'%3E%3Cpath d='M0,4 C20,10 35,1 55,7 C75,13 90,3 115,8 C140,13 155,2 180,6 C205,10 220,1 245,8 C270,15 285,3 310,7 C335,11 350,2 375,6 C400,10 415,1 440,8 C465,15 480,3 505,7 C530,11 545,2 570,6 C595,10 615,1 640,9 C665,17 680,3 705,7 C730,11 750,2 775,6 L800,4 L800,12 L0,12 Z' fill='%230a0a0a'/%3E%3C/svg%3E") bottom/100% 12px no-repeat;
 }
-/* Ring holes on left edge */
-#sb-book::after {
+#sb-book::after, .sb-book::after {
   content: '';
   position: absolute;
   left: -1px;
@@ -445,13 +439,13 @@ section {
   background-repeat: repeat-y;
   background-position: 0 24px;
 }
-.sb-pg-under, .sb-pg-top, #sb-flipper {
+.sb-pg-under, .sb-pg-top, #sb-flipper, .sb-flipper-el {
   position: absolute;
   inset: 0;
 }
 .sb-pg-under { z-index: 1; }
 .sb-pg-top   { z-index: 2; }
-#sb-flipper  {
+#sb-flipper, .sb-flipper-el  {
   z-index: 3;
   transform-style: preserve-3d;
   will-change: transform;
@@ -1155,7 +1149,7 @@ footer {
     <div class="sb-panel" id="sb-panel-digital">
       <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip, or use arrow keys</p>
       <div class="sb-stage">
-        <div id="dsk2-book" style="filter:url(#sb-grunge-filter)">
+        <div id="dsk2-book" class="sb-book">
           <div class="sb-pg-under"><img id="dsk2-img-under" src="" alt=""></div>
           <div class="sb-pg-top" id="dsk2-pg-top"><img id="dsk2-img-top" src="" alt=""></div>
           <div id="dsk2-flipper" class="sb-flipper-el">
@@ -1267,15 +1261,33 @@ footer {
     <h2>FAF Trailer</h2>
     <span class="tag">Festival trailer commission</span>
     <p class="desc">Animation trailer for Fredrikstad Animation Festival 2026.</p>
-    <div class="img-grid">
-      <img src="assets/images/faf_bg_1.jpg" alt="FAF background" onclick="openLightbox(this)">
-      <img src="assets/images/faf_bg_2.jpg" alt="FAF background" onclick="openLightbox(this)">
-      <img src="assets/images/faf_bg_3.jpg" alt="FAF background" onclick="openLightbox(this)">
-      <img src="assets/images/faf_mushroom.jpg" alt="FAF mushroom props" onclick="openLightbox(this)">
-      <img src="assets/images/faf_lineup.jpg" alt="FAF character lineup" onclick="openLightbox(this)">
-      <img src="assets/images/faf_sketches.jpg" alt="FAF sketches" onclick="openLightbox(this)">
-      <img src="assets/images/faf_thumbs.jpg" alt="FAF thumbnails" onclick="openLightbox(this)">
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1kpxEMhQORizxTWRdg8UfBVn0dk5T5Iw7" alt="FAF BG SH010" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1wij90aNbdQy9s3z1jP8_sKUUMlHorWXa" alt="FAF BG SH050" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1_YCl5aYo788q_V2IX8e4ieT9irP-UjsP" alt="FAF BG SH070" onclick="openLightbox(this)">
+      </div>
     </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Designs</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1NgDx4ENssYYEcvLI28l-bJFpdO2vs_wS" alt="FAF character design lineup" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/19tRguzT3lqvk2Q07unbi41OcUr5J0FA8" alt="FAF mushroom props" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Early Sketches</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1tYVtRkFU7u4Is3iSHPryYVBjoThLYs1e" alt="FAF cliff sketches" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/13QR0j-2vw4lCTYoBZZVVMuFYCtoLlpop" alt="FAF cliff storyboard thumbs" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/18Hlur3mu7qs6yEd-x90qVwOIouHPZKKJ" alt="FAF cliff thumbs" onclick="openLightbox(this)">
+      </div>
+    </div>
+
     <div class="overlay-coffee">
       <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
     </div>
