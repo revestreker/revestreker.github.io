@@ -42,11 +42,18 @@ body {
   overflow-x: hidden;
   cursor: url('/assets/images/cursor_hover.png') 4 4, auto;
 }
-a, button, [onclick], .card, .folio, .sb-tab, .dsk-zone, .sb-zone, .explore-btn, .close, .icon-link, .coffee-link, .game-link, .car-btn, .img-grid img {
-  cursor: url('/assets/images/cursor_interactive.png') 4 4, pointer;
+a, button, [onclick], label,
+.card, .folio, .sb-tab, .sb-zone, .dsk-zone,
+.explore-btn, .close, .icon-link, .coffee-link,
+.game-link, .car-btn, .img-grid img,
+.dsk2-zone-l, .dsk2-zone-r {
+  cursor: url('/assets/images/cursor_interactive.png') 4 4, pointer !important;
 }
-a:active, button:active, [onclick]:active, .card:active, .folio:active, .sb-tab:active, .close:active, .icon-link:active, .coffee-link:active {
-  cursor: url('/assets/images/cursor_click.png') 4 4, pointer;
+a:active, button:active, [onclick]:active,
+.card:active, .folio:active, .sb-tab:active,
+.close:active, .icon-link:active, .coffee-link:active,
+.img-grid img:active {
+  cursor: url('/assets/images/cursor_click.png') 4 4, pointer !important;
 }
 
 body::before {
@@ -474,9 +481,9 @@ section {
   user-select: none;
   pointer-events: none;
 }
-#sb-fold-shadow { position: absolute; inset: 0; pointer-events: none; }
+#sb-fold-shadow, #dsk2-fold-shadow { position: absolute; inset: 0; pointer-events: none; }
 .sb-face-back { transform: rotateY(180deg); background: #131313; }
-#sb-reveal-shadow {
+#sb-reveal-shadow, #dsk2-reveal-shadow {
   position: absolute; inset: 0; z-index: 2;
   pointer-events: none; opacity: 0;
 }
@@ -508,18 +515,18 @@ section {
   position: absolute; top: 0; height: 100%; width: 22%;
   z-index: 10; cursor: pointer;
 }
-#sb-zone-l { left: 0; }
-#sb-zone-r { right: 0; }
+#sb-zone-l, #dsk2-zone-l { left: 0; }
+#sb-zone-r, #dsk2-zone-r { right: 0; }
 .sb-glow {
   position: absolute; top: 0; height: 100%; width: 40%;
   z-index: 9; pointer-events: none; opacity: 0;
   transition: opacity 0.4s ease;
 }
-#sb-glow-l {
+#sb-glow-l, #dsk2-glow-l {
   left: 0;
   background: radial-gradient(ellipse 85% 65% at 0% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
 }
-#sb-glow-r {
+#sb-glow-r, #dsk2-glow-r {
   right: 0;
   background: radial-gradient(ellipse 85% 65% at 100% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
 }
