@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Revestreker — Elmer Lødemel</title>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon_32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/images/favicon_512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple_touch_icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
@@ -40,10 +40,13 @@ body {
   font-size: 18px;
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: url('/assets/images/cursor.png') 16 16, url('assets/images/cursor.png') 16 16, auto;
+  cursor: url('/assets/images/cursor_hover.png') 4 4, auto;
 }
-a, button, [onclick], .card, .folio, .sb-tab, .dsk-zone, .sb-zone, .explore-btn, .close, .icon-link, .coffee-link, .game-link, .car-btn {
-  cursor: url('/assets/images/cursor.png') 16 16, url('assets/images/cursor.png') 16 16, pointer;
+a, button, [onclick], .card, .folio, .sb-tab, .dsk-zone, .sb-zone, .explore-btn, .close, .icon-link, .coffee-link, .game-link, .car-btn, .img-grid img {
+  cursor: url('/assets/images/cursor_interactive.png') 4 4, pointer;
+}
+a:active, button:active, [onclick]:active, .card:active, .folio:active, .sb-tab:active, .close:active, .icon-link:active, .coffee-link:active {
+  cursor: url('/assets/images/cursor_click.png') 4 4, pointer;
 }
 
 body::before {
@@ -343,65 +346,48 @@ section {
 /* ---------- SKETCHBOOK TABS ---------- */
 .sb-tabs-wrap {
   margin-top: 48px;
-  /* break out of section's max-width constraint */
-  margin-left: calc(-50vw + 50%);
-  margin-right: calc(-50vw + 50%);
-  width: 100vw;
 }
 .sb-tabs {
-  display: flex;
-  gap: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
   margin-bottom: 0;
 }
 .sb-tab {
   font-family: 'Revestreker', cursive;
-  font-size: 20px;
+  font-size: 22px;
   background: var(--card);
   color: var(--cream);
-  border: 2px solid rgba(244,239,230,0.08);
-  border-bottom: none;
-  border-radius: 18px 18px 0 0;
-  padding: 14px 28px;
-  cursor: url('/assets/images/cursor.png') 16 16, pointer;
-  transition: border-color 0.3s steps(2), color 0.3s steps(2), background 0.3s steps(2);
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  text-align: center;
-}
-.sb-tab:first-child {
-  border-right-width: 1px;
-  border-radius: 18px 0 0 0;
-}
-.sb-tab:last-child {
-  border-left-width: 1px;
-  border-radius: 0 18px 0 0;
+  border: 2px solid rgba(244,239,230,0.06);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  cursor: url('/assets/images/cursor_interactive.png') 16 16, pointer;
+  transition: transform 0.4s steps(3), border-color 0.4s steps(2), color 0.3s steps(2);
+  text-align: left;
+  min-height: 100px;
 }
 .sb-tab:hover {
-  border-color: rgba(244,239,230,0.2);
+  transform: translateY(-8px) rotate(-1deg);
+  border-color: var(--blue-bright);
+}
+.sb-tab:nth-child(odd):hover {
+  border-color: var(--orange);
 }
 .sb-tab.active {
-  background: #111;
   border-color: var(--orange);
   color: var(--orange-bright);
 }
 .sb-panel {
   display: none;
-  background: #111;
-  border: 2px solid rgba(244,239,230,0.08);
-  border-radius: 0 0 18px 18px;
+  margin-top: 26px;
+  background: var(--card);
+  border: 2px solid rgba(244,239,230,0.06);
+  border-radius: var(--radius);
   padding: 40px 0 0;
   overflow: hidden;
 }
 .sb-panel.active {
   display: block;
-}
-/* when paper tab is active, round the right corner of its border join */
-#sb-tab-paper.active {
-  border-bottom-color: #111;
-}
-#sb-tab-digital.active {
-  border-radius: 18px 18px 0 0;
 }
 
 .sb-stage {
@@ -1167,16 +1153,24 @@ footer {
 
     <!-- DIGITAL SKETCHBOOK PANEL -->
     <div class="sb-panel" id="sb-panel-digital">
-      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to advance, or use arrow keys</p>
-      <div class="dsk-stage">
-        <div class="dsk-frame" id="dsk-frame">
-          <div class="dsk-scanlines" id="dsk-scanlines"></div>
-          <div class="dsk-wipe" id="dsk-wipe"></div>
-          <img class="dsk-img" id="dsk-img-cur" src="" alt="">
-          <img class="dsk-img dsk-img-next" id="dsk-img-next" src="" alt="">
-          <div class="dsk-zone dsk-zone-l" id="dsk-zone-l"></div>
-          <div class="dsk-zone dsk-zone-r" id="dsk-zone-r"></div>
-          <div class="dsk-counter" id="dsk-counter">1 / 24</div>
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip, or use arrow keys</p>
+      <div class="sb-stage">
+        <div id="dsk2-book" style="filter:url(#sb-grunge-filter)">
+          <div class="sb-pg-under"><img id="dsk2-img-under" src="" alt=""></div>
+          <div class="sb-pg-top" id="dsk2-pg-top"><img id="dsk2-img-top" src="" alt=""></div>
+          <div id="dsk2-flipper" class="sb-flipper-el">
+            <div class="sb-face sb-face-front">
+              <img id="dsk2-flip-f" src="" alt="">
+              <div id="dsk2-fold-shadow" class="sb-fold-shadow-el"></div>
+            </div>
+            <div class="sb-face sb-face-back"></div>
+          </div>
+          <div id="dsk2-reveal-shadow"></div>
+          <div class="sb-zone" id="dsk2-zone-l"></div>
+          <div class="sb-zone" id="dsk2-zone-r"></div>
+          <div class="sb-glow" id="dsk2-glow-l"></div>
+          <div class="sb-glow" id="dsk2-glow-r"></div>
+          <div class="sb-counter" id="dsk2-counter">1 / 24</div>
         </div>
       </div>
     </div>
@@ -1879,78 +1873,103 @@ const DSK_IMGS = [
   'https://lh3.googleusercontent.com/d/1mfRvHmayZC3xG-vKPHWiYhLS91y18AXo', // 24
   'https://lh3.googleusercontent.com/d/1AhwmHy_6hg81f6dq00MdWS6VUiNSybLF', // 25
 ];
-const DSK_DUR = 600;
-let dskCur = 0, dskBusy = false;
-
-const dskImgCur  = document.getElementById('dsk-img-cur');
-const dskImgNext = document.getElementById('dsk-img-next');
-const dskWipe    = document.getElementById('dsk-wipe');
-const dskCounter = document.getElementById('dsk-counter');
-
-function dskUpdateCounter() {
-  dskCounter.textContent = (dskCur + 1) + ' / ' + DSK_IMGS.length;
-}
-
-function dskPreload(i) {
-  if (i >= 0 && i < DSK_IMGS.length) { const p = new Image(); p.src = DSK_IMGS[i]; }
-}
+// ── Digital Sketchbook — page-flip engine (mirrors paper sketchbook) ──
+let dsk2Cur = 0, dsk2Busy = false, dsk2Inited = false;
 
 function dskInit() {
-  dskImgCur.src = DSK_IMGS[0];
-  dskPreload(1); dskPreload(2);
-  dskUpdateCounter();
+  if (dsk2Inited) return;
+  dsk2Inited = true;
+
+  const book      = document.getElementById('dsk2-book');
+  const imgTop    = document.getElementById('dsk2-img-top');
+  const imgUnder  = document.getElementById('dsk2-img-under');
+  const flipper   = document.getElementById('dsk2-flipper');
+  const flipF     = document.getElementById('dsk2-flip-f');
+  const pgTop     = document.getElementById('dsk2-pg-top');
+  const glowL     = document.getElementById('dsk2-glow-l');
+  const glowR     = document.getElementById('dsk2-glow-r');
+  const foldShad  = document.getElementById('dsk2-fold-shadow');
+  const reveal    = document.getElementById('dsk2-reveal-shadow');
+  const counter   = document.getElementById('dsk2-counter');
+
+  function updateCounter() {
+    counter.textContent = (dsk2Cur + 1) + ' / ' + DSK_IMGS.length;
+  }
+  function preload(i) {
+    if (i >= 0 && i < DSK_IMGS.length) { const p = new Image(); p.src = DSK_IMGS[i]; }
+  }
+  function size(src, cb) {
+    const img = new Image();
+    img.onload = () => {
+      const aspect = img.naturalWidth / img.naturalHeight;
+      const maxH = Math.min(window.innerHeight * 0.75, 700);
+      const h = maxH, w = Math.round(h * aspect);
+      book.style.width  = w + 'px';
+      book.style.height = h + 'px';
+      if (cb) cb();
+    };
+    img.src = src;
+  }
+
+  function flip(dir) {
+    if (dsk2Busy) return;
+    const nxt = dsk2Cur + dir;
+    if (nxt < 0 || nxt >= DSK_IMGS.length) return;
+    dsk2Busy = true;
+
+    flipF.src = DSK_IMGS[dsk2Cur];
+    flipper.style.visibility = 'visible';
+    flipper.style.transition = 'none';
+    flipper.style.transform = dir === 1 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
+    flipper.offsetHeight;
+
+    imgUnder.src = DSK_IMGS[nxt];
+    pgTop.style.visibility = 'hidden';
+
+    const SB_DUR = 700;
+    flipper.style.transition = `transform ${SB_DUR}ms cubic-bezier(0.645,0.045,0.355,1.0)`;
+    flipper.style.transform  = dir === 1 ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+
+    setTimeout(() => {
+      dsk2Cur = nxt;
+      flipper.style.visibility = 'hidden';
+      flipper.style.transition = 'none';
+      flipper.style.transform  = 'rotateY(0deg)';
+      imgTop.src = DSK_IMGS[dsk2Cur];
+      pgTop.style.visibility = '';
+      preload(dsk2Cur + 1); preload(dsk2Cur + 2); preload(dsk2Cur - 1);
+      if (DSK_IMGS[dsk2Cur + 1]) imgUnder.src = DSK_IMGS[dsk2Cur + 1];
+      updateCounter();
+      dsk2Busy = false;
+    }, SB_DUR + 30);
+  }
+
+  size(DSK_IMGS[0], () => {
+    imgTop.src   = DSK_IMGS[0];
+    imgUnder.src = DSK_IMGS[1] || '';
+    preload(2); preload(3);
+    updateCounter();
+  });
+
+  document.getElementById('dsk2-zone-r').addEventListener('click', () => flip(1));
+  document.getElementById('dsk2-zone-l').addEventListener('click', () => flip(-1));
+
+  let tx = 0;
+  document.getElementById('dsk2-book').addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, {passive:true});
+  document.getElementById('dsk2-book').addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) flip(dx < 0 ? 1 : -1);
+  });
+
+  window.addEventListener('resize', () => size(DSK_IMGS[dsk2Cur]));
+
+  // keyboard — only when digital panel is active
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('sb-panel-digital').classList.contains('active')) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') flip(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   flip(-1);
+  });
 }
-
-function dskFlip(dir) {
-  if (dskBusy) return;
-  const nxt = dskCur + dir;
-  if (nxt < 0 || nxt >= DSK_IMGS.length) return;
-  dskBusy = true;
-
-  // reset glitch overlay
-  dskWipe.style.animation = 'none';
-  dskWipe.offsetHeight; // reflow
-
-  // swap image at the midpoint of the glitch
-  const half = DSK_DUR * 0.4;
-  setTimeout(() => {
-    dskImgCur.src = DSK_IMGS[nxt];
-    dskCur = nxt;
-    dskUpdateCounter();
-    dskPreload(dskCur + 1);
-    dskPreload(dskCur - 1);
-  }, half);
-
-  // run pixel glitch — linear so speed is even throughout
-  dskWipe.style.animation = `dsk-glitch ${DSK_DUR}ms linear forwards`;
-
-  setTimeout(() => {
-    dskWipe.style.animation = 'none';
-    dskBusy = false;
-  }, DSK_DUR + 20);
-}
-
-document.getElementById('dsk-zone-r').addEventListener('click', () => dskFlip(1));
-document.getElementById('dsk-zone-l').addEventListener('click', () => dskFlip(-1));
-
-// touch swipe
-let dskTx = 0;
-document.getElementById('dsk-frame').addEventListener('touchstart', e => { dskTx = e.changedTouches[0].clientX; }, {passive:true});
-document.getElementById('dsk-frame').addEventListener('touchend',   e => {
-  const dx = e.changedTouches[0].clientX - dskTx;
-  if (Math.abs(dx) > 50) dskFlip(dx < 0 ? 1 : -1);
-});
-
-// keyboard — only when paper sketchbook isn't active (dsk section in view)
-document.addEventListener('keydown', e => {
-  const dskSection = document.getElementById('digital-sketchbook-section');
-  const rect = dskSection.getBoundingClientRect();
-  const inView = rect.top < window.innerHeight && rect.bottom > 0;
-  if (!inView) return;
-  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') dskFlip(1);
-  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   dskFlip(-1);
-});
-
 // dskInit called by tab toggle
 </script>
 
