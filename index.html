@@ -3,16 +3,2085 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Revestreker</title>
-<link rel="icon" type="image/png" href="favicon_32.png">
+<title>Revestreker — Elmer Lødemel</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/images/favicon_512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-  body { background: #0a0a0a; color: #F4EFE6; font-family: 'DM Sans', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; flex-direction: column; gap: 16px; }
-  h1 { font-size: 48px; margin: 0; letter-spacing: 0.04em; }
-  p { opacity: 0.4; font-size: 16px; margin: 0; }
+@font-face {
+  font-family: 'Revestreker';
+  src: url('assets/fonts/Revestreker_font_v001-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --orange: #E8541A;
+  --orange-bright: #FF6A1F;
+  --blue: #4A2BE8;
+  --blue-bright: #5b3cf0;
+  --cream: #F4EFE6;
+  --card: #141414;
+  --radius: 28px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: url('/assets/images/cursor_hover.png') 4 4, auto;
+}
+a, button, [onclick], label,
+.card, .folio, .sb-tab, .sb-zone, .dsk-zone,
+.explore-btn, .close, .icon-link, .coffee-link,
+.game-link, .car-btn, .img-grid img,
+.dsk2-zone-l, .dsk2-zone-r {
+  cursor: url('/assets/images/cursor_interactive.png') 4 4, pointer !important;
+}
+a:active, button:active, [onclick]:active,
+.card:active, .folio:active, .sb-tab:active,
+.close:active, .icon-link:active, .coffee-link:active,
+.img-grid img:active {
+  cursor: url('/assets/images/cursor_click.png') 4 4, pointer !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- SCROLL TINT OVERLAY ---------- */
+#scroll-tint {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+/* secondary noise texture that intensifies with scroll */
+#scroll-texture {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  transition: opacity 0.4s ease;
+}
+
+/* ---------- NAV ---------- */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  mix-blend-mode: difference;
+}
+nav .logo img { width: 110px; height: auto; display: block; }
+nav .links { display: flex; gap: 28px; }
+nav .links a {
+  font-family: 'Revestreker', cursive;
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
+  transition: transform 0.4s steps(3);
+}
+nav .links a:hover { transform: translateY(-3px) rotate(-2deg); }
+
+/* ---------- HERO ---------- */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  text-align: center;
+  padding: 0 24px 72px;
+  z-index: 2;
+  overflow: hidden;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 55%;
+  background: linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.85) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
+.hero-video {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+}
+.hero-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1.0;
+}
+
+
+.hero-logo {
+  width: clamp(220px, 55vw, 700px);
+  height: auto;
+  animation: wobble 3s steps(4) infinite;
+  filter: drop-shadow(0.04em 0.04em 0 var(--blue)) drop-shadow(-0.03em 0.03em 0 var(--orange));
+}
+@keyframes wobble {
+  0%   { transform: rotate(-1deg) translateY(0); }
+  50%  { transform: rotate(1deg) translateY(-4px); }
+  100% { transform: rotate(-1deg) translateY(0); }
+}
+.hero .sub {
+  margin-top: 32px;
+  font-family: 'Revestreker', cursive;
+  font-size: clamp(18px, 2.4vw, 26px);
+  max-width: 620px;
+  opacity: 0.9;
+}
+.scroll-hint {
+  position: absolute;
+  bottom: 34px;
+  font-family: 'Revestreker', cursive;
+  font-size: 16px;
+  opacity: 0.5;
+  animation: bob 2s steps(3) infinite;
+}
+@keyframes bob {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(8px); }
+  100% { transform: translateY(0); }
+}
+
+/* ---------- SECTIONS ---------- */
+section {
+  position: relative;
+  z-index: 2;
+  padding: 110px 32px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.section-title {
+  font-family: 'Revestreker', cursive;
+  font-size: clamp(40px, 6vw, 80px);
+  margin-bottom: 48px;
+  line-height: 1;
+}
+#about .section-title   { color: var(--cream); }
+#projects .section-title { color: var(--orange-bright); }
+#contact .section-title  { color: var(--blue-bright); }
+
+/* ---------- ABOUT ---------- */
+.about p {
+  font-size: clamp(18px, 2vw, 24px);
+  max-width: 820px;
+  line-height: 1.65;
+}
+
+/* ---------- PROJECT GRID ---------- */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 26px;
+  margin-bottom: 60px;
+}
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid rgba(244,239,230,0.06);
+  transition: transform 0.4s steps(3), border-color 0.4s steps(2);
+  display: flex;
+  flex-direction: column;
+}
+.card:hover {
+  transform: translateY(-8px) rotate(-1deg);
+  border-color: var(--orange);
+}
+.card .thumb {
+  width: 100%;
+  aspect-ratio: 16/10;
+  background: #1c1c1c;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.card .thumb.placeholder::after {
+  content: attr(data-label);
+  color: rgba(244,239,230,0.2);
+  font-size: 15px;
+  text-align: center;
+  padding: 20px;
+}
+.card .body { padding: 22px 24px 26px; }
+.card h3 {
+  font-family: 'Revestreker', cursive;
+  font-size: 26px;
+  margin-bottom: 6px;
+  color: var(--cream);
+}
+.card .tag {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--orange-bright);
+  margin-bottom: 10px;
+}
+.card p { font-size: 16px; opacity: 0.72; line-height: 1.5; }
+
+/* ---------- EXPLORE MORE ---------- */
+.explore-wrap { margin-bottom: 90px; }
+.explore-btn {
+  font-family: 'Revestreker', cursive;
+  background: var(--orange);
+  color: #0a0a0a;
+  border: none;
+  border-radius: var(--radius);
+  padding: 16px 30px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: transform 0.3s steps(2);
+}
+.explore-btn:hover { transform: translateY(-4px) rotate(-1deg); }
+.explore-btn:active { animation: press 0.25s steps(2) forwards; }
+@keyframes press {
+  0%   { transform: translateY(2px) scale(0.97); }
+  50%  { transform: translateY(-5px) scale(1.02); }
+  100% { transform: translateY(0) scale(1); }
+}
+.explore-list {
+  display: none;
+}
+.explore-list.open {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 26px;
+  margin-top: 20px;
+}
+.explore-list .pill {
+  background: var(--card);
+  border: 2px solid rgba(244,239,230,0.08);
+  border-radius: 20px;
+  padding: 12px 22px;
+  font-family: 'Revestreker', cursive;
+  font-size: 18px;
+  cursor: pointer;
+  transition: border-color 0.3s steps(2), transform 0.3s steps(2);
+}
+.explore-list .pill:hover {
+  border-color: var(--orange);
+  transform: translateY(-3px) rotate(-1deg);
+}
+
+/* ---------- PORTFOLIO ---------- */
+.portfolio-title {
+  font-family: 'Revestreker', cursive;
+  font-size: clamp(40px, 6vw, 80px);
+  color: var(--orange-bright);
+  margin-bottom: 48px;
+  line-height: 1;
+}
+.folio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 22px;
+}
+.folio {
+  background: var(--card);
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.4s steps(3), border-color 0.4s steps(2);
+  min-height: 180px;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+.folio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.18) 60%, transparent 100%);
+  border-radius: inherit;
+  pointer-events: none;
+}
+.folio:hover { transform: translateY(-8px) rotate(-1deg); border: 2px solid var(--orange); }
+.folio:nth-child(odd):hover { border-color: var(--orange); }
+.folio h4 {
+  font-family: 'Revestreker', cursive;
+  font-size: 22px;
+  line-height: 1.15;
+  color: var(--cream);
+  position: relative;
+  z-index: 1;
+}
+
+
+/* ---------- SKETCHBOOK TABS ---------- */
+.sb-tabs-wrap {
+  margin-top: 48px;
+}
+.sb-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+  margin-bottom: 0;
+}
+.sb-tab {
+  font-family: 'Revestreker', cursive;
+  font-size: 22px;
+  background: var(--card);
+  color: var(--cream);
+  border: 2px solid rgba(244,239,230,0.06);
+  border-radius: var(--radius);
+  padding: 36px 28px;
+  cursor: url('/assets/images/cursor_interactive.png') 16 16, pointer;
+  transition: transform 0.4s steps(3), border-color 0.4s steps(2), color 0.3s steps(2);
+  text-align: left;
+  min-height: 100px;
+}
+.sb-tab:hover {
+  transform: translateY(-8px) rotate(-1deg);
+  border-color: var(--blue-bright);
+}
+.sb-tab:nth-child(odd):hover {
+  border-color: var(--orange);
+}
+.sb-tab.active {
+  border-color: var(--orange);
+  color: var(--orange-bright);
+}
+.sb-panel {
+  display: none;
+  margin-top: 26px;
+  background: var(--card);
+  border: 2px solid rgba(244,239,230,0.06);
+  border-radius: var(--radius);
+  padding: 40px 0 0;
+  overflow: hidden;
+}
+.sb-panel.active {
+  display: block;
+}
+
+.sb-stage {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 2400px;
+  perspective-origin: 50% 50%;
+  height: 80vh;
+  min-height: 480px;
+  padding-bottom: 40px;
+}
+#sb-book, .sb-book {
+  position: relative;
+  box-shadow: 0 50px 140px rgba(0,0,0,0.9), 0 10px 36px rgba(0,0,0,0.6);
+  filter: url(#sb-grunge-filter);
+}
+#sb-book::before, .sb-book::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  z-index: 20;
+  pointer-events: none;
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 0 3px rgba(10,10,10,0.6),
+    inset 3px 0 8px rgba(0,0,0,0.7),
+    inset -3px 0 6px rgba(0,0,0,0.5),
+    inset 0 3px 6px rgba(0,0,0,0.5),
+    inset 0 -3px 6px rgba(0,0,0,0.5);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='12'%3E%3Cpath d='M0,8 C20,2 35,11 55,5 C75,-1 90,9 115,4 C140,-1 155,10 180,6 C205,2 220,11 245,4 C270,-3 285,9 310,5 C335,1 350,10 375,6 C400,2 415,11 440,4 C465,-3 480,9 505,5 C530,1 545,10 570,6 C595,2 615,11 640,3 C665,-5 680,9 705,5 C730,1 750,10 775,6 L800,8 L800,0 L0,0 Z' fill='%230a0a0a'/%3E%3C/svg%3E") top/100% 12px no-repeat,
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='12'%3E%3Cpath d='M0,4 C20,10 35,1 55,7 C75,13 90,3 115,8 C140,13 155,2 180,6 C205,10 220,1 245,8 C270,15 285,3 310,7 C335,11 350,2 375,6 C400,10 415,1 440,8 C465,15 480,3 505,7 C530,11 545,2 570,6 C595,10 615,1 640,9 C665,17 680,3 705,7 C730,11 750,2 775,6 L800,4 L800,12 L0,12 Z' fill='%230a0a0a'/%3E%3C/svg%3E") bottom/100% 12px no-repeat;
+}
+#sb-book::after, .sb-book::after {
+  content: '';
+  position: absolute;
+  left: -1px;
+  top: 0;
+  width: 22px;
+  height: 100%;
+  z-index: 21;
+  pointer-events: none;
+  background-image:
+    radial-gradient(ellipse 9px 9px at 11px 50%, #0a0a0a 55%, transparent 56%),
+    radial-gradient(ellipse 11px 11px at 11px 50%, rgba(0,0,0,0.8) 55%, transparent 56%);
+  background-size: 22px 52px;
+  background-repeat: repeat-y;
+  background-position: 0 24px;
+}
+.sb-pg-under, .sb-pg-top, #sb-flipper, .sb-flipper-el {
+  position: absolute;
+  inset: 0;
+}
+.sb-pg-under { z-index: 1; }
+.sb-pg-top   { z-index: 2; }
+#sb-flipper, .sb-flipper-el  {
+  z-index: 3;
+  transform-style: preserve-3d;
+  will-change: transform;
+  pointer-events: none;
+  visibility: hidden;
+}
+.sb-pg-under img, .sb-pg-top img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.sb-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+.sb-face-front img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  user-select: none;
+  pointer-events: none;
+}
+#sb-fold-shadow, #dsk2-fold-shadow { position: absolute; inset: 0; pointer-events: none; }
+.sb-face-back { transform: rotateY(180deg); background: #131313; }
+#sb-reveal-shadow, #dsk2-reveal-shadow {
+  position: absolute; inset: 0; z-index: 2;
+  pointer-events: none; opacity: 0;
+}
+@keyframes sb-fold-fwd {
+  0%   { background: linear-gradient(to left,  rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 100%); }
+  20%  { background: linear-gradient(to left,  rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  50%  { background: rgba(0,0,0,0.52); }
+  80%  { background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  100% { background: rgba(0,0,0,0.00); }
+}
+@keyframes sb-fold-bwd {
+  0%   { background: linear-gradient(to right, rgba(0,0,0,0.00) 0%, rgba(0,0,0,0.00) 100%); }
+  20%  { background: linear-gradient(to right, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  50%  { background: rgba(0,0,0,0.52); }
+  80%  { background: linear-gradient(to left,  rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.18) 45%, rgba(0,0,0,0.00) 70%); }
+  100% { background: rgba(0,0,0,0.00); }
+}
+@keyframes sb-reveal-fwd {
+  0%   { opacity:0; background: linear-gradient(to right, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
+  30%  { opacity:1; }
+  100% { opacity:0; }
+}
+@keyframes sb-reveal-bwd {
+  0%   { opacity:0; background: linear-gradient(to left, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.08) 45%, transparent 70%); }
+  30%  { opacity:1; }
+  100% { opacity:0; }
+}
+.sb-zone {
+  position: absolute; top: 0; height: 100%; width: 22%;
+  z-index: 10; cursor: pointer;
+}
+#sb-zone-l, #dsk2-zone-l { left: 0; }
+#sb-zone-r, #dsk2-zone-r { right: 0; }
+.sb-glow {
+  position: absolute; top: 0; height: 100%; width: 40%;
+  z-index: 9; pointer-events: none; opacity: 0;
+  transition: opacity 0.4s ease;
+}
+#sb-glow-l, #dsk2-glow-l {
+  left: 0;
+  background: radial-gradient(ellipse 85% 65% at 0% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
+}
+#sb-glow-r, #dsk2-glow-r {
+  right: 0;
+  background: radial-gradient(ellipse 85% 65% at 100% 50%, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.07) 38%, transparent 68%);
+}
+.sb-counter {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  z-index: 20;
+  font-family: 'Revestreker', cursive;
+  font-size: 15px;
+  color: rgba(244,239,230,0.35);
+  pointer-events: none;
+  letter-spacing: 0.05em;
+}
+
+.dsk-stage {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  height: 80vh;
+}
+.dsk-frame {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 100%;
+  overflow: hidden;
+  background: #0d0d0d;
+  box-shadow: 0 40px 120px rgba(0,0,0,0.95), 0 8px 32px rgba(0,0,0,0.7);
+}
+.dsk-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+  background: #0d0d0d;
+}
+.dsk-img-next {
+  opacity: 0;
+  z-index: 1;
+}
+/* scan-line texture — removed */
+.dsk-scanlines { display: none; }
+/* solid colour flash — orange burst on transition */
+.dsk-wipe {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background: var(--orange);
+}
+@keyframes dsk-glitch {
+  0%   { opacity: 0; }
+  12%  { opacity: 0.85; }
+  22%  { opacity: 0.2; }
+  30%  { opacity: 0.9; }
+  42%  { opacity: 0.15; }
+  50%  { opacity: 0.75; }
+  62%  { opacity: 0.05; }
+  70%  { opacity: 0.6; }
+  82%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+/* click zones */
+.dsk-zone {
+  position: absolute;
+  top: 0; height: 100%; width: 22%;
+  z-index: 15;
+  cursor: pointer;
+}
+.dsk-zone-l { left: 0; }
+.dsk-zone-r { right: 0; }
+/* hover glow on zones */
+.dsk-zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.dsk-zone-l::after {
+  background: radial-gradient(ellipse 80% 60% at 0% 50%, rgba(91,60,240,0.18) 0%, transparent 70%);
+}
+.dsk-zone-r::after {
+  background: radial-gradient(ellipse 80% 60% at 100% 50%, rgba(91,60,240,0.18) 0%, transparent 70%);
+}
+.dsk-zone:hover::after { opacity: 1; }
+/* page counter */
+.dsk-counter {
+  position: absolute;
+  bottom: 16px;
+  right: 20px;
+  z-index: 20;
+  font-family: 'Revestreker', cursive;
+  font-size: 15px;
+  color: rgba(244,239,230,0.35);
+  pointer-events: none;
+  letter-spacing: 0.05em;
+}
+
+/* ---------- CONTACT ---------- */
+.contact-intro {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 60px;
+  flex-wrap: wrap;
+}
+.contact-photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center top;
+  border: 3px solid var(--orange);
+  flex-shrink: 0;
+}
+.contact-bio {
+  max-width: 580px;
+  font-size: 19px;
+  line-height: 1.7;
+  opacity: 0.88;
+  padding-top: 8px;
+}
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+}
+.icon-link {
+  color: var(--cream);
+  text-decoration: none;
+  background: var(--card);
+  border: 2px solid rgba(244,239,230,0.08);
+  border-radius: 22px;
+  width: 58px; height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s steps(3), border-color 0.4s steps(2), color 0.4s steps(2);
+}
+.icon-link:hover {
+  transform: translateY(-6px) rotate(-1deg);
+  border-color: var(--orange);
+  color: var(--orange-bright);
+}
+
+/* ---------- FOOTER ---------- */
+footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 50px 24px 60px;
+  font-family: 'Revestreker', cursive;
+  font-size: 16px;
+  opacity: 0.5;
+}
+
+/* ---------- OVERLAYS ---------- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--bg);
+  overflow-y: auto;
+  display: none;
+  padding: 80px 24px 80px;
+}
+#ov-sketchbook {
+  padding: 0;
+  overflow: hidden;
+}
+.overlay.open {
+  display: block;
+  animation: slide-up 0.35s steps(4) forwards;
+}
+@keyframes slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.overlay-inner { max-width: 1000px; margin: 0 auto; }
+
+.overlay .close {
+  position: fixed;
+  top: 24px; right: 28px;
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  background: var(--orange);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 18px;
+  width: 54px; height: 54px;
+  cursor: pointer;
+  z-index: 210;
+  transition: transform 0.3s steps(2);
+}
+.overlay .close:hover { transform: rotate(-6deg) scale(1.05); }
+
+.overlay h2 {
+  font-family: 'Revestreker', cursive;
+  font-size: clamp(36px, 6vw, 68px);
+  margin-bottom: 10px;
+  color: var(--cream);
+}
+.overlay .tag {
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--orange-bright);
+  margin-bottom: 24px;
+  display: block;
+}
+.overlay .desc {
+  font-size: 19px;
+  max-width: 740px;
+  opacity: 0.85;
+  margin-bottom: 40px;
+  line-height: 1.65;
+}
+
+/* image grid inside overlays — masonry columns, natural aspect ratios */
+.img-grid {
+  columns: 3;
+  column-gap: 14px;
+}
+.img-grid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  background: #1c1c1c;
+  cursor: pointer;
+  transition: transform 0.3s steps(3);
+  margin-bottom: 14px;
+  break-inside: avoid;
+}
+.img-grid img:hover { transform: scale(1.02); }
+@media (max-width: 900px) { .img-grid { columns: 2; } }
+@media (max-width: 500px) { .img-grid { columns: 1; } }
+
+/* fullscreen image lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(10,10,10,0.96);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.lightbox .lb-close {
+  position: fixed;
+  top: 20px; right: 24px;
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  background: var(--orange);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 16px;
+  width: 50px; height: 50px;
+  cursor: pointer;
+  z-index: 310;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 600px) {
+  nav { padding: 16px 18px; }
+  nav .links { gap: 16px; }
+  nav .links a { font-size: 17px; }
+  section { padding: 80px 20px; }
+  .contact-intro { gap: 24px; }
+  .contact-photo { width: 120px; height: 120px; }
+  .project-grid { grid-template-columns: 1fr; }
+}
+
+/* Overlay section headers */
+.overlay-section { margin-top: 48px; }
+.overlay-section:first-of-type { margin-top: 32px; }
+.section-header {
+  font-family: 'Revestreker', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255,106,31,0.25);
+}
+
+/* Vimeo embed */
+.vimeo-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 4px;
+  background: #111;
+  margin-bottom: 28px;
+}
+.vimeo-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+/* Game link */
+.game-link {
+  display: block;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  margin-bottom: 28px;
+  max-width: 700px;
+}
+.game-link:hover .game-cta { background: var(--orange); }
+.game-thumb { width: 100%; display: block; }
+.game-cta {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(10,10,10,0.75);
+  color: var(--cream);
+  font-family: 'Revestreker', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  padding: 14px 20px;
+  transition: background 0.2s;
+}
+
+/* Teddies video note */
+.video-note {
+  background: rgba(255,106,31,0.08);
+  border: 1px solid rgba(255,106,31,0.2);
+  border-radius: 4px;
+  padding: 16px 20px;
+  font-size: 14px;
+  color: var(--cream);
+  opacity: 0.8;
+  margin-bottom: 20px;
+}
+
+
+/* Gangar carousel */
+.gangar-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 16px;
+}
+.gangar-track {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 8px;
+}
+.gangar-slide {
+  min-width: 100%;
+  transition: transform 0.4s cubic-bezier(0.35,0,0.15,1);
+}
+.gangar-slide video {
+  width: 100%;
+  display: block;
+  border-radius: 8px;
+}
+.car-btn {
+  background: rgba(244,239,230,0.08);
+  border: 1px solid rgba(244,239,230,0.15);
+  color: var(--cream);
+  font-size: 20px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.car-btn:hover { background: var(--orange); border-color: var(--orange); }
+.gangar-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.gangar-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(244,239,230,0.25);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.gangar-dot.active { background: var(--orange); }
+
+.folio-grid--sketch {
+  grid-template-columns: repeat(2, 1fr);
+  margin-top: 22px;
+}
+
+/* Coffee link at bottom of overlays */
+.overlay-coffee {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(244,239,230,0.07);
+  text-align: center;
+}
+.coffee-link {
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  color: var(--cream);
+  text-decoration: none;
+  background: var(--card);
+  border: 2px solid rgba(244,239,230,0.08);
+  border-radius: var(--radius);
+  padding: 14px 28px;
+  display: inline-block;
+  transition: transform 0.3s steps(2), border-color 0.3s steps(2), color 0.3s steps(2);
+}
+.coffee-link:hover {
+  transform: translateY(-4px) rotate(-1deg);
+  border-color: var(--orange);
+  color: var(--orange-bright);
+}
+
+/* Locked coming-soon items inside portfolio overlays */
+.folio-locked {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+  border: 2px solid rgba(244,239,230,0.07);
+  background: rgba(255,255,255,0.02);
+  color: rgba(244,239,230,0.32);
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  cursor: default;
+  user-select: none;
+}
+.folio-locked svg { flex-shrink: 0; opacity: 0.5; }
+
 </style>
 </head>
 <body>
-  <h1>Revestreker</h1>
-  <p>Coming soon</p>
+
+<!-- SCROLL TINT -->
+<div id="scroll-tint"></div>
+<div id="scroll-texture"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#top" class="logo">
+    <img src="assets/images/logo_elmer.svg" alt="Elmer Lødemel">
+  </a>
+  <div class="links">
+    <a href="#about">about</a>
+    <a href="#projects">projects</a>
+    <a href="#contact">contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="top">
+  <div class="hero-video">
+    <video autoplay muted loop playsinline>
+      <source src="studio_reel_v002_2026.mp4" type="video/mp4">
+    </video>
+  </div>
+  <img class="hero-logo" src="assets/images/revestreker_title.svg" alt="REVESTREKER">
+  <p class="sub">Comedic, charming &amp; funky animated film made in Norway and Denmark.</p>
+  <div class="scroll-hint">scroll ↓</div>
+</header>
+
+<!-- ABOUT -->
+<section id="about" class="about">
+  <h2 class="section-title">about</h2>
+  <p>Revestreker is the studio of Elmer Lødemel, an animator and illustrator building comedy and entertainment, frame by frame.<br>He also designs characters, sets, pipeline and storyboards for TV-productions and films.</p>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <h2 class="section-title">projects</h2>
+
+  <div class="project-grid">
+
+    <div class="card" onclick="openOverlay('ov-servicebus')">
+      <div class="thumb" style="background-image:url('assets/images/sb_poster.jpg')"></div>
+      <div class="body">
+        <h3>Service Bus</h3>
+        <span class="tag">Animated short</span>
+        <p>Best Animation Short EKKO 2025, New Danish Talent VAF 2025, Visuelt Prisen 2026.</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="openOverlay('ov-faf')">
+      <div class="thumb" style="background-image:url('assets/images/faf_lineup.jpg')"></div>
+      <div class="body">
+        <h3>FAF Trailer</h3>
+        <span class="tag">Festival trailer commission</span>
+        <p>Fredrikstad Animation Festival trailer for 2026.</p>
+      </div>
+    </div>
+
+    <div class="card" onclick="openOverlay('ov-minimic')">
+      <div class="thumb" style="background-image:url('assets/images/ted_turnaround.jpg')"></div>
+      <div class="body">
+        <h3>Teddies</h3>
+        <span class="tag">Animated short series</span>
+        <p>An animated stand-up TV-show in the world of Revestreker.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EXPLORE MORE -->
+  <div class="explore-wrap">
+    <button class="explore-btn" onclick="toggleExplore(this)">explore more +</button>
+    <div class="explore-list" id="explore-list">
+
+      <div class="card" onclick="openOverlay('ov-brita')">
+        <div class="thumb" style="background-image:url('assets/images/brita_interior.jpg')"></div>
+        <div class="body">
+          <h3>The Disappearance of Brita Svahni</h3>
+          <span class="tag">Interactive game &amp; animation</span>
+          <p>Hand-animated point-and-click adventure. Play it online.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openOverlay('ov-gangar')">
+        <div class="thumb" style="background-image:url('assets/images/gangar_baansull_render_v003_glitch.jpg')"></div>
+        <div class="body">
+          <h3>Gangar</h3>
+          <span class="tag">Spotify Canvas reels</span>
+          <p>Animated music visuals, looping and hypnotic.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openOverlay('ov-among')">
+        <div class="thumb" style="background-image:url('assets/images/among_still.jpg')"></div>
+        <div class="body">
+          <h3>Among Giants</h3>
+          <span class="tag">Feature film in development</span>
+          <p>A action-drama film in development.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <h2 class="portfolio-title">portfolio</h2>
+  <div class="folio-grid">
+    <div class="folio" onclick="openOverlay('ov-folio-char')" style="background-image:url('https://lh3.googleusercontent.com/d/1XvDE4wjybB4hFhNCaOwV_JRdOmOn_UjP')">
+      <h4>Character Design &amp; Art Direction</h4>
+    </div>
+    <div class="folio" onclick="openOverlay('ov-folio-prod')" style="background-image:url('https://lh3.googleusercontent.com/d/1IHRTo3c3K4DQlIMflSOpStacOWb6UCyc')">
+      <h4>Production Design &amp; Visual Development</h4>
+    </div>
+    <div class="folio" onclick="openOverlay('ov-folio-story')" style="background-image:url('https://lh3.googleusercontent.com/d/1FEQu83tKU3vva3HL4S66z7c2Esddh5uc')">
+      <h4>Storyboard &amp; Direction</h4>
+    </div>
+  </div>
+
+  <!-- SKETCHBOOK TABS — full bleed breakout -->
+  <div class="sb-tabs-wrap">
+    <div class="sb-tabs">
+      <button class="sb-tab" id="sb-tab-paper" onclick="toggleSbTab('paper')">Paper Sketchbook</button>
+      <button class="sb-tab" id="sb-tab-digital" onclick="toggleSbTab('digital')">Digital Sketchbook</button>
+    </div>
+
+    <!-- PAPER SKETCHBOOK PANEL -->
+    <div class="sb-panel" id="sb-panel-paper">
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip, or use arrow keys</p>
+      <!-- SVG filter for grungy edges -->
+      <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+        <defs>
+          <filter id="sb-grunge-filter" x="-3%" y="-3%" width="106%" height="106%" color-interpolation-filters="linearRGB">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04 0.06" numOctaves="4" seed="8" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+            <feComposite in="displaced" in2="SourceGraphic" operator="in"/>
+          </filter>
+        </defs>
+      </svg>
+      <div class="sb-stage">
+        <div id="sb-book">
+          <div class="sb-pg-under"><img id="sb-img-under" src="" alt=""></div>
+          <div class="sb-pg-top" id="sb-pg-top"><img id="sb-img-top" src="" alt=""></div>
+          <div id="sb-flipper">
+            <div class="sb-face sb-face-front">
+              <img id="sb-flip-f" src="" alt="">
+              <div id="sb-fold-shadow"></div>
+            </div>
+            <div class="sb-face sb-face-back"></div>
+          </div>
+          <div id="sb-reveal-shadow"></div>
+          <div class="sb-zone" id="sb-zone-l"></div>
+          <div class="sb-zone" id="sb-zone-r"></div>
+          <div class="sb-glow" id="sb-glow-l"></div>
+          <div class="sb-glow" id="sb-glow-r"></div>
+          <div class="sb-counter" id="sb-counter">1 / 20</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DIGITAL SKETCHBOOK PANEL -->
+    <div class="sb-panel" id="sb-panel-digital">
+      <p class="section-sub" style="text-align:center;margin-bottom:32px;">click the edges to flip, or use arrow keys</p>
+      <div class="sb-stage">
+        <div id="dsk2-book" class="sb-book">
+          <div class="sb-pg-under"><img id="dsk2-img-under" src="" alt=""></div>
+          <div class="sb-pg-top" id="dsk2-pg-top"><img id="dsk2-img-top" src="" alt=""></div>
+          <div id="dsk2-flipper" class="sb-flipper-el">
+            <div class="sb-face sb-face-front">
+              <img id="dsk2-flip-f" src="" alt="">
+              <div id="dsk2-fold-shadow" class="sb-fold-shadow-el"></div>
+            </div>
+            <div class="sb-face sb-face-back"></div>
+          </div>
+          <div id="dsk2-reveal-shadow"></div>
+          <div class="sb-zone" id="dsk2-zone-l"></div>
+          <div class="sb-zone" id="dsk2-zone-r"></div>
+          <div class="sb-glow" id="dsk2-glow-l"></div>
+          <div class="sb-glow" id="dsk2-glow-r"></div>
+          <div class="sb-counter" id="dsk2-counter">1 / 24</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2 class="section-title">contact</h2>
+  <div class="contact-intro">
+    <img class="contact-photo" src="assets/images/photo_elmer.jpg" alt="Elmer Lødemel">
+    <p class="contact-bio">Hope you like what you saw!<br>Please don't hesitate to reach out for questions and requests.<br>I'd love to collaborate with you!</p>
+  </div>
+  <div class="contact-links">
+    <a href="mailto:elmerlodemel@gmail.com" title="Email" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+    </a>
+    <a href="https://www.instagram.com/revestreken/" target="_blank" rel="noopener" title="Instagram" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://www.youtube.com/@revestreken" target="_blank" rel="noopener" title="YouTube" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><polygon points="10 15 15 12 10 9" fill="currentColor" stroke="none"/></svg>
+    </a>
+    <a href="https://soundcloud.com/revestrek" target="_blank" rel="noopener" title="SoundCloud" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M1.175 12.225c-.042 0-.08.03-.083.072l-.41 3.653.41 3.606c.004.042.04.072.083.072.041 0 .077-.03.082-.072l.465-3.606-.465-3.653c-.005-.042-.04-.072-.082-.072zm1.558-.297c-.05 0-.09.037-.094.087l-.35 3.943.35 3.862c.004.05.044.087.094.087.05 0 .09-.037.094-.087l.398-3.862-.398-3.943c-.004-.05-.044-.087-.094-.087zm1.574-.155c-.058 0-.105.047-.108.105l-.29 4.098.29 4.02c.003.058.05.105.108.105.06 0 .106-.047.109-.105l.33-4.02-.33-4.098c-.003-.058-.05-.105-.109-.105zm1.59.444c-.066 0-.12.054-.122.12l-.23 3.654.23 3.955c.003.066.056.12.122.12.067 0 .12-.054.123-.12l.262-3.955-.262-3.654c-.003-.066-.056-.12-.123-.12zm1.604-.732c-.075 0-.135.06-.137.135l-.17 4.386.17 3.896c.002.075.062.135.137.135.076 0 .136-.06.138-.135l.193-3.896-.193-4.386c-.002-.075-.062-.135-.138-.135zm1.618-.33c-.083 0-.15.067-.152.15l-.11 4.716.11 3.836c.002.083.069.15.152.15.084 0 .15-.067.153-.15l.124-3.836-.124-4.716c-.003-.083-.07-.15-.153-.15zm1.63.09c-.09 0-.164.074-.165.165l-.053 4.626.053 3.776c.001.09.075.164.165.164.091 0 .165-.074.166-.164l.06-3.776-.06-4.626c-.001-.09-.075-.165-.166-.165zm1.644-.43c-.1 0-.18.08-.18.18l.003 5.056-.003 3.717c0 .1.08.18.18.18.1 0 .18-.08.18-.18l.003-3.717-.003-5.056c0-.1-.08-.18-.18-.18zm1.657-.194c-.107 0-.194.087-.195.194l.003 5.25-.003 3.657c.001.108.088.195.195.195.108 0 .194-.087.195-.195l.003-3.657-.003-5.25c-.001-.107-.087-.194-.195-.194zm1.67-.116c-.116 0-.21.094-.21.21v8.967c0 .116.094.21.21.21.117 0 .21-.094.21-.21v-8.967c0-.116-.093-.21-.21-.21zm2.625.9c-.42 0-.826.07-1.207.2V19.97c0 .125.1.23.226.23h7.434C22.1 20.2 23 19.295 23 18.188c0-1.108-.9-2.013-2.013-2.013-.22 0-.432.036-.63.102-.133-2.533-2.19-4.555-4.74-4.555z"/></svg>
+    </a>
+    <a href="https://www.linkedin.com/in/elmerlodemel/" target="_blank" rel="noopener" title="LinkedIn" class="icon-link">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+    </a>
+  </div>
+</section>
+
+<footer>© 2026 Revestreker — OSL / CPH</footer>
+
+<!-- ============ OVERLAYS ============ -->
+
+<div class="overlay" id="ov-servicebus">
+  <button class="close" onclick="closeOverlay('ov-servicebus')">✕</button>
+  <div class="overlay-inner">
+    <h2>Service Bus</h2>
+    <span class="tag">Animated short film</span>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Film</h3>
+      <p class="desc">An award winning short film made at The Animation Workshop as our graduation project.<br><br>We all know the service button on airplanes, but what about the ones on buses? When a bored traveler stumbles upon one, his curiosity gets the better of him. But with only the bus driver on duty, pressing it might lead to unexpected consequences.</p>
+      <div class="vimeo-wrap">
+        <iframe src="https://player.vimeo.com/video/1051852019?h=b982cfd35d&autoplay=0&title=0&byline=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="img-grid">
+        <img src="assets/images/sb_still1.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+        <img src="assets/images/sb_still2.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+        <img src="assets/images/sb_still3.jpg" alt="Service Bus still" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <div class="img-grid">
+        <img src="assets/images/sb_bg_1.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_2.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_3.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_4.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_5.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_6.jpg" alt="Background" onclick="openLightbox(this)">
+        <img src="assets/images/sb_bg_7.jpg" alt="Background" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Designs</h3>
+      <div class="img-grid">
+        <img src="assets/images/sb_des_1.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_2.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_3.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_4.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_5.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/char_sb_001.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/char_sb_002.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/sb_des_8.jpg" alt="Character design" onclick="openLightbox(this)">
+        <img src="assets/images/char_passengers.jpg" alt="Character design" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-faf">
+  <button class="close" onclick="closeOverlay('ov-faf')">✕</button>
+  <div class="overlay-inner">
+    <h2>FAF Trailer</h2>
+    <span class="tag">Festival trailer commission</span>
+    <p class="desc">Animation trailer for Fredrikstad Animation Festival 2026.</p>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1kpxEMhQORizxTWRdg8UfBVn0dk5T5Iw7" alt="FAF BG SH010" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1wij90aNbdQy9s3z1jP8_sKUUMlHorWXa" alt="FAF BG SH050" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1_YCl5aYo788q_V2IX8e4ieT9irP-UjsP" alt="FAF BG SH070" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Designs</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1NgDx4ENssYYEcvLI28l-bJFpdO2vs_wS" alt="FAF character design lineup" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/19tRguzT3lqvk2Q07unbi41OcUr5J0FA8" alt="FAF mushroom props" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Early Sketches</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1tYVtRkFU7u4Is3iSHPryYVBjoThLYs1e" alt="FAF cliff sketches" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/13QR0j-2vw4lCTYoBZZVVMuFYCtoLlpop" alt="FAF cliff storyboard thumbs" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/18Hlur3mu7qs6yEd-x90qVwOIouHPZKKJ" alt="FAF cliff thumbs" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-brita">
+  <button class="close" onclick="closeOverlay('ov-brita')">✕</button>
+  <div class="overlay-inner">
+    <h2>The Disappearance of Brita Svahni</h2>
+    <span class="tag">Interactive game &amp; animation</span>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Play the game</h3>
+      <p class="desc">Brita Svahni is a well-known theater actress. Nobody has seen her since her last performance. You show up at her apartment to find out what happened. Look around, find clues and piece together the story in this hand-animated point-and-click game with an original atmospheric soundtrack.</p>
+      <a href="https://revestreker.github.io/brita-svani/" target="_blank" class="game-link">
+        <img src="assets/images/brita_interior.jpg" alt="Play The Disappearance of Brita Svahni" class="game-thumb">
+        <span class="game-cta">▶ Play the game</span>
+      </a>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Assets</h3>
+      <div class="img-grid">
+        <img src="assets/images/brita_interior.jpg" alt="Brita interior" onclick="openLightbox(this)">
+        <img src="assets/images/brita_exterior.jpg" alt="Brita exterior" onclick="openLightbox(this)">
+        <img src="assets/images/brita_char.jpg" alt="Brita character design" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-gangar">
+  <button class="close" onclick="closeOverlay('ov-gangar')">✕</button>
+  <div class="overlay-inner">
+    <h2>Gangar</h2>
+    <span class="tag">Music visuals / Spotify Canvas</span>
+    <p class="desc">13 animated Spotify Canvases made for the folk-rock band Gangar.</p>
+    <div class="gangar-carousel">
+      <button class="car-btn car-prev" onclick="gangarPrev()">&#8592;</button>
+      <div class="gangar-track" id="gangar-track">
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
+      <div class="gangar-slide"><video autoplay muted loop playsinline><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
+      </div>
+      <button class="car-btn car-next" onclick="gangarNext()">&#8594;</button>
+    </div>
+    <div class="gangar-dots" id="gangar-dots"></div>
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-ecokrim">
+  <button class="close" onclick="closeOverlay('ov-ecokrim')">✕</button>
+  <div class="overlay-inner">
+    <h2>Ecokrim Concert Visuals</h2>
+    <span class="tag">Live VJ work</span>
+    <p class="desc">Animated character cycles and loops performed live through Resolume Arena for Norwegian comedy-crime act Ecokrim. Mike walks through seasons — spring greens, winter greys, and everything in between — synced to the show in real time.</p>
+    <p class="video-note">Video files are .mov / large — upload to YouTube or Vimeo as unlisted and send me the links to embed them here.</p>
+  </div>
+</div>
+
+<div class="overlay" id="ov-among">
+  <button class="close" onclick="closeOverlay('ov-among')">✕</button>
+  <div class="overlay-inner">
+    <h2>Among Giants</h2>
+    <span class="tag">Feature film</span>
+    <p class="desc">A feature film about the corrupt and mafia-like society we live in today.</p>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Stills &amp; Development</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1UiO7W39E98shjbWyExAwSlcxLZaMce0d" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ys9Yfjvc2_OjQnNos4Xcow7pX4hARGfI" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TWoETdQVQms9kN1t0HZwyIJYzFEgHXwu" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/13_PtpnE3MLFi40cuYMEkYNccuqMVWKI5" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1o-wO5yFwGWmqXTyVqxKzSb0JQa4GHAqa" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TElWgTV9Eiy1VRdOEXXu4vOIicgeNlje" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1ssbckHF1n85x5V2rh05K2A9Y6IRgNCiT" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m4A_HzXbcTgu9LD5gkQ2iSa5a8xFPElE" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1GXE0c-xHPmmfCrQM8NtQx4iBi16ckzqS" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m_Xy8MA02azjzPoIFYSueR8RMKC6Vb4B" alt="Among Giants" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1zQHJ-mrzUVBcRAJXSiQ99XgIMz00LB-2" alt="Among Giants" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">WIP Storyboards</h3>
+      <p><a href="https://speakerdeck.com/revestreken/among-giants-wip-storyboards" target="_blank" rel="noopener" style="color:var(--orange-bright);text-decoration:none;font-family:'Revestreker',cursive;font-size:20px;">View WIP storyboard deck ↗</a></p>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-minimic">
+  <button class="close" onclick="closeOverlay('ov-minimic')">✕</button>
+  <div class="overlay-inner">
+    <h2>Teddies</h2>
+    <span class="tag">Animated short series</span>
+    <p class="desc">Walk into the grungy and funky world of Revestreker where the pub Teddies sits. Here you will find stand-up shows, theater events and more. You can walk into apartments to solve mysteries (like <a href="#" onclick="closeOverlay('ov-minimic');openOverlay('ov-brita');return false;" style="color:var(--orange-bright);text-decoration:none;">The Disappearance of Brita Svahni</a>), and play mini games.</p>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Backgrounds</h3>
+      <div class="vimeo-wrap">
+        <iframe src="https://www.youtube.com/embed/R4KISSrF27g?autoplay=0&rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Character designs</h3>
+      <div class="img-grid">
+        <img src="assets/images/ted_turnaround.jpg" alt="Ted turnaround" onclick="openLightbox(this)">
+        <img src="assets/images/ted_ladies.jpg" alt="Ladies concept" onclick="openLightbox(this)">
+        <img src="assets/images/ted_mike.jpg" alt="Mike" onclick="openLightbox(this)">
+        <img src="assets/images/ted_guys_turn.jpg" alt="Guys turnaround" onclick="openLightbox(this)">
+        <img src="assets/images/ted_guys_con.jpg" alt="Guys concept" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="ov-folio-char">
+  <button class="close" onclick="closeOverlay('ov-folio-char')">✕</button>
+  <div class="overlay-inner">
+    <h2>Character Design &amp; Art Direction</h2>
+    <span class="tag">Portfolio</span>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Teddies</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1XvDE4wjybB4hFhNCaOwV_JRdOmOn_UjP" alt="Teddies turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1bAYG4U0RzmUKe5xBcwXOILnhyxyRYTcR" alt="Guys turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1tV-cB7QGecfCw-Gl7T3qCkUy-1xjvWpL" alt="Guys concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1wZPhmCpclDsD7ikDttSEIPI9w60elWTs" alt="Ladies concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1szsTnSkYKYXOXQobLBXXlADAbM8AjfA9" alt="Character design lady" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/17pmP-0Ds8MHvEQ08ndgwnNK_xOnvKaaR" alt="Character exploration" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/10LUI2oB0Rsb4XsLe9sPx8y2leHWsi5rD" alt="Silhouettes" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Jpje5CNORB9TV3dtYW3PDeFBoz8ttwW7" alt="Mike" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Mr. Mafiaman</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1Hkp3-_QILuhayGxtJRZlWm-zb-ufCpMp" alt="Mafiaman character design" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/189RVni2yKoc-EAqIYCuD8jifcumRZr42" alt="Mr Mafiaman" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1gdC9jsQZdEefmqkkB_PF4S7_JDhpg8Pt" alt="Mr Mafiaman v1" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1qvIc-TF0K2s14T23rPnsPrvuWlqn6zXr" alt="Mafiaman concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/10SdxAQll7x33Bp3PsQ18AjX1W9dXsjWM" alt="Mafiaman sketch" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1sCx0oihluaJkfXlkZK24PoZcdF_BN_1z" alt="Mr Mafiaman animation" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/kluwYaDu2bA?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Among Giants</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1UiO7W39E98shjbWyExAwSlcxLZaMce0d" alt="Picky Mic turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ys9Yfjvc2_OjQnNos4Xcow7pX4hARGfI" alt="Loose Bruce turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/13_PtpnE3MLFi40cuYMEkYNccuqMVWKI5" alt="Picky Mic expressions" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1o-wO5yFwGWmqXTyVqxKzSb0JQa4GHAqa" alt="Loose Bruce expressions" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TWoETdQVQms9kN1t0HZwyIJYzFEgHXwu" alt="Girls concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TElWgTV9Eiy1VRdOEXXu4vOIicgeNlje" alt="Among Giants design 1" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1ssbckHF1n85x5V2rh05K2A9Y6IRgNCiT" alt="Among Giants design 2" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m4A_HzXbcTgu9LD5gkQ2iSa5a8xFPElE" alt="Among Giants design 3" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1GXE0c-xHPmmfCrQM8NtQx4iBi16ckzqS" alt="Among Giants design 4" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1m_Xy8MA02azjzPoIFYSueR8RMKC6Vb4B" alt="Picky Mic walk" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1zQHJ-mrzUVBcRAJXSiQ99XgIMz00LB-2" alt="Loose Bruce walk" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Other Designs</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1aCWgnQjL9PrRdB4E_NMIcchMHuhoHRM2" alt="Gunnar concept sheet" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1xBbK4kIEXVoZTv4arFFO27xAPvj7n6Fq" alt="Character design" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1D3YKyYF_-cuWM6PqaY9z81Pc8k7UwaSD" alt="Design work" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1_8APz2QmVXJds7BeFNyNTuOkSB7vT0nM" alt="Character concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1tNdpPObo3P2fQxh1mAuwCbj8FDh46X7d" alt="Character design" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1tnpK6mFZC-ptGKjxH-X_qeiTZ_jutGbI" alt="Design sketch" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1YswBzqk2SBVI00fSsz-UJMaT4r3o5xEk" alt="Character design" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="overlay" id="ov-folio-prod">
+  <button class="close" onclick="closeOverlay('ov-folio-prod')">✕</button>
+  <div class="overlay-inner">
+    <h2>Production Design &amp; Visual Development</h2>
+    <span class="tag">Portfolio</span>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Blender Worlds — Teddies</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1oIKz7ANwMclxoUOirmaKur8M1e7Cm6Lz" alt="Locations" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1IHRTo3c3K4DQlIMflSOpStacOWb6UCyc" alt="Look test v007" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/17Kh7_qwOAS-ReLboHe4_Gqgfpmmr2VxV" alt="Look test v006 frame 01" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1uC_NwqlhauQUSIOHxkXJLoyT0_3C_Bye" alt="Look test v006 frame 02" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1qBdDwVqpUziMhZhNNtBC5eD9zyB9nlE9" alt="Look test v006 frame 03" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/R4KISSrF27g?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Blender Worlds — Scenes</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1bHVjrJrWxktyGekSrznImWO_dEe8GohA" alt="Snofritt 002" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ia9uW1fH4hXX9ImZyiMHWUbrJCEhdKao" alt="Snofritt 004" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1klAV94l57kpzNTRXzW1J-6b40NMpfRzj" alt="Sunset v003" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Y49Hqgw0tOKhGGzX7J3IC0I0CWzaduAk" alt="Sunset v002" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1jEenlqAoBeBSKtN5Z6oGnXMNStOMWRK7" alt="Sunset v001" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1WDiWF8M3YYIHMTY__pWmPopU8NLBeM69" alt="Night scene" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1MzK110ZNAHoolM0VA9onKtjg4ZBY2J0o" alt="House scene" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1bg64XFlVubQjCrszUlUMHmx8er_9CyfR" alt="Chimney asset" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1eZQ6DZuyofTGHt6f-YBHV45p9YQyS3JU" alt="House looktest" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1i8zEUrXi4Dar4fp96T62IMR83AyEwztZ" alt="Ambient scene" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/_F1CQtSxXOk?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Service Bus</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/14proEp0IsuEmChstYXc4lV0eNy6f_6ie" alt="Service Bus background" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1G8iX2r8nGPhQzn-9Nfu0qCrIPnU0SkN9" alt="Service Bus background 2" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1hVVaERmNjgvrRWjPhoVZoYDY5pIzLfSs" alt="Service Bus background 3" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1fb9DMtfq7Vu52F7XBaAWJugVd9qe0_f7" alt="Service Bus background 4" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1TAA2jHNBpxUx-J_4CEUxShvPz-y08zS4" alt="Look test" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1FHuj6nqDooReuUaIbxs587GTeT5aEwAx" alt="Tree concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1dY6hOZOHxGRmLZewZ3s_jr2kFxYhHm21" alt="Cliff concept" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1FcW9ZnSuajFNFNiOehSQz-Uq2gBsgG-n" alt="Painting guide" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1UK7urZo7ZuIGZq0PGS3FM8b3yssh7VW-" alt="Reference photo" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1dARVfZEKtUjl4FKRXBLFT6NtVxrVygJF" alt="Cliffs reference" onclick="openLightbox(this)">
+      </div>
+      <div class="vimeo-wrap" style="margin-top:20px;">
+        <iframe src="https://www.youtube.com/embed/k_l_9RxO38E?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Other Designs</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1h8m1ScnqatoHx06oC6-bVQUXNiZoPK0Z" alt="Car design four views" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1c9ketombUraxuW8W0mk5lufu-Jkxnz8x" alt="Car design rear" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1gVeWfz9s7VK53_h9U3AZzP_ROkxSMCYk" alt="Color script" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1PlXyqKctM3tfxczxNmP_I2VfHtHQewsH" alt="Walking forest long shot" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1266KBMCjloem7nTjJnMsPY-9G0CpbZ2e" alt="Design work" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1M170oTasyQPzr4dhauVW3sX7RIfrFtfC" alt="Design work 2" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Jjtq5v9DG8pAwts9DzXjgiAGOXk3inrI" alt="Design work 3" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Z-E3jGxrjKfIs50aKD7ow0XJ_sOTBqyW" alt="Design work 4" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/183RnDiiyczkDuOPz-xHnI0_Sw0mNPqzL" alt="Design work 5" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1PKqGocJOm4MXiC_MJGKbMPfOw-3A7aV2" alt="Design work 6" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1gxjx_YLpaKpgyGNAUmzxPjW0fSqJn0Ws" alt="Design work 7" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="overlay" id="ov-folio-story">
+  <button class="close" onclick="closeOverlay('ov-folio-story')">✕</button>
+  <div class="overlay-inner">
+    <h2>Storyboard &amp; Direction</h2>
+    <span class="tag">Portfolio</span>
+
+    <div class="overlay-section">
+      <div class="folio-locked">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Høj Season 2 — coming soon!</span>
+      </div>
+      <div class="folio-locked">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Hidden Islands — coming soon!</span>
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Yardmission</h3>
+      <div class="vimeo-wrap">
+        <iframe src="https://www.youtube.com/embed/kO_Yl2_gHHs?rel=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1zrxSUh40gE0PLTjXTmhkbW6K6gyIo-dH" alt="Yardmission thumbnails" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1AmWlmOoZdcSLc97ziFl-eCGaIa7Xhyj5" alt="Yardmission shot 016" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+    <div class="overlay-section">
+      <h3 class="section-header">Service Bus — Storyboards</h3>
+      <div class="img-grid">
+        <img src="https://lh3.googleusercontent.com/d/1FEQu83tKU3vva3HL4S66z7c2Esddh5uc" alt="Storyboard page 01" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Y4kIs8zdnMcOzh9h-oCXA63CJwM-wh8d" alt="Storyboard page 02" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1HZKTN4uDFPf3rvJJVXUxTWqhvudZInw6" alt="Storyboard page 03" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1or-N7lYU011PTe13YS2darTAI8mb9mUW" alt="Storyboard page 04" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/12AJ8Chms7tNaSWFrbO-SiM9HvcjfYo2Z" alt="Service Bus poster" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1kUOBNzA62QAkcozgxFgZQag5V37qPlgv" alt="Bus driver turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1ScEpX-awUx49p356tTMSGKn0Z0NSGOBp" alt="Rolf turnaround" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1LVP8R6nNeiNrvzOjXEdK9lMhlMroQo3R" alt="Rolf expression sheet" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1XeLepsxtXTX0YBOAtwMVX7BsOG7MT-QI" alt="Bus front view" onclick="openLightbox(this)">
+        <img src="https://lh3.googleusercontent.com/d/1Ul1WX9LqgI7buKmGhKTaeDuVmEoFBDU7" alt="Bus profile" onclick="openLightbox(this)">
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="overlay" id="ov-sketchbook">
+  <button class="close" onclick="closeOverlay('ov-sketchbook')">✕</button>
+  <div style="position:fixed;inset:0;padding-top:0;">
+    <iframe
+      src="https://revestreker.github.io/sketchbook/"
+      style="width:100%;height:100%;border:none;display:block;"
+      title="Sketchbook">
+    </iframe>
+  </div>
+</div>
+
+<div class="overlay" id="ov-pixelsketch">
+  <button class="close" onclick="closeOverlay('ov-pixelsketch')">✕</button>
+  <div class="overlay-inner">
+    <h2>Pixel Sketchbook</h2>
+    <span class="tag">Digital illustration</span>
+    <p class="desc">A collection of digital drawings and illustrations. Coming soon — send me the folder when it's ready and I'll get it in here.</p>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<script>
+function toggleExplore(btn) {
+  const list = document.getElementById('explore-list');
+  const isOpen = list.classList.contains('open');
+  list.classList.toggle('open');
+  btn.textContent = isOpen ? 'explore more +' : 'explore less −';
+}
+function closeExplore() {
+  const list = document.getElementById('explore-list');
+  list.classList.remove('open');
+  const btn = document.querySelector('.explore-btn');
+  if (btn) btn.textContent = 'explore more +';
+}
+function openOverlay(id) {
+  const el = document.getElementById(id);
+  el.style.display = 'block';
+  el.offsetHeight;
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  el.scrollTop = 0;
+}
+function closeOverlay(id) {
+  const el = document.getElementById(id);
+  el.classList.remove('open');
+  el.style.display = 'none';
+  document.body.style.overflow = '';
+}
+function openLightbox(src) {
+  event.stopPropagation();
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.overlay.open').forEach(o => {
+      o.classList.remove('open');
+      o.style.display = 'none';
+    });
+    closeLightbox();
+    document.body.style.overflow = '';
+  }
+});
+</script>
+
+<script>
+// Gangar carousel
+let gangarIdx = 0;
+const gangarSlides = document.querySelectorAll('.gangar-slide');
+const gangarTrack  = document.getElementById('gangar-track');
+const dotsContainer = document.getElementById('gangar-dots');
+
+function gangarBuildDots() {
+  if (!dotsContainer) return;
+  gangarSlides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'gangar-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => gangarGo(i);
+    dotsContainer.appendChild(d);
+  });
+}
+function gangarGo(n) {
+  gangarSlides[gangarIdx].querySelector('video')?.pause();
+  gangarIdx = (n + gangarSlides.length) % gangarSlides.length;
+  gangarSlides.forEach((s, i) => s.style.transform = `translateX(${(i - gangarIdx) * 100}%)`);
+  document.querySelectorAll('.gangar-dot').forEach((d, i) => d.classList.toggle('active', i === gangarIdx));
+  gangarSlides[gangarIdx].querySelector('video')?.play();
+}
+function gangarNext() { gangarGo(gangarIdx + 1); }
+function gangarPrev() { gangarGo(gangarIdx - 1); }
+gangarBuildDots();
+// Init positions
+gangarSlides.forEach((s, i) => s.style.transform = `translateX(${i * 100}%)`);
+</script>
+
+
+<script>
+// ── Inline Sketchbook ──
+const SB_IMGS = [
+  'assets/sketchbook-images/C6BEE7C8-F42D-4B14-8D75-CC4DA3715503.JPG',
+  'assets/sketchbook-images/IMG_0005.jpeg',
+  'assets/sketchbook-images/IMG_0007.jpeg',
+  'assets/sketchbook-images/IMG_0031.jpeg',
+  'assets/sketchbook-images/IMG_0171.jpeg',
+  'assets/sketchbook-images/IMG_0174.jpeg',
+  'assets/sketchbook-images/IMG_0175.jpeg',
+  'assets/sketchbook-images/IMG_1675.jpg',
+  'assets/sketchbook-images/IMG_1986.JPG',
+  'assets/sketchbook-images/IMG_2409.jpeg',
+  'assets/sketchbook-images/IMG_2612.jpeg',
+  'assets/sketchbook-images/IMG_2613.jpeg',
+  'assets/sketchbook-images/IMG_4524.jpeg',
+  'assets/sketchbook-images/IMG_4529.jpeg',
+  'assets/sketchbook-images/IMG_6572.jpeg',
+  'assets/sketchbook-images/IMG_8476.jpeg',
+  'assets/sketchbook-images/IMG_8557.jpeg',
+  'assets/sketchbook-images/IMG_8558.jpeg',
+  'assets/sketchbook-images/IMG_8562.jpeg',
+  'assets/sketchbook-images/IMG_9980.jpeg'
+];
+const SB_DUR = 660;
+let sbCur = 0, sbBusy = false;
+
+const sbBook       = document.getElementById('sb-book');
+const sbImgTop     = document.getElementById('sb-img-top');
+const sbImgUnder   = document.getElementById('sb-img-under');
+const sbFlipper    = document.getElementById('sb-flipper');
+const sbFlipF      = document.getElementById('sb-flip-f');
+const sbPgTop      = document.getElementById('sb-pg-top');
+const sbGlowL      = document.getElementById('sb-glow-l');
+const sbGlowR      = document.getElementById('sb-glow-r');
+const sbFoldShadow = document.getElementById('sb-fold-shadow');
+const sbReveal     = document.getElementById('sb-reveal-shadow');
+const sbCounter    = document.getElementById('sb-counter');
+
+function sbUpdateCounter() {
+  if (sbCounter) sbCounter.textContent = (sbCur + 1) + ' / ' + SB_IMGS.length;
+}
+
+function sbSize(src, cb) {
+  const p = new Image();
+  p.onload = () => {
+    const ar = p.naturalWidth / p.naturalHeight;
+    const stage = sbBook.parentElement;
+    const maxH = stage.clientHeight * 0.92;
+    const maxW = stage.clientWidth  * 0.90;
+    let h = maxH, w = h * ar;
+    if (w > maxW) { w = maxW; h = w / ar; }
+    sbBook.style.width  = Math.round(w) + 'px';
+    sbBook.style.height = Math.round(h) + 'px';
+    if (cb) cb();
+  };
+  p.src = src;
+}
+
+function sbPreload(i) {
+  if (i >= 0 && i < SB_IMGS.length) { const p = new Image(); p.src = SB_IMGS[i]; }
+}
+
+function sbInit() {
+  sbSize(SB_IMGS[0], () => {
+    sbImgTop.src   = SB_IMGS[0];
+    sbImgUnder.src = SB_IMGS[1] || '';
+    sbPreload(2); sbPreload(3);
+    sbUpdateCounter();
+  });
+}
+
+function sbStopAnim() {
+  sbFoldShadow.style.animation = 'none';
+  sbReveal.style.animation     = 'none';
+  sbReveal.style.opacity       = '0';
+}
+
+function sbFlip(dir) {
+  if (sbBusy) return;
+  const nxt = sbCur + dir;
+  if (nxt < 0 || nxt >= SB_IMGS.length) return;
+  sbBusy = true;
+  sbGlowL.style.opacity = '0';
+  sbGlowR.style.opacity = '0';
+  sbImgUnder.src = SB_IMGS[nxt];
+  sbFlipF.src    = SB_IMGS[sbCur];
+  sbFlipper.style.transformOrigin = dir === 1 ? '0% 50%' : '100% 50%';
+  sbFlipper.style.transition = 'none';
+  sbFlipper.style.transform  = 'rotateY(0deg)';
+  sbPgTop.style.visibility   = 'hidden';
+  sbFlipper.style.visibility = 'visible';
+  sbStopAnim();
+  sbFlipper.offsetHeight;
+  sbFoldShadow.style.animation = `${dir===1?'sb-fold-fwd':'sb-fold-bwd'} ${SB_DUR}ms ease-in-out forwards`;
+  sbReveal.style.animation     = `${dir===1?'sb-reveal-fwd':'sb-reveal-bwd'} ${SB_DUR}ms ease-in-out forwards`;
+  sbFlipper.style.transition = `transform ${SB_DUR}ms cubic-bezier(0.35,0,0.15,1)`;
+  sbFlipper.style.transform  = `rotateY(${dir===1?-180:180}deg)`;
+  setTimeout(() => {
+    sbCur = nxt;
+    sbFlipper.style.visibility = 'hidden';
+    sbFlipper.style.transition = 'none';
+    sbFlipper.style.transform  = 'rotateY(0deg)';
+    sbStopAnim();
+    sbImgTop.src = SB_IMGS[sbCur];
+    sbPgTop.style.visibility = '';
+    sbPreload(sbCur+1); sbPreload(sbCur+2); sbPreload(sbCur-1);
+    if (SB_IMGS[sbCur+1]) sbImgUnder.src = SB_IMGS[sbCur+1];
+    sbUpdateCounter();
+    sbBusy = false;
+  }, SB_DUR + 30);
+}
+
+document.getElementById('sb-zone-r').addEventListener('click', () => sbFlip(1));
+document.getElementById('sb-zone-l').addEventListener('click', () => sbFlip(-1));
+document.getElementById('sb-zone-r').addEventListener('mouseenter', () => { if (!sbBusy && sbCur < SB_IMGS.length-1) sbGlowR.style.opacity='1'; });
+document.getElementById('sb-zone-r').addEventListener('mouseleave', () => { sbGlowR.style.opacity='0'; });
+document.getElementById('sb-zone-l').addEventListener('mouseenter', () => { if (!sbBusy && sbCur > 0) sbGlowL.style.opacity='1'; });
+document.getElementById('sb-zone-l').addEventListener('mouseleave', () => { sbGlowL.style.opacity='0'; });
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') sbFlip(1);
+  if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   sbFlip(-1);
+});
+let sbTx = 0;
+document.addEventListener('touchstart', e => { sbTx = e.changedTouches[0].clientX; }, {passive:true});
+document.addEventListener('touchend',   e => { const dx = e.changedTouches[0].clientX - sbTx; if (Math.abs(dx)>50) sbFlip(dx<0?1:-1); });
+window.addEventListener('resize', () => sbSize(SB_IMGS[sbCur]));
+// sbInit called by tab toggle
+</script>
+
+<script>
+// ── Digital Sketchbook ──
+const DSK_IMGS = [
+  'https://lh3.googleusercontent.com/d/1gvXG9i1PSDmU9iDARVnFKpS28y453wfM', // 1
+  'https://lh3.googleusercontent.com/d/1GHUTcg1WmEj6JvK1rfAoImbsXUnsfpvB', // 2
+  'https://lh3.googleusercontent.com/d/14MGtMQASA675Z_npMvx_ZkndLFA6aa9m', // 3
+  // 4 is .tiff — skipped
+  'https://lh3.googleusercontent.com/d/17TvflTFBBLfPkYAQukvZ0Mmadfcbg2iX', // 5
+  'https://lh3.googleusercontent.com/d/1ptvQqL1L5fodKxV8uHWkXYvJ4f8fBXNA', // 6
+  'https://lh3.googleusercontent.com/d/1Tb5LR6A8TxNIrAexM6vAVRlLshyZJ491', // 7
+  'https://lh3.googleusercontent.com/d/1dq_2wffP4_iolo_mz8lKrlD1mlgRGg1X', // 8
+  'https://lh3.googleusercontent.com/d/1XpcBvLcR8NiBYPtRNkaAIv0SNMFpV9B3', // 9
+  'https://lh3.googleusercontent.com/d/1LBdu1s82Y2rALlxEx6ZFGMRIMpujdYaN', // 10
+  'https://lh3.googleusercontent.com/d/1Y8WcEU0kBp5LqJpBbN-qy_-EhiQasxfd', // 11
+  'https://lh3.googleusercontent.com/d/1nkxaG6vuoxmcWEIYUNY3ClFxhpALxKhG', // 12
+  'https://lh3.googleusercontent.com/d/191B5ePVIFOIvZfKo0_fQzWFWFgGrUFxS', // 13
+  'https://lh3.googleusercontent.com/d/18J19A6mSVFfD3VyWHtqs6KIEFgdf65km', // 14
+  'https://lh3.googleusercontent.com/d/1xworvARbJ8ipnm_mV9l6Mv085gzOhbs4', // 15
+  'https://lh3.googleusercontent.com/d/1shRKe45YLaDF3Js3l5Ui3ekl-jPV3ZsN', // 16
+  'https://lh3.googleusercontent.com/d/1Z_-NkGl6jKkVAiPzYtmIoHTDwowe2xsw', // 17
+  'https://lh3.googleusercontent.com/d/1g7wBZVxqN2oTW5yVWaWWcjbWE-QfuIHu', // 18
+  'https://lh3.googleusercontent.com/d/1O35U6OUD-dBcl33xzd3uD7EsUXWZcWi3', // 19
+  'https://lh3.googleusercontent.com/d/1yu8rPoSK7ALJgS6saqmeCF42TVIbjggP', // 20
+  'https://lh3.googleusercontent.com/d/1DilEeh3lsWyIziz30dU8PugTbGm18zDy', // 21
+  'https://lh3.googleusercontent.com/d/1o7PyHNL5DwJ2O_B-Xtp1PKkxYQ-eOk7o', // 22
+  'https://lh3.googleusercontent.com/d/1cnMZ-dgFq9zoNdZgmyyCx_5IXbTuOwef', // 23
+  'https://lh3.googleusercontent.com/d/1mfRvHmayZC3xG-vKPHWiYhLS91y18AXo', // 24
+  'https://lh3.googleusercontent.com/d/1AhwmHy_6hg81f6dq00MdWS6VUiNSybLF', // 25
+];
+// ── Digital Sketchbook — page-flip engine (mirrors paper sketchbook) ──
+let dsk2Cur = 0, dsk2Busy = false, dsk2Inited = false;
+
+function dskInit() {
+  if (dsk2Inited) return;
+  dsk2Inited = true;
+
+  const book      = document.getElementById('dsk2-book');
+  const imgTop    = document.getElementById('dsk2-img-top');
+  const imgUnder  = document.getElementById('dsk2-img-under');
+  const flipper   = document.getElementById('dsk2-flipper');
+  const flipF     = document.getElementById('dsk2-flip-f');
+  const pgTop     = document.getElementById('dsk2-pg-top');
+  const glowL     = document.getElementById('dsk2-glow-l');
+  const glowR     = document.getElementById('dsk2-glow-r');
+  const foldShad  = document.getElementById('dsk2-fold-shadow');
+  const reveal    = document.getElementById('dsk2-reveal-shadow');
+  const counter   = document.getElementById('dsk2-counter');
+
+  function updateCounter() {
+    counter.textContent = (dsk2Cur + 1) + ' / ' + DSK_IMGS.length;
+  }
+  function preload(i) {
+    if (i >= 0 && i < DSK_IMGS.length) { const p = new Image(); p.src = DSK_IMGS[i]; }
+  }
+  function size(src, cb) {
+    const img = new Image();
+    img.onload = () => {
+      const aspect = img.naturalWidth / img.naturalHeight;
+      const maxH = Math.min(window.innerHeight * 0.75, 700);
+      const h = maxH, w = Math.round(h * aspect);
+      book.style.width  = w + 'px';
+      book.style.height = h + 'px';
+      if (cb) cb();
+    };
+    img.src = src;
+  }
+
+  function flip(dir) {
+    if (dsk2Busy) return;
+    const nxt = dsk2Cur + dir;
+    if (nxt < 0 || nxt >= DSK_IMGS.length) return;
+    dsk2Busy = true;
+
+    flipF.src = DSK_IMGS[dsk2Cur];
+    flipper.style.visibility = 'visible';
+    flipper.style.transition = 'none';
+    flipper.style.transform = dir === 1 ? 'rotateY(0deg)' : 'rotateY(-180deg)';
+    flipper.offsetHeight;
+
+    imgUnder.src = DSK_IMGS[nxt];
+    pgTop.style.visibility = 'hidden';
+
+    const SB_DUR = 700;
+    flipper.style.transition = `transform ${SB_DUR}ms cubic-bezier(0.645,0.045,0.355,1.0)`;
+    flipper.style.transform  = dir === 1 ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+
+    setTimeout(() => {
+      dsk2Cur = nxt;
+      flipper.style.visibility = 'hidden';
+      flipper.style.transition = 'none';
+      flipper.style.transform  = 'rotateY(0deg)';
+      imgTop.src = DSK_IMGS[dsk2Cur];
+      pgTop.style.visibility = '';
+      preload(dsk2Cur + 1); preload(dsk2Cur + 2); preload(dsk2Cur - 1);
+      if (DSK_IMGS[dsk2Cur + 1]) imgUnder.src = DSK_IMGS[dsk2Cur + 1];
+      updateCounter();
+      dsk2Busy = false;
+    }, SB_DUR + 30);
+  }
+
+  size(DSK_IMGS[0], () => {
+    imgTop.src   = DSK_IMGS[0];
+    imgUnder.src = DSK_IMGS[1] || '';
+    preload(2); preload(3);
+    updateCounter();
+  });
+
+  document.getElementById('dsk2-zone-r').addEventListener('click', () => flip(1));
+  document.getElementById('dsk2-zone-l').addEventListener('click', () => flip(-1));
+
+  let tx = 0;
+  document.getElementById('dsk2-book').addEventListener('touchstart', e => { tx = e.changedTouches[0].clientX; }, {passive:true});
+  document.getElementById('dsk2-book').addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 50) flip(dx < 0 ? 1 : -1);
+  });
+
+  window.addEventListener('resize', () => size(DSK_IMGS[dsk2Cur]));
+
+  // keyboard — only when digital panel is active
+  document.addEventListener('keydown', e => {
+    if (!document.getElementById('sb-panel-digital').classList.contains('active')) return;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') flip(1);
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   flip(-1);
+  });
+}
+// dskInit called by tab toggle
+</script>
+
+<script>
+// ── Sketchbook tab toggle ──
+let sbInited = false, dskInited = false;
+
+function toggleSbTab(which) {
+  const paperTab  = document.getElementById('sb-tab-paper');
+  const digitalTab = document.getElementById('sb-tab-digital');
+  const paperPanel  = document.getElementById('sb-panel-paper');
+  const digitalPanel = document.getElementById('sb-panel-digital');
+
+  const isAlreadyActive = (which === 'paper' && paperPanel.classList.contains('active'))
+                       || (which === 'digital' && digitalPanel.classList.contains('active'));
+
+  // clicking the active tab closes it
+  if (isAlreadyActive) {
+    paperTab.classList.remove('active');
+    digitalTab.classList.remove('active');
+    paperPanel.classList.remove('active');
+    digitalPanel.classList.remove('active');
+    return;
+  }
+
+  // switch to clicked tab
+  if (which === 'paper') {
+    paperTab.classList.add('active');
+    digitalTab.classList.remove('active');
+    paperPanel.classList.add('active');
+    digitalPanel.classList.remove('active');
+    if (!sbInited) { sbInited = true; sbInit(); }
+    else { window.dispatchEvent(new Event('resize')); }
+  } else {
+    digitalTab.classList.add('active');
+    paperTab.classList.remove('active');
+    digitalPanel.classList.add('active');
+    paperPanel.classList.remove('active');
+    if (!dskInited) { dskInited = true; dskInit(); }
+  }
+}
+
+// ── Scroll tint overlay ──
+const scrollTint    = document.getElementById('scroll-tint');
+const scrollTexture = document.getElementById('scroll-texture');
+// warm orange at top → neutral mid → cool blue at bottom
+const tintColors = [
+  [232, 100, 26],  // warm orange-red (top of page)
+  [200, 80,  20],  // deeper orange
+  [140, 60, 120],  // warm purple transition
+  [74,  43, 232],  // blue
+  [50,  30, 210],  // deeper blue (bottom)
+];
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function updateScrollTint() {
+  const scrollY = window.scrollY;
+  const maxScroll = document.body.scrollHeight - window.innerHeight;
+  const t = Math.min(scrollY / maxScroll, 1);
+
+  const seg = t * (tintColors.length - 1);
+  const idx = Math.floor(seg);
+  const frac = seg - idx;
+  const c1 = tintColors[Math.min(idx, tintColors.length - 1)];
+  const c2 = tintColors[Math.min(idx + 1, tintColors.length - 1)];
+
+  const r = Math.round(lerp(c1[0], c2[0], frac));
+  const g = Math.round(lerp(c1[1], c2[1], frac));
+  const b = Math.round(lerp(c1[2], c2[2], frac));
+  const alpha = 0.12 + t * 0.18;
+
+  scrollTint.style.background = `radial-gradient(ellipse 140% 90% at 50% ${10 + t * 70}%, rgba(${r},${g},${b},${alpha.toFixed(2)}) 0%, transparent 65%)`;
+
+  // texture layer: ramps up from 0 to ~0.12 as you scroll, peaks in mid-scroll
+  const texOpacity = Math.sin(t * Math.PI) * 0.14;
+  scrollTexture.style.opacity = texOpacity.toFixed(3);
+  // slowly drift the texture position for a living feel
+  const drift = scrollY * 0.08;
+  scrollTexture.style.backgroundPosition = `${drift}px ${drift * 0.6}px`;
+}
+window.addEventListener('scroll', updateScrollTint, { passive: true });
+updateScrollTint();
+
+// ── Hero parallax ──
+const heroVideo = document.querySelector('.hero-video');
+const heroLogo  = document.querySelector('.hero-logo');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  if (heroVideo) heroVideo.style.transform = `translateY(${y * 0.35}px)`;
+  if (heroLogo)  heroLogo.style.transform  = `translateY(${y * 0.12}px) rotate(${heroLogo.style.transform.match(/rotate\(([^)]+)\)/)?.[1] || '-1deg'})`;
+}, { passive: true });
+</script>
+
 </body>
 </html>
