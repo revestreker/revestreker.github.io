@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project — Revestreker</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon_32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/images/favicon_512.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+@font-face {
+  font-family: 'Revestreker';
+  src: url('assets/fonts/Revestreker_font_v001-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg: #0a0a0a;
+  --orange: #E8541A;
+  --orange-bright: #FF6A1F;
+  --orange-light: #FFA52D;
+  --blue: #4A2BE8;
+  --blue-bright: #5b3cf0;
+  --cream: #F4EFE6;
+  --card: #141414;
+  --radius: 28px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--cream);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: hidden;
+  cursor: url('/assets/images/cursor_hover.png') 4 4, auto;
+}
+a, button, [onclick],
+.chip, .back, .coffee-link, .game-link,
+.car-btn, .img-grid img, .lb-close {
+  cursor: url('/assets/images/cursor_interactive.png') 4 4, pointer !important;
+}
+a:active, button:active, [onclick]:active,
+.chip:active, .back:active, .coffee-link:active,
+.img-grid img:active, .lb-close:active {
+  cursor: url('/assets/images/cursor_click.png') 4 4, pointer !important;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- SCROLL TINT OVERLAY ---------- */
+#scroll-tint {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+#scroll-texture {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  transition: opacity 0.4s ease;
+}
+
+/* ---------- NAV ---------- */
+nav.topnav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 32px;
+  mix-blend-mode: difference;
+}
+nav.topnav .logo img { width: 110px; height: auto; display: block; }
+nav.topnav .links { display: flex; gap: 28px; align-items: center; }
+nav.topnav .links a {
+  font-family: 'Revestreker', cursive;
+  color: #fff;
+  text-decoration: none;
+  font-size: 20px;
+  transition: transform 0.4s steps(3);
+}
+nav.topnav .links a:hover { transform: translateY(-3px) rotate(-2deg); }
+
+/* ---------- PAGE HEADER (LIKE PORTFOLIO work.html) ---------- */
+.wrap {
+  position: relative;
+  z-index: 2;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.project-head {
+  padding-top: 120px;
+  padding-bottom: 36px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 36px;
+  padding: 10px 20px 10px 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(244, 239, 230, 0.35);
+  font-family: 'Revestreker', cursive;
+  font-size: 18px;
+  color: var(--cream);
+  text-decoration: none;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s steps(2);
+}
+.back:hover {
+  background: var(--orange-bright);
+  border-color: var(--orange-bright);
+  color: #0a0a0a;
+  transform: translateX(-3px);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 44px;
+}
+
+.chip {
+  font-family: 'Revestreker', cursive;
+  padding: 9px 20px;
+  border-radius: 999px;
+  border: 2px solid rgba(244, 239, 230, 0.25);
+  font-size: 17px;
+  color: rgba(244, 239, 230, 0.8);
+  text-decoration: none;
+  transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, transform 0.2s steps(2);
+}
+.chip:hover {
+  color: #0a0a0a;
+  background: var(--orange-bright);
+  border-color: var(--orange-bright);
+  transform: translateY(-2px);
+}
+.chip[aria-current="page"] {
+  color: #ffffff;
+  background: var(--blue);
+  border-color: var(--blue);
+}
+
+/* ---------- PROJECT CONTENT ---------- */
+.project-view {
+  display: none;
+  padding-bottom: 80px;
+}
+.project-view.active {
+  display: block;
+}
+
+.project-view h1 {
+  font-family: 'Revestreker', cursive;
+  font-size: clamp(40px, 6.5vw, 76px);
+  line-height: 1;
+  margin-bottom: 10px;
+  color: var(--cream);
+}
+
+.project-view .tag {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--orange-bright);
+  margin-bottom: 24px;
+  display: block;
+}
+
+.project-view .desc {
+  font-size: 19px;
+  max-width: 740px;
+  opacity: 0.88;
+  margin-bottom: 40px;
+  line-height: 1.65;
+}
+
+.project-section {
+  margin-top: 48px;
+}
+.project-section:first-of-type {
+  margin-top: 32px;
+}
+
+.section-header {
+  font-family: 'Revestreker', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--orange);
+  margin-bottom: 20px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 106, 31, 0.25);
+}
+
+/* Masonry image grid */
+.img-grid {
+  columns: 3;
+  column-gap: 14px;
+}
+.img-grid img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 18px;
+  background: #1c1c1c;
+  cursor: pointer;
+  transition: transform 0.3s steps(3);
+  margin-bottom: 14px;
+  break-inside: avoid;
+}
+.img-grid img:hover { transform: scale(1.02); }
+@media (max-width: 900px) { .img-grid { columns: 2; } }
+@media (max-width: 500px) { .img-grid { columns: 1; } }
+
+/* Video embed wrapper */
+.vimeo-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #111;
+  margin-bottom: 28px;
+}
+.vimeo-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+
+/* Game link */
+.game-link {
+  display: block;
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  cursor: pointer;
+  text-decoration: none;
+  margin-bottom: 28px;
+  max-width: 700px;
+}
+.game-link:hover .game-cta { background: var(--orange); color: #0a0a0a; }
+.game-thumb { width: 100%; display: block; }
+.game-cta {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(10, 10, 10, 0.78);
+  color: var(--cream);
+  font-family: 'Revestreker', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.08em;
+  padding: 14px 20px;
+  transition: background 0.2s, color 0.2s;
+}
+
+/* Gangar carousel */
+.gangar-carousel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 24px 0 16px;
+}
+.gangar-track {
+  overflow: hidden;
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  border-radius: 12px;
+}
+.gangar-strip {
+  display: flex;
+  transition: transform 0.4s cubic-bezier(0.35, 0, 0.15, 1);
+}
+.gangar-slide {
+  min-width: 100%;
+  flex-shrink: 0;
+}
+.gangar-slide video {
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
+.car-btn {
+  background: rgba(244, 239, 230, 0.08);
+  border: 1px solid rgba(244, 239, 230, 0.15);
+  color: var(--cream);
+  font-size: 20px;
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.car-btn:hover { background: var(--orange); border-color: var(--orange); }
+.gangar-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.gangar-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(244, 239, 230, 0.25);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.gangar-dot.active { background: var(--orange); }
+
+/* Coffee link at bottom of project */
+.project-coffee {
+  margin-top: 56px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(244, 239, 230, 0.07);
+  text-align: center;
+}
+.coffee-link {
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  color: var(--cream);
+  text-decoration: none;
+  background: var(--card);
+  border: 2px solid rgba(244, 239, 230, 0.08);
+  border-radius: var(--radius);
+  padding: 14px 28px;
+  display: inline-block;
+  transition: transform 0.3s steps(2), border-color 0.3s steps(2), color 0.3s steps(2);
+}
+.coffee-link:hover {
+  transform: translateY(-4px) rotate(-1deg);
+  border-color: var(--orange);
+  color: var(--orange-bright);
+}
+
+/* Fullscreen image lightbox */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(10, 10, 10, 0.96);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.lightbox.open { display: flex; }
+.lightbox img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 12px;
+}
+.lightbox .lb-close {
+  position: fixed;
+  top: 20px; right: 24px;
+  font-family: 'Revestreker', cursive;
+  font-size: 20px;
+  background: var(--orange);
+  color: #0a0a0a;
+  border: none;
+  border-radius: 16px;
+  width: 50px; height: 50px;
+  cursor: pointer;
+  z-index: 310;
+}
+
+/* Footer */
+footer {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 40px 24px 60px;
+  font-family: 'Revestreker', cursive;
+  font-size: 16px;
+  opacity: 0.55;
+}
+
+@media (max-width: 720px) {
+  nav.topnav { padding: 16px 18px; }
+  nav.topnav .links { gap: 16px; }
+  nav.topnav .links a { font-size: 17px; }
+  .wrap { padding: 0 20px; }
+  .project-head { padding-top: 96px; }
+}
+</style>
+</head>
+<body id="top">
+
+<!-- SCROLL TINT -->
+<div id="scroll-tint"></div>
+<div id="scroll-texture"></div>
+
+<!-- NAV -->
+<nav class="topnav">
+  <a href="index.html" class="logo">
+    <img src="assets/images/logo_elmer.svg" alt="Elmer Lødemel">
+  </a>
+  <div class="links">
+    <a href="https://revestreker.com/elmerlodemel-portfolio/index.html">portfolio</a>
+    <a href="index.html#projects">projects</a>
+    <a href="index.html#contact">contact</a>
+  </div>
+</nav>
+
+<header class="project-head">
+  <div class="wrap">
+    <a class="back" href="index.html#projects">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M19 12H5m0 0 6-6m-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>Revestreker</span>
+    </a>
+
+    <nav class="chips" id="chips" aria-label="Projects">
+      <a class="chip" data-slug="service-bus" href="project.html?p=service-bus">Service Bus</a>
+      <a class="chip" data-slug="merlo-shorts" href="project.html?p=merlo-shorts">Merlo.Shorts</a>
+      <a class="chip" data-slug="service-bus-game" href="project.html?p=service-bus-game">Service Bus The Game</a>
+      <a class="chip" data-slug="brita-svahni" href="project.html?p=brita-svahni">The Mystery Of Brita Svahni</a>
+      <a class="chip" data-slug="faf-trailer" href="project.html?p=faf-trailer">FAF Trailer</a>
+      <a class="chip" data-slug="gangar" href="project.html?p=gangar">Gangar</a>
+      <a class="chip" data-slug="ecokrim" href="project.html?p=ecokrim">Ecokrim</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 1. SERVICE BUS -->
+  <article class="project-view" id="proj-service-bus" data-title="Service Bus">
+    <h1>Service Bus</h1>
+    <span class="tag">Animated short film</span>
+
+    <div class="project-section">
+      <h2 class="section-header">Film</h2>
+      <p class="desc">An award winning short film made at The Animation Workshop as our graduation project.<br><br>We all know the service button on airplanes, but what about the ones on buses? When a bored traveler stumbles upon one, his curiosity gets the better of him. But with only the bus driver on duty, pressing it might lead to unexpected consequences.</p>
+      <div class="vimeo-wrap">
+        <iframe data-src="https://player.vimeo.com/video/1051852019?h=b982cfd35d&autoplay=0&title=0&byline=0&portrait=0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Service Bus short film"></iframe>
+      </div>
+      <div class="img-grid">
+        <img src="assets/images/sb_still1.jpg" alt="Service Bus film still 1" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_still2.jpg" alt="Service Bus film still 2" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_still3.jpg" alt="Service Bus film still 3" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Backgrounds</h2>
+      <div class="img-grid">
+        <img src="assets/images/sb_bg_1.jpg" alt="Service Bus background 1" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_bg_2.jpg" alt="Service Bus background 2" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_bg_3.jpg" alt="Service Bus background 3" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_bg_4.jpg" alt="Service Bus background 4" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_bg_5.jpg" alt="Service Bus background 5" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_bg_6.jpg" alt="Service Bus background 6" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_bg_7.jpg" alt="Service Bus background 7" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Designs</h2>
+      <div class="img-grid">
+        <img src="assets/images/sb_des_1.jpg" alt="Service Bus character design 1" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_des_2.jpg" alt="Service Bus character design 2" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_des_3.jpg" alt="Service Bus character design 3" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_des_4.jpg" alt="Service Bus character design 4" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_des_5.jpg" alt="Service Bus character design 5" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sb_des_8.jpg" alt="Service Bus passenger designs" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+  <!-- 2. MERLO.SHORTS -->
+  <article class="project-view" id="proj-merlo-shorts" data-title="Merlo.Shorts">
+    <h1>Merlo.Shorts</h1>
+    <span class="tag">Animated short series</span>
+    <p class="desc">Walk into the grungy and funky world of Revestreker where the pub Teddies sits. Here you will find stand-up shows, theater events and more. You can walk into apartments to solve mysteries (like <a href="project.html?p=brita-svahni" style="color:var(--orange-bright);text-decoration:none;">The Mystery Of Brita Svahni</a>), and play mini games.</p>
+
+    <div class="project-section">
+      <h2 class="section-header">Backgrounds</h2>
+      <div class="vimeo-wrap">
+        <iframe data-src="https://www.youtube.com/embed/R4KISSrF27g?autoplay=0&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Merlo.Shorts 2.5D looktest"></iframe>
+      </div>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Character designs</h2>
+      <div class="img-grid">
+        <img src="assets/images/ted_turnaround.jpg" alt="Turnaround" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/ted_ladies.jpg" alt="Ladies concept" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/ted_mike.jpg" alt="Mike character design" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/ted_guys_turn.jpg" alt="Guys turnaround" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/ted_guys_con.jpg" alt="Guys concept" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+  <!-- 3. SERVICE BUS THE GAME -->
+  <article class="project-view" id="proj-service-bus-game" data-title="Service Bus The Game">
+    <h1>Service Bus The Game</h1>
+    <span class="tag">Interactive game</span>
+    <p class="desc">Stills and key art from the Service Bus game experience.</p>
+
+    <div class="project-section">
+      <h2 class="section-header">Stills</h2>
+      <div class="img-grid">
+        <img src="assets/images/sbg_still_1.jpg" alt="Service Bus The Game still 1" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sbg_still_2.jpg" alt="Service Bus The Game still 2" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/sbg_still_3.jpg" alt="Service Bus The Game still 3" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+  <!-- 4. THE MYSTERY OF BRITA SVAHNI -->
+  <article class="project-view" id="proj-brita-svahni" data-title="The Mystery Of Brita Svahni">
+    <h1>The Mystery Of Brita Svahni</h1>
+    <span class="tag">Interactive game &amp; animation</span>
+
+    <div class="project-section">
+      <h2 class="section-header">Play the game</h2>
+      <p class="desc">Brita Svahni is a well-known theater actress. Nobody has seen her since her last performance. You show up at her apartment to find out what happened. Look around, find clues and piece together the story in this hand-animated point-and-click game with an original atmospheric soundtrack.</p>
+      <a href="https://revestreker.com/brita-svani/" target="_blank" rel="noopener" class="game-link">
+        <img src="assets/images/brita_interior.jpg" alt="Play The Mystery Of Brita Svahni" class="game-thumb" loading="lazy" decoding="async">
+        <span class="game-cta">▶ Play the game</span>
+      </a>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Assets</h2>
+      <div class="img-grid">
+        <img src="assets/images/brita_interior.jpg" alt="Brita interior" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/brita_exterior.jpg" alt="Brita exterior" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/brita_char.jpg" alt="Brita character design" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+  <!-- 5. FAF TRAILER -->
+  <article class="project-view" id="proj-faf-trailer" data-title="FAF Trailer">
+    <h1>FAF Trailer</h1>
+    <span class="tag">Festival trailer commission</span>
+    <p class="desc">Animation trailer for Fredrikstad Animation Festival 2026.</p>
+
+    <div class="project-section">
+      <h2 class="section-header">Backgrounds</h2>
+      <div class="img-grid">
+        <img src="assets/images/faf_bg_1.jpg" alt="FAF background shot 010" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/faf_bg_2.jpg" alt="FAF background shot 050" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/faf_bg_3.jpg" alt="FAF background shot 070" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Designs</h2>
+      <div class="img-grid">
+        <img src="assets/images/faf_lineup.jpg" alt="FAF character design lineup" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/faf_mushroom.jpg" alt="FAF mushroom props" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Early Sketches</h2>
+      <div class="img-grid">
+        <img src="assets/images/faf_sketches.jpg" alt="FAF cliff sketches" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/faf_storyboard.jpg" alt="FAF cliff storyboard thumbnails" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/faf_thumbs.jpg" alt="FAF cliff thumbnails" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+  <!-- 6. GANGAR -->
+  <article class="project-view" id="proj-gangar" data-title="Gangar">
+    <h1>Gangar</h1>
+    <span class="tag">Music visuals / Spotify Canvas</span>
+    <p class="desc">13 animated Spotify Canvases made for the folk-rock band Gangar.</p>
+
+    <div class="gangar-carousel">
+      <button class="car-btn car-prev" onclick="gangarPrev()" aria-label="Previous video">&#8592;</button>
+      <div class="gangar-track" id="gangar-track">
+        <div class="gangar-strip" id="gangar-strip">
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_overgang.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_baansull.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_stabbmarsj.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_skomakerhal.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_outro.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_martajohannes.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_karlsolo.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_fjukanrjukan.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_egerliten.mp4" type="video/mp4"></video></div>
+          <div class="gangar-slide"><video muted loop playsinline preload="none"><source src="assets/videos/gangar_bombom.mp4" type="video/mp4"></video></div>
+        </div>
+      </div>
+      <button class="car-btn car-next" onclick="gangarNext()" aria-label="Next video">&#8594;</button>
+    </div>
+    <div class="gangar-dots" id="gangar-dots"></div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+  <!-- 7. ECOKRIM -->
+  <article class="project-view" id="proj-ecokrim" data-title="Ecokrim Concert Visuals">
+    <h1>Ecokrim Concert Visuals</h1>
+    <span class="tag">Live VJ work</span>
+    <p class="desc">Animated character cycles and loops performed live through Resolume Arena for the jazz group Ecokrim. Mike walks through seasons — spring greens, winter greys, and everything in between — synced to the show in real time.</p>
+
+    <div class="project-section">
+      <h2 class="section-header">Live performance</h2>
+      <div class="vimeo-wrap">
+        <iframe data-src="https://www.youtube.com/embed/nWvSk3ubPF8?start=1762&rel=0&modestbranding=1" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Ecokrim live at Geiteberg Kulturbruk"></iframe>
+      </div>
+    </div>
+
+    <div class="project-section">
+      <h2 class="section-header">Frames</h2>
+      <div class="img-grid">
+        <img src="assets/images/ekokrim_grass.jpg" alt="Ecokrim visual frame — laying on grass" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/ekokrim_walk.jpg" alt="Ecokrim visual frame — spring walk" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+        <img src="assets/images/ekokrim_winter.jpg" alt="Ecokrim visual frame — winter walk" loading="lazy" decoding="async" onclick="openLightbox(this, event)">
+      </div>
+    </div>
+
+    <div class="project-coffee">
+      <a href="https://buymeacoffee.com/revestreken" target="_blank" rel="noopener" class="coffee-link">Buy me a coffee</a>
+    </div>
+  </article>
+
+</main>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()" aria-label="Close image">✕</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<footer>© 2026 Revestreker — OSL / CPH</footer>
+
+<script>
+// ── Gangar carousel ──
+let gangarIdx = 0;
+const gangarSlides  = document.querySelectorAll('.gangar-slide');
+const gangarStrip   = document.getElementById('gangar-strip');
+const dotsContainer = document.getElementById('gangar-dots');
+
+function gangarBuildDots() {
+  if (!dotsContainer) return;
+  gangarSlides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'gangar-dot' + (i === 0 ? ' active' : '');
+    d.onclick = () => gangarGo(i);
+    dotsContainer.appendChild(d);
+  });
+}
+
+function gangarGo(n) {
+  gangarSlides[gangarIdx]?.querySelector('video')?.pause();
+  gangarIdx = (n + gangarSlides.length) % gangarSlides.length;
+  gangarStrip.style.transform = `translateX(${-gangarIdx * 100}%)`;
+  document.querySelectorAll('.gangar-dot').forEach((d, i) => d.classList.toggle('active', i === gangarIdx));
+  const nextVideo = gangarSlides[gangarIdx]?.querySelector('video');
+  if (nextVideo && document.getElementById('proj-gangar')?.classList.contains('active')) {
+    nextVideo.play().catch(() => {});
+  }
+}
+
+function gangarNext() { gangarGo(gangarIdx + 1); }
+function gangarPrev() { gangarGo(gangarIdx - 1); }
+gangarBuildDots();
+
+// ── Route ?p=<slug> to the matching project ──
+(function initProjectPage() {
+  const params = new URLSearchParams(window.location.search);
+  const wanted = params.get('p') || 'service-bus';
+  const target = document.getElementById('proj-' + wanted) || document.getElementById('proj-service-bus');
+  const activeSlug = target.id.replace(/^proj-/, '');
+
+  target.classList.add('active');
+  document.title = (target.dataset.title || 'Project') + ' — Revestreker';
+
+  // Only load iframe embeds inside the active project
+  target.querySelectorAll('iframe[data-src]').forEach(iframe => {
+    iframe.src = iframe.dataset.src;
+  });
+
+  // Highlight active chip
+  document.querySelectorAll('.chip').forEach(chip => {
+    if (chip.dataset.slug === activeSlug) {
+      chip.setAttribute('aria-current', 'page');
+    }
+  });
+
+  // Start first Gangar video if Gangar is the active project
+  if (activeSlug === 'gangar') {
+    const firstVideo = gangarSlides[0]?.querySelector('video');
+    if (firstVideo) firstVideo.play().catch(() => {});
+  }
+})();
+
+// ── Lightbox ──
+function openLightbox(target, evt) {
+  if (evt) evt.stopPropagation();
+  const imgEl = document.getElementById('lightbox-img');
+  const src = typeof target === 'string' ? target : (target && target.src ? target.src : '');
+  const alt = (target && target.alt) ? target.alt : '';
+  if (!src) return;
+  imgEl.src = src;
+  imgEl.alt = alt;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  document.getElementById('lightbox-img').removeAttribute('src');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    closeLightbox();
+  }
+});
+
+// ── Scroll tint overlay ──
+const scrollTint    = document.getElementById('scroll-tint');
+const scrollTexture = document.getElementById('scroll-texture');
+const tintColors = [
+  [232, 100, 26],
+  [200, 80,  20],
+  [140, 60, 120],
+  [74,  43, 232],
+  [50,  30, 210],
+];
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function updateScrollTint() {
+  const scrollY = window.scrollY;
+  const maxScroll = Math.max(document.body.scrollHeight - window.innerHeight, 1);
+  const t = Math.min(scrollY / maxScroll, 1);
+
+  const seg = t * (tintColors.length - 1);
+  const idx = Math.floor(seg);
+  const frac = seg - idx;
+  const c1 = tintColors[Math.min(idx, tintColors.length - 1)];
+  const c2 = tintColors[Math.min(idx + 1, tintColors.length - 1)];
+
+  const r = Math.round(lerp(c1[0], c2[0], frac));
+  const g = Math.round(lerp(c1[1], c2[1], frac));
+  const b = Math.round(lerp(c1[2], c2[2], frac));
+  const alpha = 0.12 + t * 0.18;
+
+  scrollTint.style.background = `radial-gradient(ellipse 140% 90% at 50% ${10 + t * 70}%, rgba(${r},${g},${b},${alpha.toFixed(2)}) 0%, transparent 65%)`;
+
+  const texOpacity = Math.sin(t * Math.PI) * 0.14;
+  scrollTexture.style.opacity = texOpacity.toFixed(3);
+  const drift = scrollY * 0.08;
+  scrollTexture.style.backgroundPosition = `${drift}px ${drift * 0.6}px`;
+}
+window.addEventListener('scroll', updateScrollTint, { passive: true });
+updateScrollTint();
+</script>
+
+</body>
+</html>
